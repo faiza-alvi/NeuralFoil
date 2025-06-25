@@ -180,5 +180,13 @@ for _ in range(n_procs):
     worker.remote(csv_actor)
 
 # Keep the main thread alive (otherwise the script would end immediately)
-while True:
-    time.sleep(1)
+# Implements a loop to keep the thread alive unless someone hits Ctrl + C, which forces a grateful shutdown 
+try:
+    while True:
+        time.sleep(1)
+except KeyboardInterrupt:
+    # Press Ctrl + C here 
+    print("Interrupted. Shutting down Ray...")
+    ray.shutdown()
+    print("Gracefully shut down.")
+
