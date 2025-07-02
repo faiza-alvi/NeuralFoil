@@ -5,6 +5,7 @@ import aerosandbox.numpy as np
 from typing import List
 import time
 from neuralfoil._basic_data_type import Data
+from pathlib import Path
 
 print("Initializing Ray...")
 ray.init(
@@ -13,14 +14,34 @@ ray.init(
     # num_cpus=2,
 )
 
-datafile = "data_xfoil.csv"
+datafile = "data_xfoil_Kaleb.csv"
 n_procs = int(ray.cluster_resources()["CPU"])
 print(f"Running on {n_procs} processes.")
 
-airfoil_database_path = asb._asb_root / "geometry" / "airfoil" / "airfoil_database"
+
+airfoil_database_path = Path("/home/faiza/Documents/TrainingAirfoils")
+
+def load_airfoil_coordinates(filepath):
+    # Skip the first line (airfoil name), and load the x,y columns
+    with open(filepath, 'r') as f:
+        lines = f.readlines()
+
+    # Remove any empty lines and non-numeric lines
+    coords = []
+    for line in lines[1:]:  # skip the first line (usually name/title)
+        try:
+            x, y = map(float, line.strip().split())
+            coords.append([x, y])
+        except ValueError:
+            continue  # Skip lines that can't be parsed
+
+    return np.array(coords)
 
 airfoil_database = [
-    asb.Airfoil(name=filename.stem).normalize().to_kulfan_airfoil()
+    asb.Airfoil(
+        name=filename.stem,
+        coordinates=load_airfoil_coordinates(filename)
+    ).normalize().to_kulfan_airfoil()
     for filename in airfoil_database_path.glob("*.dat")
 ]
 
@@ -164,9 +185,9 @@ def worker(csv_actor):
             n_crit=n_crit,
             xtr_upper=xtr_upper,
             xtr_lower=xtr_lower,
-            timeout=30,
+            timeout=60,
             max_iter=200,
-            xfoil_command="/home/faiza/Documents/xfoil"
+            # xfoil_command="/home/faiza/Documents/xfoil"            
         )
 
         for data in datas:

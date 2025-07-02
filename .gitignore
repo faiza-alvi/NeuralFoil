@@ -12,6 +12,9 @@ svg-inkscape/
 ~*.*
 *.csv
 
+# Venv to ignore any virtual environment files 
+venv/
+
 ## Core latex/pdflatex auxiliary files:
 *.aux
 *.lof
