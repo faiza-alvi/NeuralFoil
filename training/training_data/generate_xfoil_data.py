@@ -166,7 +166,7 @@ def worker(csv_actor):
             xtr_lower=xtr_lower,
             timeout=30,
             max_iter=200,
-            # xfoil_command="~/NeuralFoil/training/training_data/xfoil_supercloud"
+            xfoil_command="/home/faiza/Documents/xfoil"
         )
 
         for data in datas:
