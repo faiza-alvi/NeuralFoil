@@ -1,7 +1,131 @@
 import aerosandbox.numpy as np
 import polars as pl
+import pandas as pd 
+from scipy.special import comb
 from pathlib import Path
 from neuralfoil._basic_data_type import Data
+
+# Function that calculates the derivatives of the airfoil using exact differentiation at specific nodes. 
+# With 8 polynomials per side, the first and second derivatives are calculated at 1/7, 2/7, 3/7, 4/7, 5/7 
+# and 6/7 along the chord
+def derivatives_at_nodes(lower_weights: np.ndarray = -0.2 * np.ones(8),
+    upper_weights: np.ndarray = 0.2 * np.ones(8),
+    leading_edge_weight: float = 0.0,
+    TE_thickness: float = 0.0,
+    N1: float = 0.5,
+    N2: float = 1.0,
+    **deprecated_kwargs,
+) -> np.ndarray:
+    """
+    Given a set of Kulfan Parameters (18 values)
+    Finds the first and second derivative of the surface at specific nodes along the airfoil
+    """
+    n_weights_per_side = len(lower_weights)
+
+    x_nodes = np.linspace(0, 1, n_weights_per_side)
+    
+    x_nodes = x_nodes[1:-1] #eliminates end points and only uses interior nodes for the derivative calculation. 
+
+    n_nodes = len(x_nodes)
+
+    N = n_weights_per_side - 1  # Order of Bernstein polynomials
+
+    K = comb(N, np.arange(N + 1))  # Bernstein polynomial coefficients
+
+    dims = (n_weights_per_side, n_nodes)
+
+    def wide(vector):
+        return np.tile(np.reshape(vector, (1, dims[1])), (dims[0], 1))
+
+    def tall(vector):
+        return np.tile(np.reshape(vector, (dims[0], 1)), (1, dims[1]))
+
+    p = np.arange(N1, (N1 + N + 1), 1) #exponent of x
+    q = N-np.arange(N + 1) + N2 #exponent of 1-x
+    
+    p_1 = p - 1 
+    q_1 = q - 1 
+    p_2 = p - 2
+    q_2 = q - 2
+    q_2[q_2 < 0] = 0 #hardcoding that q-2 after zero goes to zero still since derivative of a constant is zero. 
+    
+    slopes_matrix = (
+        tall(K)
+        * tall(p) 
+        * wide(x_nodes) ** tall(p_1) 
+        * wide( 1-x_nodes ) ** tall(q) 
+        - 
+        tall(K)
+        * tall(q)
+        * wide(x_nodes) ** tall(p) 
+        * wide( 1-x_nodes ) ** tall(q_1)
+    )       
+
+    curvature_matrix = (
+        tall(K)
+        * tall(p) * tall(p_1) 
+        * wide(x_nodes) ** tall(p_2) 
+        * wide( 1-x_nodes ) ** tall(q) 
+        - 2 * tall(K)
+        * tall(q)
+        * tall(p)
+        * wide(x_nodes) ** tall(p_1) 
+        * wide( 1-x_nodes ) ** tall(q_1) 
+        + tall(K) 
+        * tall(q)
+        * tall(q_1)
+        * wide(x_nodes) ** tall(p)
+        * wide( 1-x_nodes) ** tall(q_2)
+    )
+
+    lowerslope = slopes_matrix.T @ lower_weights
+    lowercurve = curvature_matrix.T @ lower_weights
+    upperslope = slopes_matrix.T @ upper_weights
+    uppercurve = curvature_matrix.T @ upper_weights
+
+    #Add in Leading Edge Modification
+    m_upper = np.length(upper_weights) + 0.5
+    m_lower = np.length(lower_weights) + 0.5
+    LE_upper_slope = leading_edge_weight*((1 - x_nodes)**m_upper) - leading_edge_weight*m_upper*x_nodes*((1-x_nodes)**(m_upper-1))
+    LE_lower_slope = leading_edge_weight*((1 - x_nodes)**m_lower) - leading_edge_weight*m_lower*x_nodes*((1-x_nodes)**(m_lower-1))
+    LE_upper_curve = -2*leading_edge_weight*m_upper*((1-x_nodes)**(m_upper-1)) + leading_edge_weight*m_upper*(m_upper-1)*x_nodes*((1-x_nodes)**(m_upper-2))
+    LE_lower_curve = -2*leading_edge_weight*m_lower*((1-x_nodes)**(m_lower-1)) + leading_edge_weight*m_lower*(m_lower-1)*x_nodes*((1-x_nodes)**(m_lower-2))
+    upperslope = upperslope + LE_upper_slope
+    lowerslope = lowerslope + LE_lower_slope
+    uppercurve = uppercurve + LE_upper_curve
+    lowercurve = lowercurve + LE_lower_curve
+
+    #Add in Trailing Edge Thickness 
+    upperslope = upperslope + TE_thickness/2
+    lowerslope = lowerslope - TE_thickness/2
+    # No effect on the second derivative as it is a function of x and so the second derivative is zero
+    
+    return {
+        "upper_first_der": upperslope,
+        "lower_first_der": lowerslope,
+        "upper_second_der": uppercurve,
+        "lower_second_der": lowercurve,
+    }
+
+# Given an input row of kulfan parameters from the dataframe this applies derivatives at nodes to create an output of derivative nodes. 
+def compute_derivatives(row):
+    result = derivatives_at_nodes(
+        lower_weights=np.array([row[f"kulfan_lower_{i}"] for i in range(8)]),
+        upper_weights=np.array([row[f"kulfan_upper_{i}"] for i in range(8)]),
+        leading_edge_weight=row["kulfan_LE_weight"],
+        TE_thickness=row["kulfan_TE_thickness"],
+    )
+    
+    # Expand into flat dict with meaningful column names
+    return {
+        f"upper_first_der_{i}": result["upper_first_der"][i] for i in range(len(result["upper_first_der"]))
+    } | {
+        f"lower_first_der_{i}": result["lower_first_der"][i] for i in range(len(result["lower_first_der"]))
+    } | {
+        f"upper_second_der_{i}": result["upper_second_der"][i] for i in range(len(result["upper_second_der"]))
+    } | {
+        f"lower_second_der_{i}": result["lower_second_der"][i] for i in range(len(result["lower_second_der"]))
+    }
 
 cols = Data.get_vector_column_names()
 
@@ -138,6 +262,10 @@ print(df)
 ### Shuffle the training set (deterministically)
 df = df.sample(fraction=1, with_replacement=False, shuffle=True, seed=0)
 
+# Make the derivative dataset
+# Apply to all rows
+derivatives_df = pd.DataFrame([compute_derivatives(row) for _, row in df.iterrows()])
+
 # Make the scaled datasets
 df_inputs_scaled = pl.DataFrame(
     {
@@ -155,6 +283,19 @@ df_inputs_scaled = pl.DataFrame(
         "s_xtr_lower": df["xtr_lower"],
     }
 )
+
+# Step 1: Convert derivatives_df to Polars
+df_derivatives_polars = pl.from_pandas(derivatives_df)
+
+# Step 2: Find index of "s_kulfan_TE_thickness"
+insert_idx = df_inputs_scaled.columns.index("s_kulfan_TE_thickness") + 1
+
+# Step 3: Slice and reassemble
+before = df_inputs_scaled[:, :insert_idx]
+after = df_inputs_scaled[:, insert_idx:]
+
+# Step 4: Stack all together
+df_inputs_scaled = before.hstack([df_derivatives_polars, after])
 
 di = df_inputs_scaled.describe()
 
