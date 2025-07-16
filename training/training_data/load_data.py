@@ -130,7 +130,7 @@ def compute_derivatives(row):
 cols = Data.get_vector_column_names()
 
 ### Read the original data, by scraping all .csv files within the data directory
-data_directory = Path(__file__).parent
+data_directory = Path("/home/faiza/Documents/NeuralFoil")
 
 raw_dfs = {}
 
