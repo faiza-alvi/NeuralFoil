@@ -264,7 +264,7 @@ df = df.sample(fraction=1, with_replacement=False, shuffle=True, seed=0)
 
 # Make the derivative dataset
 # Apply to all rows
-derivatives_df = pd.DataFrame([compute_derivatives(row) for _, row in df.iter_rows()])
+derivatives_df = pd.DataFrame([compute_derivatives(row) for _, row in df.iter_rows(named=True)])
 
 # Make the scaled datasets
 df_inputs_scaled = pl.DataFrame(
@@ -284,17 +284,17 @@ df_inputs_scaled = pl.DataFrame(
     }
 )
 
-# Step 1: Convert derivatives_df to Polars
+# Convert derivatives_df to Polars
 df_derivatives_polars = pl.from_pandas(derivatives_df)
 
-# Step 2: Find index of "s_kulfan_TE_thickness"
+# Find index of "s_kulfan_TE_thickness"
 insert_idx = df_inputs_scaled.columns.index("s_kulfan_TE_thickness") + 1
 
-# Step 3: Slice and reassemble
+# Slice dataframe in half to insert derivatives
 before = df_inputs_scaled[:, :insert_idx]
 after = df_inputs_scaled[:, insert_idx:]
 
-# Step 4: Stack all together
+# Stack all together
 df_inputs_scaled = before.hstack([df_derivatives_polars, after])
 
 di = df_inputs_scaled.describe()
