@@ -5,3 +5,4 @@ torch~=2.4.0
 ray[default]
 polars~=0.18.15
 tqdm~=4.65.0
+pandas[default]
