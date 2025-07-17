@@ -292,7 +292,7 @@ before = df_inputs_scaled[:, :insert_idx]
 after = df_inputs_scaled[:, insert_idx:]
 
 # Stack all together
-df_inputs_scaled = before.hstack([derivatives_df, after])
+df_inputs_scaled = pl.concat([before, derivatives_df, after], how="horizontal")
 
 di = df_inputs_scaled.describe()
 
