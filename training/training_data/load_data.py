@@ -118,13 +118,13 @@ def compute_derivatives(row):
     
     # Expand into flat dict with meaningful column names
     return {
-        f"upper_first_der_{i}": result["upper_first_der"][i] for i in range(len(result["upper_first_der"]))
+        f"s_upper_first_der_{i}": result["upper_first_der"][i] for i in range(len(result["upper_first_der"]))
     } | {
-        f"lower_first_der_{i}": result["lower_first_der"][i] for i in range(len(result["lower_first_der"]))
+        f"s_lower_first_der_{i}": result["lower_first_der"][i] for i in range(len(result["lower_first_der"]))
     } | {
-        f"upper_second_der_{i}": result["upper_second_der"][i] for i in range(len(result["upper_second_der"]))
+        f"s_upper_second_der_{i}": result["upper_second_der"][i] for i in range(len(result["upper_second_der"]))
     } | {
-        f"lower_second_der_{i}": result["lower_second_der"][i] for i in range(len(result["lower_second_der"]))
+        f"s_lower_second_der_{i}": result["lower_second_der"][i] for i in range(len(result["lower_second_der"]))
     }
 
 cols = Data.get_vector_column_names()
@@ -284,9 +284,6 @@ df_inputs_scaled = pl.DataFrame(
     }
 )
 
-# Convert derivatives_df to Polars
-df_derivatives_polars = pl.from_pandas(derivatives_df)
-
 # Find index of "s_kulfan_TE_thickness"
 insert_idx = df_inputs_scaled.columns.index("s_kulfan_TE_thickness") + 1
 
@@ -295,7 +292,7 @@ before = df_inputs_scaled[:, :insert_idx]
 after = df_inputs_scaled[:, insert_idx:]
 
 # Stack all together
-df_inputs_scaled = before.hstack([df_derivatives_polars, after])
+df_inputs_scaled = before.hstack([derivatives_df, after])
 
 di = df_inputs_scaled.describe()
 
