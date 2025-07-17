@@ -264,7 +264,7 @@ df = df.sample(fraction=1, with_replacement=False, shuffle=True, seed=0)
 
 # Make the derivative dataset
 # Apply to all rows
-derivatives_df = pd.DataFrame([compute_derivatives(row) for _, row in df.iter_rows(named=True)])
+derivatives_df = pl.DataFrame([compute_derivatives(row) for row in df.iter_rows(named=True)])
 
 # Make the scaled datasets
 df_inputs_scaled = pl.DataFrame(
