@@ -1,0 +1,41 @@
+import csv
+import aerosandbox as asb
+import aerosandbox.numpy as np
+from aerosandbox import Airfoil
+from typing import List
+import time
+from neuralfoil._basic_data_type import Data
+from pathlib import Path
+
+af=Airfoil("naca2412")
+alphas = (
+            np.linspace(-15, 15, 7)
+            + np.random.uniform(-2.5, 2.5)
+            + 2.5 * np.random.randn()
+        )
+Re = float(10 ** (5.5 + 1.5 * np.random.randn()))
+
+n_crit = np.random.uniform(0, 18)
+if np.random.rand() < 0.8:
+    xtr_upper = 1
+else:
+    xtr_upper = np.random.uniform(0, 1)
+if np.random.rand() < 0.8:
+    xtr_lower = 1
+else:
+    xtr_lower = np.random.uniform(0, 1)
+
+datas = Data.from_xfoil(
+            airfoil=af,
+            alphas=alphas,
+            Re=Re,
+            mach=0,
+            n_crit=n_crit,
+            xtr_upper=xtr_upper,
+            xtr_lower=xtr_lower,
+            timeout=60,
+            max_iter=200,
+            # xfoil_command="/home/faiza/Documents/xfoil"            
+        )
+
+print(datas)
