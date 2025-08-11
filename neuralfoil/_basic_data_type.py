@@ -146,6 +146,7 @@ class Data:
             xtr_upper=xtr_upper,
             xtr_lower=xtr_lower,
             xfoil_repanel=True,
+            xfoil_repanel_n_points=279,
             timeout=timeout,
             max_iter=max_iter,
             xfoil_command=xfoil_command,
