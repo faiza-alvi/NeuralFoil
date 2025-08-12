@@ -38,4 +38,13 @@ datas = Data.from_xfoil(
             # xfoil_command="/home/faiza/Documents/xfoil"            
         )
 
-print(datas)
+import pandas as pd
+
+for i, data in enumerate(datas):
+    # Convert to DataFrame; assuming to_vector() returns list or dict
+    df = pd.DataFrame([data.to_vector()])  # single-row DataFrame
+    
+    if i == 0:
+        df.to_csv("testrun.csv", index=False)
+    else:
+        df.to_csv("testrun.csv", mode='a', header=False, index=False)
