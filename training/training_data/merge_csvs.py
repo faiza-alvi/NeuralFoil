@@ -17,7 +17,7 @@ print(f"Found {len(csv_files)} CSV files to process.")
 dfs = []
 for csv_file in csv_files:
     print(f"Reading {csv_file}...")
-    df = pl.read_csv(csv_file, has_header=False)
+    df = pl.read_csv(csv_file, has_header=False, infer_schema_length=10000)
     print(f"\tRead {len(df)} rows")
     dfs.append(df)
 
