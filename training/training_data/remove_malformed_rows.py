@@ -28,6 +28,7 @@ file_name = r"C:\Users\booki\Documents\BIRD Lab\Airfoil Project\data_xfoil_final
 row_indices, length = find_longest_rows(file_name)
 
 print(f"The longest rows have {length} columns ")
+print(f"The longest rows are at indices: {row_indices}")
 
 # import csv
 
