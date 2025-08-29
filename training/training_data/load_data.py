@@ -130,14 +130,14 @@ def compute_derivatives(row):
 cols = Data.get_vector_column_names()
 
 ### Read the original data, by scraping all .csv files within the data directory
-data_directory = Path("/home/faiza/Documents/NeuralFoil")
+data_directory = Path(r"C:\Users\booki\Documents\BIRD Lab\Airfoil Project\NeuralFoil\training\training_data")
 
 raw_dfs = {}
 
 for csv_file in data_directory.glob("data*.csv"):
     print(f"Reading {csv_file}...")
     raw_dfs[csv_file.stem] = pl.read_csv(
-        csv_file, has_header=False, dtypes={col: pl.Float32 for col in cols}
+        csv_file, has_header=False, dtypes={col: pl.Float32 for col in cols}, skip_rows=1
     )
     print(f"\t{len(raw_dfs[csv_file.stem])} rows")
 
@@ -262,9 +262,12 @@ print(df)
 ### Shuffle the training set (deterministically)
 df = df.sample(fraction=1, with_replacement=False, shuffle=True, seed=0)
 
+print("At calculation now")
+
 # Make the derivative dataset
 # Apply to all rows
 derivatives_df = pl.DataFrame([compute_derivatives(row) for row in df.iter_rows(named=True)])
+print(derivatives_df)
 
 # Make the scaled datasets
 df_inputs_scaled = pl.DataFrame(
@@ -283,16 +286,20 @@ df_inputs_scaled = pl.DataFrame(
         "s_xtr_lower": df["xtr_lower"],
     }
 )
+print("Made scaled dataset")
 
 # Find index of "s_kulfan_TE_thickness"
 insert_idx = df_inputs_scaled.columns.index("s_kulfan_TE_thickness") + 1
+print("found insertion index")
 
 # Slice dataframe in half to insert derivatives
 before = df_inputs_scaled[:, :insert_idx]
 after = df_inputs_scaled[:, insert_idx:]
+print("cut dataframe at insertion index")
 
 # Stack all together
 df_inputs_scaled = pl.concat([before, derivatives_df, after], how="horizontal")
+print("stacked inputs using pl.concat")
 
 di = df_inputs_scaled.describe()
 
@@ -351,6 +358,11 @@ df_train_inputs_scaled = df_inputs_scaled[:test_train_split_index]
 df_train_outputs_scaled = df_outputs_scaled[:test_train_split_index]
 df_test_inputs_scaled = df_inputs_scaled[test_train_split_index:]
 df_test_outputs_scaled = df_outputs_scaled[test_train_split_index:]
+print("Splitting data between test and train sets has been completed")
+print(f"The input training data is shaped as {df_train_inputs_scaled.describe()} ")
+print(f"The output training data is shaped as {df_train_outputs_scaled.describe()} ")
+print(f"The input test data is shaped as {df_test_inputs_scaled.describe()} ")
+print(f"The output test data is shaped as {df_test_outputs_scaled.describe()} ")
 
 mean_inputs_scaled = np.mean(df_inputs_scaled.to_numpy(), axis=0)
 cov_inputs_scaled = np.cov(df_inputs_scaled.to_numpy(), rowvar=False)
