@@ -66,11 +66,27 @@ class Net(torch.nn.Module):
         x_flipped = x.clone()
         x_flipped[:, :8] = (
             -1 * x[:, 8:16]
-        )  # switch kulfan_lower with a flipped kulfan_upper
+        )  # switch kulfan_lower with a flipped kulfan_upper 
+        # this is incorrectly labeled. The column names are actually listing upper surface then lower
         x_flipped[:, 8:16] = (
             -1 * x[:, :8]
         )  # switch kulfan_upper with a flipped kulfan_lower
         x_flipped[:, 16] = -1 * x[:, 16]  # flip kulfan_LE_weight
+
+        # Accounting for derivatives
+        x_flipped[:, 18:24] = (
+            -1 * x[:, 24:30]
+        ) #switches upper 1st derivative with a flipped lower derivative
+        x_flipped[:, 24:30] = (
+            -1 * x[:, 18:24]
+        ) # switches lower 1st derivative with a flipped upper derivative 
+        x_flipped[:, 30:36] = (
+            -1 * x[:, 36:42]
+        ) # switches upper 2nd derivative with flipped lower 
+        x_flipped[:, 36:42] = (
+            -1 * x[:, 30:36]
+        ) # switches lower 2nd derivative with flipped upper
+
         x_flipped[:, 18] = -1 * x[:, 18]  # flip sin(2a)
         x_flipped[:, 23] = x[:, 24]  # flip xtr_upper with xtr_lower
         x_flipped[:, 24] = x[:, 23]  # flip xtr_lower with xtr_upper
