@@ -87,9 +87,9 @@ class Net(torch.nn.Module):
             -1 * x[:, 30:36]
         ) # switches lower 2nd derivative with flipped upper
 
-        x_flipped[:, 18] = -1 * x[:, 18]  # flip sin(2a)
-        x_flipped[:, 23] = x[:, 24]  # flip xtr_upper with xtr_lower
-        x_flipped[:, 24] = x[:, 23]  # flip xtr_lower with xtr_upper
+        x_flipped[:, 42] = -1 * x[:, 42]  # flip sin(2a)
+        x_flipped[:, 47] = x[:, 48]  # flip xtr_upper with xtr_lower
+        x_flipped[:, 48] = x[:, 47]  # flip xtr_lower with xtr_upper
 
         y_flipped = self.net(x_flipped)
         y_flipped[:, 0] = y_flipped[:, 0] - self.squared_mahalanobis_distance(
