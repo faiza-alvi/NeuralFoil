@@ -138,7 +138,7 @@ raw_dfs = {}
 for csv_file in data_directory.glob("data*.csv"):
     print(f"Reading {csv_file}...")
     raw_dfs[csv_file.stem] = pl.read_csv(
-        csv_file, has_header=False, new_columns=cols, dtypes={col: pl.Float32 for col in cols}#, skip_rows=1
+        csv_file, has_header=False, new_columns=cols, schema_overrides={col: pl.Float32 for col in cols}, infer_schema_length=10000, skip_rows=1
     )
     print(f"\t{len(raw_dfs[csv_file.stem])} rows")
 
