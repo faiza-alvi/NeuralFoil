@@ -12,14 +12,15 @@ def derivatives_at_nodes(lower_weights: np.ndarray = -0.2 * np.ones(8),
     upper_weights: np.ndarray = 0.2 * np.ones(8),
     leading_edge_weight: float = 0.0,
     TE_thickness: float = 0.0,
-    N1: float = 0.5,
-    N2: float = 1.0,
     **deprecated_kwargs,
 ) -> np.ndarray:
     """
     Given a set of Kulfan Parameters (18 values)
     Finds the first and second derivative of the surface at specific nodes along the airfoil
     """
+    N1 = 0.5 
+    N2 = 1.0,
+
     n_weights_per_side = len(lower_weights)
 
     x_nodes = np.linspace(0, 1, n_weights_per_side)
@@ -130,14 +131,14 @@ def compute_derivatives(row):
 cols = Data.get_vector_column_names()
 
 ### Read the original data, by scraping all .csv files within the data directory
-data_directory = Path(r"C:\Users\booki\Documents\BIRD Lab\Airfoil Project\NeuralFoil\training\training_data")
+data_directory = Path(r"/home/faiza/Documents/NeuralFoil/training/training_data")
 
 raw_dfs = {}
 
 for csv_file in data_directory.glob("data*.csv"):
     print(f"Reading {csv_file}...")
     raw_dfs[csv_file.stem] = pl.read_csv(
-        csv_file, has_header=False, dtypes={col: pl.Float32 for col in cols}, skip_rows=1
+        csv_file, has_header=False, new_columns=cols, dtypes={col: pl.Float32 for col in cols}#, skip_rows=1
     )
     print(f"\t{len(raw_dfs[csv_file.stem])} rows")
 
