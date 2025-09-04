@@ -94,6 +94,23 @@ def clean_csv(input_file, output_file):
 # -----------------------------------
 # Implementation to remove any rows that have a null value for any of the 18 kulfan parameters 
 # This is caused by interrupted writing during the data generation process. 
-input_filename = r"/home/faiza/Documents/"
-output_filename = r"/home"
-clean_csv(input_filename, output_filename)
+# input_filename = r"/home/faiza/Documents/NeuralFoil/training/training_data/data_xfoil.csv"
+output_filename = r"/home/faiza/Documents/NeuralFoil/training/training_data/data_xfoil_clean.csv"
+# clean_csv(input_filename, output_filename)
+
+df = pd.read_csv(output_filename)
+
+# First 18 columns
+first_18_cols = df.columns[:18]
+
+# Check if there are any nulls
+null_counts = df[first_18_cols].isnull().sum()
+
+print("Null values per column (first 18):")
+print(null_counts)
+
+total_nulls = null_counts.sum()
+if total_nulls == 0:
+    print("No null values found in the first 18 columns.")
+else:
+    print(f"Found {total_nulls} null values in the first 18 columns.")
