@@ -13,7 +13,7 @@ from torch.utils.data import TensorDataset, DataLoader
 N_inputs = len(df_train_inputs_scaled.columns)
 N_outputs = len(df_train_outputs_scaled.columns)
 
-cache_file = Path(__file__).parent / "nn-avian.pth"
+cache_file = Path(__file__).parent / "nn-avian-v2.pth"
 n_hidden_layers = 5
 width = 512
 print("Cache file: ", cache_file)
@@ -191,7 +191,7 @@ if __name__ == "__main__":
     )
     test_loader = DataLoader(
         dataset=TensorDataset(test_inputs, test_outputs),
-        batch_size=8192,
+        batch_size=batch_size,#8192,
         num_workers=16,
     )
 
