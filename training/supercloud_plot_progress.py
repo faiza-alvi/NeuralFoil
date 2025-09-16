@@ -13,14 +13,15 @@ import aerosandbox.tools.pretty_plots as p
 # log_file = max(log_files, key=log_files.get)
 
 log_file_ids = {
-    "xxsmall": ["log.log-25540774", "log.log-25584785"],
-    "xsmall": ["log.log-25542972", "log.log-25584790"],
-    "small": "log.log-25542974",
-    "medium": "log.log-25542980",
-    "large": "log.log-25542983",
-    "xlarge": "log.log-25542989",
-    "xxlarge": "log.log-25542993",
+    # "xxsmall": ["log.log-25540774", "log.log-25584785"],
+    # "xsmall": ["log.log-25542972", "log.log-25584790"],
+    # "small": "log.log-25542974",
+    # "medium": "log.log-25542980",
+    # "large": "log.log-25542983",
+    # "xlarge": "log.log-25542989",
+    # "xxlarge": "log.log-25542993",
     "xxxlarge": "log.log-25543001",
+    "avian": "avian.log",
 }
 
 fig, ax = plt.subplots(
@@ -34,7 +35,7 @@ ax_f = ax.flatten()
 
 
 def load_log_file(filename) -> dict[str, np.ndarray]:
-    with open(filename, "r", encoding="utf8") as f:
+    with open(filename, "r", encoding="utf8", errors="replace") as f:
         lines = f.readlines()
 
     def parse_line(row: str) -> Union[dict[str, float], None]:
