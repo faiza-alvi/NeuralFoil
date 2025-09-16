@@ -131,14 +131,15 @@ def compute_derivatives(row):
 cols = Data.get_vector_column_names()
 
 ### Read the original data, by scraping all .csv files within the data directory
-data_directory = Path(r"/home/faiza/Documents/NeuralFoil/training/training_data")
+# data_directory = Path(r"/home/faiza/Documents/NeuralFoil/training/training_data")
+data_directory = Path(r"C:\Users\booki\Documents\BIRD Lab\Airfoil Project\NeuralFoil\training\training_data")
 
 raw_dfs = {}
 
 for csv_file in data_directory.glob("data*.csv"):
     print(f"Reading {csv_file}...")
     raw_dfs[csv_file.stem] = pl.read_csv(
-        csv_file, has_header=False, new_columns=cols, dtypes={col: pl.Float32 for col in cols}#, skip_rows=1
+        csv_file, has_header=False, new_columns=cols, dtypes={col: pl.Float32 for col in cols}, skip_rows=1
     )
     print(f"\t{len(raw_dfs[csv_file.stem])} rows")
 
@@ -360,10 +361,10 @@ df_train_outputs_scaled = df_outputs_scaled[:test_train_split_index]
 df_test_inputs_scaled = df_inputs_scaled[test_train_split_index:]
 df_test_outputs_scaled = df_outputs_scaled[test_train_split_index:]
 print("Splitting data between test and train sets has been completed")
-print(f"The input training data is shaped as {df_train_inputs_scaled.describe()} ")
-print(f"The output training data is shaped as {df_train_outputs_scaled.describe()} ")
-print(f"The input test data is shaped as {df_test_inputs_scaled.describe()} ")
-print(f"The output test data is shaped as {df_test_outputs_scaled.describe()} ")
+print(f"The input training data is shaped as {df_train_inputs_scaled} ")
+print(f"The output training data is shaped as {df_train_outputs_scaled} ")
+print(f"The input test data is shaped as {df_test_inputs_scaled} ")
+print(f"The output test data is shaped as {df_test_outputs_scaled} ")
 
 mean_inputs_scaled = np.mean(df_inputs_scaled.to_numpy(), axis=0)
 cov_inputs_scaled = np.cov(df_inputs_scaled.to_numpy(), rowvar=False)
