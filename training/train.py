@@ -178,7 +178,7 @@ if __name__ == "__main__":
         dataset=TensorDataset(train_inputs, train_outputs),
         batch_size=batch_size,
         shuffle=True,
-        # num_workers=4,
+        num_workers=16,
     )
 
     test_inputs = torch.tensor(
@@ -192,7 +192,7 @@ if __name__ == "__main__":
     test_loader = DataLoader(
         dataset=TensorDataset(test_inputs, test_outputs),
         batch_size=8192,
-        # num_workers=4,
+        num_workers=16,
     )
 
     # Prepare the loss function
