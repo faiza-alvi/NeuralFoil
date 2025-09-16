@@ -1,12 +1,14 @@
-import csv
-import aerosandbox as asb
-import aerosandbox.numpy as np
-from aerosandbox import Airfoil
-from typing import List
-import time
-from neuralfoil._basic_data_type import Data
-from pathlib import Path
+# import csv
+# import aerosandbox as asb
+# import aerosandbox.numpy as np
+# from aerosandbox import Airfoil
+# from typing import List
+# import time
+# from neuralfoil._basic_data_type import Data
+# from pathlib import Path
 
+#testing plots, commented out below 
+"""
 af=Airfoil("naca2412")
 alphas = (
             np.linspace(-15, 15, 7)
@@ -48,3 +50,37 @@ for i, data in enumerate(datas):
         df.to_csv("testrun.csv", index=False)
     else:
         df.to_csv("testrun.csv", mode='a', header=False, index=False)
+
+"""
+import re
+import matplotlib.pyplot as plt
+
+# regex to capture epoch, train loss, test loss
+pattern = re.compile(
+    r"Epoch:\s*(\d+)\s*\|\s*Train Loss:\s*([\d.eE+-]+)\s*\|\s*Test Loss:\s*([\d.eE+-]+)"
+)
+
+epochs = []
+train_losses = []
+test_losses = []
+
+# Path for xxxlarge: C:\Users\booki\Documents\BIRD Lab\Airfoil Project\NeuralFoil\training\log.log-25543001
+# path for avian: C:\Users\booki\Documents\BIRD Lab\Airfoil Project\NeuralFoil\training\avian.log
+
+with open(r"C:\Users\booki\Documents\BIRD Lab\Airfoil Project\NeuralFoil\training\avian_9-16-25.log", "r", encoding="utf-8", errors="ignore") as f:
+    for line in f:
+        match = pattern.search(line)
+        if match:
+            epochs.append(int(match.group(1)))
+            train_losses.append(float(match.group(2)))
+            test_losses.append(float(match.group(3)))
+
+# Plot
+plt.plot(train_losses, label="Train Loss", linewidth=1)
+plt.plot(test_losses, label="Test Loss", linewidth=1)
+plt.xlabel("Epoch")
+plt.ylabel("Loss")
+plt.yscale("log")   # if you want log scale like before
+plt.legend()
+plt.title("Training Progress")
+plt.show()
