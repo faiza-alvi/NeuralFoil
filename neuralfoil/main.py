@@ -272,7 +272,6 @@ def get_aero_from_kulfan_parameters(
     nn_params: dict[str, np.ndarray] = _nn_parameters[model_size]
 
     # Calculate Derivatives: 
-    # Compute derivatives directly
     derivs = derivatives_at_nodes(
         lower_weights=kulfan_parameters["lower_weights"],
         upper_weights=kulfan_parameters["upper_weights"],
@@ -280,25 +279,44 @@ def get_aero_from_kulfan_parameters(
         TE_thickness=kulfan_parameters["TE_thickness"],
     )
 
-    ### Prepare the inputs for the neural network
-    input_rows: List[Union[float, np.ndarray]] = [
-        *[kulfan_parameters["upper_weights"][i] for i in range(8)],
-        *[kulfan_parameters["lower_weights"][i] for i in range(8)],
-        kulfan_parameters["leading_edge_weight"],
-        kulfan_parameters["TE_thickness"] * 50,
-        *derivs["upper_first_der"],
-        *derivs["lower_first_der"],
-        *derivs["upper_second_der"],
-        *derivs["lower_second_der"],
-        np.sind(2 * alpha),
-        np.cosd(alpha),
-        1 - np.cosd(alpha) ** 2,
-        (np.log(Re) - 12.5) / 3.5,
-        # No mach
-        (n_crit - 9) / 4.5,
-        xtr_upper,
-        xtr_lower,
-    ]
+    if model_size=="avian":
+        ### Prepare the inputs for the neural network
+        # Only adds derivative if the avian model is selected
+        input_rows: List[Union[float, np.ndarray]] = [
+            *[kulfan_parameters["upper_weights"][i] for i in range(8)],
+            *[kulfan_parameters["lower_weights"][i] for i in range(8)],
+            kulfan_parameters["leading_edge_weight"],
+            kulfan_parameters["TE_thickness"] * 50,
+            *derivs["upper_first_der"],
+            *derivs["lower_first_der"],
+            *derivs["upper_second_der"],
+            *derivs["lower_second_der"],
+            np.sind(2 * alpha),
+            np.cosd(alpha),
+            1 - np.cosd(alpha) ** 2,
+            (np.log(Re) - 12.5) / 3.5,
+            # No mach
+            (n_crit - 9) / 4.5,
+            xtr_upper,
+            xtr_lower,
+        ]
+    else: 
+        ### Prepare the inputs for the neural network
+        # Retains original structure for 
+        input_rows: List[Union[float, np.ndarray]] = [
+            *[kulfan_parameters["upper_weights"][i] for i in range(8)],
+            *[kulfan_parameters["lower_weights"][i] for i in range(8)],
+            kulfan_parameters["leading_edge_weight"],
+            kulfan_parameters["TE_thickness"] * 50,
+            np.sind(2 * alpha),
+            np.cosd(alpha),
+            1 - np.cosd(alpha) ** 2,
+            (np.log(Re) - 12.5) / 3.5,
+            # No mach
+            (n_crit - 9) / 4.5,
+            xtr_upper,
+            xtr_lower,
+        ]
 
     
 
@@ -383,6 +401,38 @@ def get_aero_from_kulfan_parameters(
     x_flipped[:, 18] = -1 * x[:, 18]  # flip sin(2a)
     x_flipped[:, 23] = x[:, 24]  # flip xtr_upper with xtr_lower
     x_flipped[:, 24] = x[:, 23]  # flip xtr_lower with xtr_upper
+
+    if model_size=="avian": 
+        x_flipped = (
+            x + 0.0
+        )  # This is an array-api-agnostic way to force a memory copy of the array to be made.
+        x_flipped[:, :8] = (
+            -1 * x[:, 8:16]
+        )  # switch kulfan_lower with a flipped kulfan_upper 
+        # this is incorrectly labeled. The column names are actually listing upper surface then lower
+        x_flipped[:, 8:16] = (
+            -1 * x[:, :8]
+        )  # switch kulfan_upper with a flipped kulfan_lower
+        x_flipped[:, 16] = -1 * x[:, 16]  # flip kulfan_LE_weight
+
+        # Accounting for derivatives
+        x_flipped[:, 18:24] = (
+            -1 * x[:, 24:30]
+        ) #switches upper 1st derivative with a flipped lower derivative
+        x_flipped[:, 24:30] = (
+            -1 * x[:, 18:24]
+        ) # switches lower 1st derivative with a flipped upper derivative 
+        x_flipped[:, 30:36] = (
+            -1 * x[:, 36:42]
+        ) # switches upper 2nd derivative with flipped lower 
+        x_flipped[:, 36:42] = (
+            -1 * x[:, 30:36]
+        ) # switches lower 2nd derivative with flipped upper
+
+        x_flipped[:, 42] = -1 * x[:, 42]  # flip sin(2a)
+        x_flipped[:, 47] = x[:, 48]  # flip xtr_upper with xtr_lower
+        x_flipped[:, 48] = x[:, 47]  # flip xtr_lower with xtr_upper
+
 
     y_flipped = net(x_flipped)
     y_flipped[:, 0] = y_flipped[:, 0] - _squared_mahalanobis_distance(x_flipped) / (
