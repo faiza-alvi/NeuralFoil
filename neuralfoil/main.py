@@ -4,6 +4,7 @@ from typing import Union, Dict, Set, List, Iterable
 from pathlib import Path
 import re
 from neuralfoil._basic_data_type import Data
+from scipy.special import comb
 
 nn_weights_dir = Path(__file__).parent / "nn_weights_and_biases"
 
@@ -21,6 +22,117 @@ def _sigmoid(x: Union[float, np.ndarray]) -> Union[float, np.ndarray]:
     x = np.clip(x, _ln_eps, -_ln_eps)  # Clip to suppress overflow
     return 1 / (1 + np.exp(-x))
 
+# Function that calculates the derivatives of the airfoil using exact differentiation at specific nodes. 
+# With 8 polynomials per side, the first and second derivatives are calculated at 1/7, 2/7, 3/7, 4/7, 5/7 
+# and 6/7 along the chord
+def derivatives_at_nodes(lower_weights: np.ndarray = -0.2 * np.ones(8),
+    upper_weights: np.ndarray = 0.2 * np.ones(8),
+    leading_edge_weight: float = 0.0,
+    TE_thickness: float = 0.0,
+    **deprecated_kwargs,
+) -> np.ndarray:
+    """
+    Given a set of Kulfan Parameters (18 values)
+    Finds the first and second derivative of the surface at specific nodes along the airfoil
+    """
+    N1 = 0.5 
+    N2 = 1.0,
+
+    n_weights_per_side = len(lower_weights)
+
+    x_nodes = np.linspace(0, 1, n_weights_per_side)
+    
+    x_nodes = x_nodes[1:-1] #eliminates end points and only uses interior nodes for the derivative calculation. 
+
+    n_nodes = len(x_nodes)
+
+    N = n_weights_per_side - 1  # Order of Bernstein polynomials
+
+    K = comb(N, np.arange(N + 1))  # Bernstein polynomial coefficients
+
+    dims = (n_weights_per_side, n_nodes)
+
+    def wide(vector):
+        return np.tile(np.reshape(vector, (1, dims[1])), (dims[0], 1))
+
+    def tall(vector):
+        return np.tile(np.reshape(vector, (dims[0], 1)), (1, dims[1]))
+
+    p = np.arange(N1, (N1 + N + 1), 1) #exponent of x
+    q = N-np.arange(N + 1) + N2 #exponent of 1-x
+    
+    p_1 = p - 1 
+    q_1 = q - 1 
+    p_2 = p - 2
+    q_2 = q - 2
+    q_2[q_2 < 0] = 0 #hardcoding that q-2 after zero goes to zero still since derivative of a constant is zero. 
+    
+    slopes_matrix = (
+        tall(K)
+        * tall(p) 
+        * wide(x_nodes) ** tall(p_1) 
+        * wide( 1-x_nodes ) ** tall(q) 
+        - 
+        tall(K)
+        * tall(q)
+        * wide(x_nodes) ** tall(p) 
+        * wide( 1-x_nodes ) ** tall(q_1)
+    )       
+
+    curvature_matrix = (
+        tall(K)
+        * tall(p) * tall(p_1) 
+        * wide(x_nodes) ** tall(p_2) 
+        * wide( 1-x_nodes ) ** tall(q) 
+        - 2 * tall(K)
+        * tall(q)
+        * tall(p)
+        * wide(x_nodes) ** tall(p_1) 
+        * wide( 1-x_nodes ) ** tall(q_1) 
+        + tall(K) 
+        * tall(q)
+        * tall(q_1)
+        * wide(x_nodes) ** tall(p)
+        * wide( 1-x_nodes) ** tall(q_2)
+    )
+
+    lowerslope = slopes_matrix.T @ lower_weights
+    lowercurve = curvature_matrix.T @ lower_weights
+    upperslope = slopes_matrix.T @ upper_weights
+    uppercurve = curvature_matrix.T @ upper_weights
+
+    #Add in Leading Edge Modification
+    m_upper = np.length(upper_weights) + 0.5
+    m_lower = np.length(lower_weights) + 0.5
+    LE_upper_slope = leading_edge_weight*((1 - x_nodes)**m_upper) - leading_edge_weight*m_upper*x_nodes*((1-x_nodes)**(m_upper-1))
+    LE_lower_slope = leading_edge_weight*((1 - x_nodes)**m_lower) - leading_edge_weight*m_lower*x_nodes*((1-x_nodes)**(m_lower-1))
+    LE_upper_curve = -2*leading_edge_weight*m_upper*((1-x_nodes)**(m_upper-1)) + leading_edge_weight*m_upper*(m_upper-1)*x_nodes*((1-x_nodes)**(m_upper-2))
+    LE_lower_curve = -2*leading_edge_weight*m_lower*((1-x_nodes)**(m_lower-1)) + leading_edge_weight*m_lower*(m_lower-1)*x_nodes*((1-x_nodes)**(m_lower-2))
+    upperslope = upperslope + LE_upper_slope
+    lowerslope = lowerslope + LE_lower_slope
+    uppercurve = uppercurve + LE_upper_curve
+    lowercurve = lowercurve + LE_lower_curve
+
+    #Add in Trailing Edge Thickness 
+    upperslope = upperslope + TE_thickness/2
+    lowerslope = lowerslope - TE_thickness/2
+    # No effect on the second derivative as it is a function of x and so the second derivative is zero
+    
+    return {
+        "upper_first_der": upperslope,
+        "lower_first_der": lowerslope,
+        "upper_second_der": uppercurve,
+        "lower_second_der": lowercurve,
+    }
+
+# Given an input row of kulfan parameters from the dataframe this applies derivatives at nodes to create an output of derivative nodes. 
+def compute_derivatives(row):
+    result = derivatives_at_nodes(
+        lower_weights=np.array([row[f"kulfan_lower_{i}"] for i in range(8)]),
+        upper_weights=np.array([row[f"kulfan_upper_{i}"] for i in range(8)]),
+        leading_edge_weight=row["kulfan_LE_weight"],
+        TE_thickness=row["kulfan_TE_thickness"],
+    )
 
 ### For speed, pre-loads parameters with statistics about the training distribution
 # Includes the mean, covariance, and inverse covariance of training data in the input latent space (25-dim)
@@ -159,21 +271,54 @@ def get_aero_from_kulfan_parameters(
         )
     nn_params: dict[str, np.ndarray] = _nn_parameters[model_size]
 
-    ### Prepare the inputs for the neural network
-    input_rows: List[Union[float, np.ndarray]] = [
-        *[kulfan_parameters["upper_weights"][i] for i in range(8)],
-        *[kulfan_parameters["lower_weights"][i] for i in range(8)],
-        kulfan_parameters["leading_edge_weight"],
-        kulfan_parameters["TE_thickness"] * 50,
-        np.sind(2 * alpha),
-        np.cosd(alpha),
-        1 - np.cosd(alpha) ** 2,
-        (np.log(Re) - 12.5) / 3.5,
-        # No mach
-        (n_crit - 9) / 4.5,
-        xtr_upper,
-        xtr_lower,
-    ]
+    # Calculate Derivatives: 
+    derivs = derivatives_at_nodes(
+        lower_weights=kulfan_parameters["lower_weights"],
+        upper_weights=kulfan_parameters["upper_weights"],
+        leading_edge_weight=kulfan_parameters["leading_edge_weight"],
+        TE_thickness=kulfan_parameters["TE_thickness"],
+    )
+
+    if model_size=="avian":
+        ### Prepare the inputs for the neural network
+        # Only adds derivative if the avian model is selected
+        input_rows: List[Union[float, np.ndarray]] = [
+            *[kulfan_parameters["upper_weights"][i] for i in range(8)],
+            *[kulfan_parameters["lower_weights"][i] for i in range(8)],
+            kulfan_parameters["leading_edge_weight"],
+            kulfan_parameters["TE_thickness"] * 50,
+            *derivs["upper_first_der"],
+            *derivs["lower_first_der"],
+            *derivs["upper_second_der"],
+            *derivs["lower_second_der"],
+            np.sind(2 * alpha),
+            np.cosd(alpha),
+            1 - np.cosd(alpha) ** 2,
+            (np.log(Re) - 12.5) / 3.5,
+            # No mach
+            (n_crit - 9) / 4.5,
+            xtr_upper,
+            xtr_lower,
+        ]
+    else: 
+        ### Prepare the inputs for the neural network
+        # Retains original structure for 
+        input_rows: List[Union[float, np.ndarray]] = [
+            *[kulfan_parameters["upper_weights"][i] for i in range(8)],
+            *[kulfan_parameters["lower_weights"][i] for i in range(8)],
+            kulfan_parameters["leading_edge_weight"],
+            kulfan_parameters["TE_thickness"] * 50,
+            np.sind(2 * alpha),
+            np.cosd(alpha),
+            1 - np.cosd(alpha) ** 2,
+            (np.log(Re) - 12.5) / 3.5,
+            # No mach
+            (n_crit - 9) / 4.5,
+            xtr_upper,
+            xtr_lower,
+        ]
+
+    
 
     ### Handle the vectorization, where here we figure out how many cases the user wants to run
     N_cases = 1  # TODO rework this with np.atleast1d
@@ -256,6 +401,38 @@ def get_aero_from_kulfan_parameters(
     x_flipped[:, 18] = -1 * x[:, 18]  # flip sin(2a)
     x_flipped[:, 23] = x[:, 24]  # flip xtr_upper with xtr_lower
     x_flipped[:, 24] = x[:, 23]  # flip xtr_lower with xtr_upper
+
+    if model_size=="avian": 
+        x_flipped = (
+            x + 0.0
+        )  # This is an array-api-agnostic way to force a memory copy of the array to be made.
+        x_flipped[:, :8] = (
+            -1 * x[:, 8:16]
+        )  # switch kulfan_lower with a flipped kulfan_upper 
+        # this is incorrectly labeled. The column names are actually listing upper surface then lower
+        x_flipped[:, 8:16] = (
+            -1 * x[:, :8]
+        )  # switch kulfan_upper with a flipped kulfan_lower
+        x_flipped[:, 16] = -1 * x[:, 16]  # flip kulfan_LE_weight
+
+        # Accounting for derivatives
+        x_flipped[:, 18:24] = (
+            -1 * x[:, 24:30]
+        ) #switches upper 1st derivative with a flipped lower derivative
+        x_flipped[:, 24:30] = (
+            -1 * x[:, 18:24]
+        ) # switches lower 1st derivative with a flipped upper derivative 
+        x_flipped[:, 30:36] = (
+            -1 * x[:, 36:42]
+        ) # switches upper 2nd derivative with flipped lower 
+        x_flipped[:, 36:42] = (
+            -1 * x[:, 30:36]
+        ) # switches lower 2nd derivative with flipped upper
+
+        x_flipped[:, 42] = -1 * x[:, 42]  # flip sin(2a)
+        x_flipped[:, 47] = x[:, 48]  # flip xtr_upper with xtr_lower
+        x_flipped[:, 48] = x[:, 47]  # flip xtr_lower with xtr_upper
+
 
     y_flipped = net(x_flipped)
     y_flipped[:, 0] = y_flipped[:, 0] - _squared_mahalanobis_distance(x_flipped) / (
