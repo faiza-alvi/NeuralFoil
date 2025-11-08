@@ -279,7 +279,7 @@ def get_aero_from_kulfan_parameters(
         TE_thickness=kulfan_parameters["TE_thickness"],
     )
 
-    if model_size=="avian":
+    if model_size=="avian-v2":
         ### Prepare the inputs for the neural network
         # Only adds derivative if the avian model is selected
         input_rows: List[Union[float, np.ndarray]] = [
@@ -402,7 +402,7 @@ def get_aero_from_kulfan_parameters(
     x_flipped[:, 23] = x[:, 24]  # flip xtr_upper with xtr_lower
     x_flipped[:, 24] = x[:, 23]  # flip xtr_lower with xtr_upper
 
-    if model_size=="avian": 
+    if model_size=="avian-v2": 
         x_flipped = (
             x + 0.0
         )  # This is an array-api-agnostic way to force a memory copy of the array to be made.
