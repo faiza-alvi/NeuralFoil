@@ -369,6 +369,17 @@ print(f"The output test data is shaped as {df_test_outputs_scaled.describe()} ")
 mean_inputs_scaled = np.mean(df_inputs_scaled.to_numpy(), axis=0)
 cov_inputs_scaled = np.cov(df_inputs_scaled.to_numpy(), rowvar=False)
 
+# Compute the inverse of the covariance
+inv_cov_inputs_scaled = np.linalg.inv(cov_inputs_scaled)
+
+# Save everything to a .npz file
+np.savez(
+    "avian_scaled_input_distribution.npz",
+    mean_inputs_scaled=mean_inputs_scaled,
+    cov_inputs_scaled=cov_inputs_scaled,
+    inv_cov_inputs_scaled=inv_cov_inputs_scaled
+)
+
 
 def make_data(row_index, df=df):
     row = df[row_index]
