@@ -67,23 +67,43 @@ test_losses = []
 # Path for xxxlarge: C:\Users\booki\Documents\BIRD Lab\Airfoil Project\NeuralFoil\training\log.log-25543001
 # path for avian: C:\Users\booki\Documents\BIRD Lab\Airfoil Project\NeuralFoil\training\avian.log
 
-# with open(r"C:\Users\booki\Documents\BIRD Lab\Airfoil Project\NeuralFoil\training\avian_9-16-25.log", "r", encoding="utf-8", errors="ignore") as f:
-#     for line in f:
-#         match = pattern.search(line)
-#         if match:
-#             epochs.append(int(match.group(1)))
-#             train_losses.append(float(match.group(2)))
-#             test_losses.append(float(match.group(3)))
+# List of log files
+log_files = [
+    # r"C:\Users\booki\Documents\BIRD Lab\Airfoil Project\NeuralFoil\training\avian-v2.log",
+    # r"C:\Users\booki\Documents\BIRD Lab\Airfoil Project\NeuralFoil\training\avian-v2_pt2.log", 
+    # r"C:\Users\booki\Documents\BIRD Lab\Airfoil Project\NeuralFoil\training\avian-v2_pt3.log"
+    r"C:\Users\booki\Documents\BIRD Lab\Airfoil Project\NeuralFoil\training\log.log-25543001"
+]
 
-# # Plot
-# plt.plot(train_losses, label="Train Loss", linewidth=1)
-# plt.plot(test_losses, label="Test Loss", linewidth=1)
-# plt.xlabel("Epoch")
-# plt.ylabel("Loss")
-# plt.yscale("log")   # if you want log scale like before
-# plt.legend()
-# plt.title("Training Progress")
-# plt.show()
+for file in log_files:
+    with open(file, "r", encoding="utf-8", errors="ignore") as f:
+        for line in f:
+            match = pattern.search(line)
+            if match:
+                epochs.append(int(match.group(1)))
+                train_losses.append(float(match.group(2)))
+                test_losses.append(float(match.group(3)))
+
+train_sub = train_losses[-50:]
+test_sub = test_losses[-50:]
+train_conv_error = max(train_sub) - min(train_sub)
+test_conv_error = max(test_sub) - min(test_sub)
+print(f"The training convergence error is {train_conv_error}")
+print(f"The test convergence error is {test_conv_error}")
+print(f"This is comparing over the last {len(train_sub)} epochs")
+print(f"The two loss values are approximately {max(test_sub) - min(train_sub)} apart.")
+
+# Plot
+plt.plot(train_losses, label="Train Loss", linewidth=1)
+plt.plot(test_losses, label="Test Loss", linewidth=1)
+plt.xlabel("Epoch")
+plt.ylabel("Loss")
+#plt.xlim(0,250)
+#plt.ylim(0, 2)
+plt.yscale("log")   # if you want log scale like before
+plt.legend()
+plt.title("Avian Training Progress")
+plt.show()
 
 import numpy as np
 
