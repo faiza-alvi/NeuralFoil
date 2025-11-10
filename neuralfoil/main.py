@@ -36,7 +36,7 @@ def derivatives_at_nodes(lower_weights: np.ndarray = -0.2 * np.ones(8),
     Finds the first and second derivative of the surface at specific nodes along the airfoil
     """
     N1 = 0.5 
-    N2 = 1.0,
+    N2 = 1.0
 
     n_weights_per_side = len(lower_weights)
 
@@ -143,6 +143,14 @@ _scaled_input_distribution["N_inputs"]: int = len(
     _scaled_input_distribution["mean_inputs_scaled"]
 )
 
+# Additional new scaled input distribution information for Avian training data
+_avian_scaled_input_distribution = dict(
+    np.load(nn_weights_dir / "avian_scaled_input_distribution.npz")
+)
+_avian_scaled_input_distribution["N_inputs"]: int = len(
+    _avian_scaled_input_distribution["mean_inputs_scaled"]
+)
+
 ### For speed, pre-loads the neural network weights and biases
 _nn_parameter_files: Iterable[Path] = nn_weights_dir.glob("nn-*.npz")
 _allowable_model_sizes: set[str] = set(
@@ -170,6 +178,22 @@ def _squared_mahalanobis_distance(x: np.ndarray) -> np.ndarray:
         The squared Mahalanobis distance. Shape: (N_cases,)
     """
     d = _scaled_input_distribution
+    mean = np.reshape(d["mean_inputs_scaled"], (1, -1))
+    x_minus_mean = (x.T - mean.T).T
+    return np.sum(x_minus_mean @ d["inv_cov_inputs_scaled"] * x_minus_mean, axis=1)
+
+def _avian_squared_mahalanobis_distance(x: np.ndarray) -> np.ndarray:
+    """
+    Computes the squared Mahalanobis distance of a set of points from the training data.
+
+    Args:
+        x: Query point in the input latent space. Shape: (N_cases, N_inputs)
+            For non-vectorized queries, N_cases=1.
+
+    Returns:
+        The squared Mahalanobis distance. Shape: (N_cases,)
+    """
+    d = _avian_scaled_input_distribution
     mean = np.reshape(d["mean_inputs_scaled"], (1, -1))
     x_minus_mean = (x.T - mean.T).T
     return np.sum(x_minus_mean @ d["inv_cov_inputs_scaled"] * x_minus_mean, axis=1)
@@ -378,30 +402,26 @@ def get_aero_from_kulfan_parameters(
         x = np.transpose(x)
         return x
 
+    #Despite differences in sizes of x for different models, the same output y is generated. 
     y = net(x)  # N_outputs x N_cases
-    y[:, 0] = y[:, 0] - _squared_mahalanobis_distance(x) / (
-        2 * _scaled_input_distribution["N_inputs"]
-    )
+
+    if model_size == "avian-v2":
+        y[:, 0] = y[:, 0] - _avian_squared_mahalanobis_distance(x) / (
+            2 * _avian_scaled_input_distribution["N_inputs"]
+        )
+    else: 
+        y[:, 0] = y[:, 0] - _squared_mahalanobis_distance(x) / (
+            2 * _scaled_input_distribution["N_inputs"]
+        )
+       
     # This was baked into training in order to ensure the network asymptotes to zero analysis confidence far away from the training data.
 
     ### Then, flip the inputs and evaluate the network again.
     # The goal here is to embed the invariant of "symmetry across alpha" into the network evaluation.
     # (This was also performed during training, so the network is "intended" to be evaluated this way.)
 
-    x_flipped = (
-        x + 0.0
-    )  # This is an array-api-agnostic way to force a memory copy of the array to be made.
-    x_flipped[:, :8] = (
-        x[:, 8:16] * -1
-    )  # switch kulfan_lower with a flipped kulfan_upper
-    x_flipped[:, 8:16] = (
-        x[:, :8] * -1
-    )  # switch kulfan_upper with a flipped kulfan_lower
-    x_flipped[:, 16] = -1 * x[:, 16]  # flip kulfan_LE_weight
-    x_flipped[:, 18] = -1 * x[:, 18]  # flip sin(2a)
-    x_flipped[:, 23] = x[:, 24]  # flip xtr_upper with xtr_lower
-    x_flipped[:, 24] = x[:, 23]  # flip xtr_lower with xtr_upper
-
+    # Accounts for the differences in input vector size. If Avian version is chosen then the avian version is evaluated first
+    # Otherwise the old version is used. 
     if model_size=="avian-v2": 
         x_flipped = (
             x + 0.0
@@ -432,13 +452,35 @@ def get_aero_from_kulfan_parameters(
         x_flipped[:, 42] = -1 * x[:, 42]  # flip sin(2a)
         x_flipped[:, 47] = x[:, 48]  # flip xtr_upper with xtr_lower
         x_flipped[:, 48] = x[:, 47]  # flip xtr_lower with xtr_upper
+    
+    # This is the old version which is used for all non-Avian NeuralFoil
+    else:
+        x_flipped = (
+            x + 0.0
+        )  # This is an array-api-agnostic way to force a memory copy of the array to be made.
+        x_flipped[:, :8] = (
+            x[:, 8:16] * -1
+        )  # switch kulfan_lower with a flipped kulfan_upper
+        x_flipped[:, 8:16] = (
+            x[:, :8] * -1
+        )  # switch kulfan_upper with a flipped kulfan_lower
+        x_flipped[:, 16] = -1 * x[:, 16]  # flip kulfan_LE_weight
+        x_flipped[:, 18] = -1 * x[:, 18]  # flip sin(2a)
+        x_flipped[:, 23] = x[:, 24]  # flip xtr_upper with xtr_lower
+        x_flipped[:, 24] = x[:, 23]  # flip xtr_lower with xtr_upper
 
 
     y_flipped = net(x_flipped)
-    y_flipped[:, 0] = y_flipped[:, 0] - _squared_mahalanobis_distance(x_flipped) / (
-        2 * _scaled_input_distribution["N_inputs"]
-    )
-    # This was baked into training in order to ensure the network asymptotes to zero analysis confidence far away from the training data.
+
+    if model_size == "avian-v2": 
+        y_flipped[:, 0] = y_flipped[:, 0] - _avian_squared_mahalanobis_distance(x_flipped) / (
+            2 * _avian_scaled_input_distribution["N_inputs"]
+        )
+    else: 
+        y_flipped[:, 0] = y_flipped[:, 0] - _squared_mahalanobis_distance(x_flipped) / (
+            2 * _scaled_input_distribution["N_inputs"]
+        )
+        # This was baked into training in order to ensure the network asymptotes to zero analysis confidence far away from the training data.
 
     ### The resulting outputs will also be flipped, so we need to flip them back to their normal orientation
     y_unflipped = (
