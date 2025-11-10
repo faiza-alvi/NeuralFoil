@@ -36,7 +36,7 @@ def derivatives_at_nodes(lower_weights: np.ndarray = -0.2 * np.ones(8),
     Finds the first and second derivative of the surface at specific nodes along the airfoil
     """
     N1 = 0.5 
-    N2 = 1.0,
+    N2 = 1.0
 
     n_weights_per_side = len(lower_weights)
 
