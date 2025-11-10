@@ -402,30 +402,26 @@ def get_aero_from_kulfan_parameters(
         x = np.transpose(x)
         return x
 
+    #Despite differences in sizes of x for different models, the same output y is generated. 
     y = net(x)  # N_outputs x N_cases
-    y[:, 0] = y[:, 0] - _squared_mahalanobis_distance(x) / (
-        2 * _scaled_input_distribution["N_inputs"]
-    )
+
+    if model_size == "avian-v2":
+        y[:, 0] = y[:, 0] - _avian_squared_mahalanobis_distance(x) / (
+            2 * _avian_scaled_input_distribution["N_inputs"]
+        )
+    else: 
+        y[:, 0] = y[:, 0] - _squared_mahalanobis_distance(x) / (
+            2 * _scaled_input_distribution["N_inputs"]
+        )
+       
     # This was baked into training in order to ensure the network asymptotes to zero analysis confidence far away from the training data.
 
     ### Then, flip the inputs and evaluate the network again.
     # The goal here is to embed the invariant of "symmetry across alpha" into the network evaluation.
     # (This was also performed during training, so the network is "intended" to be evaluated this way.)
 
-    x_flipped = (
-        x + 0.0
-    )  # This is an array-api-agnostic way to force a memory copy of the array to be made.
-    x_flipped[:, :8] = (
-        x[:, 8:16] * -1
-    )  # switch kulfan_lower with a flipped kulfan_upper
-    x_flipped[:, 8:16] = (
-        x[:, :8] * -1
-    )  # switch kulfan_upper with a flipped kulfan_lower
-    x_flipped[:, 16] = -1 * x[:, 16]  # flip kulfan_LE_weight
-    x_flipped[:, 18] = -1 * x[:, 18]  # flip sin(2a)
-    x_flipped[:, 23] = x[:, 24]  # flip xtr_upper with xtr_lower
-    x_flipped[:, 24] = x[:, 23]  # flip xtr_lower with xtr_upper
-
+    # Accounts for the differences in input vector size. If Avian version is chosen then the avian version is evaluated first
+    # Otherwise the old version is used. 
     if model_size=="avian-v2": 
         x_flipped = (
             x + 0.0
@@ -456,6 +452,22 @@ def get_aero_from_kulfan_parameters(
         x_flipped[:, 42] = -1 * x[:, 42]  # flip sin(2a)
         x_flipped[:, 47] = x[:, 48]  # flip xtr_upper with xtr_lower
         x_flipped[:, 48] = x[:, 47]  # flip xtr_lower with xtr_upper
+    
+    # This is the old version which is used for all non-Avian NeuralFoil
+    else:
+        x_flipped = (
+            x + 0.0
+        )  # This is an array-api-agnostic way to force a memory copy of the array to be made.
+        x_flipped[:, :8] = (
+            x[:, 8:16] * -1
+        )  # switch kulfan_lower with a flipped kulfan_upper
+        x_flipped[:, 8:16] = (
+            x[:, :8] * -1
+        )  # switch kulfan_upper with a flipped kulfan_lower
+        x_flipped[:, 16] = -1 * x[:, 16]  # flip kulfan_LE_weight
+        x_flipped[:, 18] = -1 * x[:, 18]  # flip sin(2a)
+        x_flipped[:, 23] = x[:, 24]  # flip xtr_upper with xtr_lower
+        x_flipped[:, 24] = x[:, 23]  # flip xtr_lower with xtr_upper
 
 
     y_flipped = net(x_flipped)
