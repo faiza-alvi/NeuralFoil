@@ -143,6 +143,14 @@ _scaled_input_distribution["N_inputs"]: int = len(
     _scaled_input_distribution["mean_inputs_scaled"]
 )
 
+# Additional new scaled input distribution information for Avian training data
+_avian_scaled_input_distribution = dict(
+    np.load(nn_weights_dir / "avian_scaled_input_distribution.npz")
+)
+_avian_scaled_input_distribution["N_inputs"]: int = len(
+    _avian_scaled_input_distribution["mean_inputs_scaled"]
+)
+
 ### For speed, pre-loads the neural network weights and biases
 _nn_parameter_files: Iterable[Path] = nn_weights_dir.glob("nn-*.npz")
 _allowable_model_sizes: set[str] = set(
@@ -170,6 +178,22 @@ def _squared_mahalanobis_distance(x: np.ndarray) -> np.ndarray:
         The squared Mahalanobis distance. Shape: (N_cases,)
     """
     d = _scaled_input_distribution
+    mean = np.reshape(d["mean_inputs_scaled"], (1, -1))
+    x_minus_mean = (x.T - mean.T).T
+    return np.sum(x_minus_mean @ d["inv_cov_inputs_scaled"] * x_minus_mean, axis=1)
+
+def _avian_squared_mahalanobis_distance(x: np.ndarray) -> np.ndarray:
+    """
+    Computes the squared Mahalanobis distance of a set of points from the training data.
+
+    Args:
+        x: Query point in the input latent space. Shape: (N_cases, N_inputs)
+            For non-vectorized queries, N_cases=1.
+
+    Returns:
+        The squared Mahalanobis distance. Shape: (N_cases,)
+    """
+    d = _avian_scaled_input_distribution
     mean = np.reshape(d["mean_inputs_scaled"], (1, -1))
     x_minus_mean = (x.T - mean.T).T
     return np.sum(x_minus_mean @ d["inv_cov_inputs_scaled"] * x_minus_mean, axis=1)
@@ -435,10 +459,16 @@ def get_aero_from_kulfan_parameters(
 
 
     y_flipped = net(x_flipped)
-    y_flipped[:, 0] = y_flipped[:, 0] - _squared_mahalanobis_distance(x_flipped) / (
-        2 * _scaled_input_distribution["N_inputs"]
-    )
-    # This was baked into training in order to ensure the network asymptotes to zero analysis confidence far away from the training data.
+
+    if model_size == "avian-v2": 
+        y_flipped[:, 0] = y_flipped[:, 0] - _avian_squared_mahalanobis_distance(x_flipped) / (
+            2 * _avian_scaled_input_distribution["N_inputs"]
+        )
+    else: 
+        y_flipped[:, 0] = y_flipped[:, 0] - _squared_mahalanobis_distance(x_flipped) / (
+            2 * _scaled_input_distribution["N_inputs"]
+        )
+        # This was baked into training in order to ensure the network asymptotes to zero analysis confidence far away from the training data.
 
     ### The resulting outputs will also be flipped, so we need to flip them back to their normal orientation
     y_unflipped = (
