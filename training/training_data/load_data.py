@@ -131,8 +131,8 @@ def compute_derivatives(row):
 cols = Data.get_vector_column_names()
 
 ### Read the original data, by scraping all .csv files within the data directory
-data_directory = Path(r"/home/faiza/Documents/NeuralFoil/training/training_data")
-# data_directory = Path(r"C:\Users\booki\Documents\BIRD Lab\Airfoil Project\NeuralFoil\training\training_data")
+# data_directory = Path(r"/home/faiza/Documents/NeuralFoil/training/training_data")
+data_directory = Path(r"/home/faiza/Downloads/training_data/training_data")
 
 raw_dfs = {}
 
@@ -289,6 +289,19 @@ df_inputs_scaled = pl.DataFrame(
     }
 )
 print("Made scaled dataset")
+mean_inputs_scaled = np.mean(df_inputs_scaled.to_numpy(), axis=0)
+cov_inputs_scaled = np.cov(df_inputs_scaled.to_numpy(), rowvar=False)
+
+# Compute the inverse of the covariance
+inv_cov_inputs_scaled = np.linalg.pinv(cov_inputs_scaled)
+
+# Save everything to a .npz file
+np.savez(
+    "Peter_scaled_input_distribution_no_derivs.npz",
+    mean_inputs_scaled=mean_inputs_scaled,
+    cov_inputs_scaled=cov_inputs_scaled,
+    inv_cov_inputs_scaled=inv_cov_inputs_scaled
+)
 
 # Find index of "s_kulfan_TE_thickness"
 insert_idx = df_inputs_scaled.columns.index("s_kulfan_TE_thickness") + 1
@@ -374,7 +387,7 @@ inv_cov_inputs_scaled = np.linalg.inv(cov_inputs_scaled)
 
 # Save everything to a .npz file
 np.savez(
-    "avian_scaled_input_distribution.npz",
+    "Peter_scaled_input_distribution.npz",
     mean_inputs_scaled=mean_inputs_scaled,
     cov_inputs_scaled=cov_inputs_scaled,
     inv_cov_inputs_scaled=inv_cov_inputs_scaled
