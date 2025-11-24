@@ -5,6 +5,7 @@ from aerosandbox.geometry.airfoil.airfoil_families import get_kulfan_coordinates
 from neuralfoil._basic_data_type import Data
 from pathlib import Path
 import aerosandbox as asb
+import os
 
 # ----------------------------------------------------
 # Load CSV with Polars and select only first 18 columns
@@ -57,6 +58,10 @@ kulfans_database = np.stack(
 )
 mean_database = np.mean(kulfans_database, axis=0)
 cov_database = np.cov(kulfans_database, rowvar=False)
+
+print("mean and cov of kulfans database")
+print(mean_database)
+print(cov_database)
 
 
 # raw_dfs = {}
@@ -192,8 +197,8 @@ cov_database = np.cov(kulfans_database, rowvar=False)
 unique_params = kulfans_database
 
 zscores = (unique_params - unique_params.mean(axis=0)) / unique_params.std(axis=0)
-# outlier_mask = np.any(np.abs(zscores) > 3 , axis=1)
-outlier_mask = np.any((np.abs(zscores) > 5) & (np.abs(zscores) < 10), axis=1)
+outlier_mask = np.any(np.abs(zscores) > 3 , axis=1)
+#outlier_mask = np.any((np.abs(zscores) > 5) & (np.abs(zscores) < 10), axis=1)
 
 
 print("Outlier Rows")
@@ -202,39 +207,56 @@ idx = np.where(outlier_mask)[0]
 print(idx)
 print(len(idx))
 
-for i in idx:
-    print(i, airfoil_database[i].name)
+# for i in idx:
+#     print(i, airfoil_database[i].name)
 
 print(f"Found {len(unique_params)} unique Kulfan parameter sets.")
 
 # ----------------------------------------------------
 # Plotting only NON-outlier airfoils
 # ----------------------------------------------------
-plt.figure(figsize=(8, 4))
+# plt.figure(figsize=(8, 4))
 
-clean_params = unique_params[outlier_mask]   # <--- THIS IS THE KEY LINE
+clean_params = unique_params[~outlier_mask]   # <--- THIS IS THE KEY LINE
 print("The number of non outliers are: ", len(clean_params))
 
-# Row indices of maxima for each column
-row_max = np.argmax(unique_params, axis=0)
 
-# Row indices of minima for each column
-row_min = np.argmin(unique_params, axis=0)
+# for params in kulfans_database:
+#     ku_upper = params[0:8]
+#     ku_lower = params[8:16]
+#     t_le     = params[16]
+#     t_te     = params[17]
 
-print("Row index of maximum in each column:", row_max)
-print("Row index of minimum in each column:", row_min)
+#     coords = get_kulfan_coordinates(
+#         upper_weights=ku_upper,
+#         lower_weights=ku_lower,
+#         leading_edge_weight=t_le,
+#         TE_thickness=t_te,
+#         n_points_per_side=200
+#     )
 
-for j in range(unique_params.shape[1]):
-    print(f"Column {j}: max at row {row_max[j]} (value={unique_params[row_max[j], j]}), airfoil: {airfoil_database[j].name}")
-    print(f"Column {j}: min at row {row_min[j]} (value={unique_params[row_min[j], j]}), airfoil: {airfoil_database[j].name}")
+#     x = coords[:, 0]
+#     y = coords[:, 1]
 
+#     plt.plot(x, y, color="blue", alpha=0.15, linewidth=1)
+#     plt.ylim((-1,1))
+#     plt.gca().set_aspect("equal", adjustable="box")
+        
 
-for params in clean_params:
+# plt.show()
+
+# ----------------------------------------------------
+# Plotting
+# ----------------------------------------------------
+plt.figure(figsize=(8, 4))
+
+for params in unique_params:
     ku_upper = params[0:8]
     ku_lower = params[8:16]
     t_le     = params[16]
     t_te     = params[17]
 
+    # Generate Kulfan coordinates (Nx2 array)
     coords = get_kulfan_coordinates(
         upper_weights=ku_upper,
         lower_weights=ku_lower,
@@ -248,22 +270,30 @@ for params in clean_params:
 
     plt.plot(x, y, color="blue", alpha=0.15, linewidth=1)
 
-plt.ylim((-1,1))
 plt.gca().set_aspect("equal", adjustable="box")
+plt.title("Kulfan Airfoils used for training data generation")
+plt.xlabel("x")
+plt.ylabel("y")
+plt.grid(True, linestyle="--", alpha=0.3)
+plt.tight_layout()
 plt.show()
 
-# # ----------------------------------------------------
-# # Plotting
-# # ----------------------------------------------------
-# plt.figure(figsize=(8, 4))
+#----------------------------------------------------------------------------------
+# New section that plots and saves all airfoils in the database
+# print("len(airfoil_database) =", len(airfoil_database))
+# print("len(kulfans_database) =", len(kulfans_database))
 
-# for params in unique_params:
+
+# save_dir = "/home/faiza/Documents/AirfoilDatabasePlots"
+# os.makedirs(save_dir, exist_ok=True)   # Create folder if missing
+
+# for i, params in enumerate(kulfans_database):
+
 #     ku_upper = params[0:8]
 #     ku_lower = params[8:16]
 #     t_le     = params[16]
 #     t_te     = params[17]
 
-#     # Generate Kulfan coordinates (Nx2 array)
 #     coords = get_kulfan_coordinates(
 #         upper_weights=ku_upper,
 #         lower_weights=ku_lower,
@@ -275,16 +305,19 @@ plt.show()
 #     x = coords[:, 0]
 #     y = coords[:, 1]
 
-#     plt.plot(x, y, color="blue", alpha=0.15, linewidth=1)
+#     # New figure for each airfoil
+#     plt.figure(figsize=(6, 3))
+#     plt.plot(x, y, linewidth=1)
+#     plt.ylim((-1, 1))
+#     plt.gca().set_aspect("equal", adjustable="box")
 
+#     name = airfoil_database[i].name
+#     plt.title(name)
 
-# # ----------------------------------------------------
-# # Formatting
-# # ----------------------------------------------------
-# plt.gca().set_aspect("equal", adjustable="box")
-# plt.title("Kulfan Airfoils (from Polars CSV)")
-# plt.xlabel("x")
-# plt.ylabel("y")
-# plt.grid(True, linestyle="--", alpha=0.3)
-# plt.tight_layout()
-# plt.show()
+#     # Full file path
+#     filepath = os.path.join(save_dir, f"{name}.png")
+
+#     plt.savefig(filepath, dpi=300, bbox_inches="tight")
+#     plt.close()
+
+# print(i, "finished")
