@@ -290,6 +290,7 @@ df_inputs_scaled = pl.DataFrame(
     }
 )
 print("Made scaled dataset")
+
 mean_inputs_scaled = np.mean(df_inputs_scaled.to_numpy(), axis=0)
 cov_inputs_scaled = np.cov(df_inputs_scaled.to_numpy(), rowvar=False)
 
@@ -303,6 +304,8 @@ np.savez(
     cov_inputs_scaled=cov_inputs_scaled,
     inv_cov_inputs_scaled=inv_cov_inputs_scaled
 )
+
+print("Calculated and saved input distribution information without derivatives.")
 
 # Find index of "s_kulfan_TE_thickness"
 insert_idx = df_inputs_scaled.columns.index("s_kulfan_TE_thickness") + 1
@@ -380,19 +383,22 @@ print(f"The output training data is shaped as {df_train_outputs_scaled.describe(
 print(f"The input test data is shaped as {df_test_inputs_scaled.describe()} ")
 print(f"The output test data is shaped as {df_test_outputs_scaled.describe()} ")
 
-mean_inputs_scaled = np.mean(df_inputs_scaled.to_numpy(), axis=0)
-cov_inputs_scaled = np.cov(df_inputs_scaled.to_numpy(), rowvar=False)
+# --------------------------------------------------
+# Commented out below distribution metrics because analysis confidence works 
+# with the distribution metrics calculated before the derivatives are added. 
+# mean_inputs_scaled = np.mean(df_inputs_scaled.to_numpy(), axis=0)
+# cov_inputs_scaled = np.cov(df_inputs_scaled.to_numpy(), rowvar=False)
 
-# Compute the inverse of the covariance
-inv_cov_inputs_scaled = np.linalg.inv(cov_inputs_scaled)
+# # Compute the inverse of the covariance
+# inv_cov_inputs_scaled = np.linalg.inv(cov_inputs_scaled)
 
-# Save everything to a .npz file
-np.savez(
-    "gen2_scaled_input_distribution.npz",
-    mean_inputs_scaled=mean_inputs_scaled,
-    cov_inputs_scaled=cov_inputs_scaled,
-    inv_cov_inputs_scaled=inv_cov_inputs_scaled
-)
+# # Save everything to a .npz file
+# np.savez(
+#     "gen2_scaled_input_distribution.npz",
+#     mean_inputs_scaled=mean_inputs_scaled,
+#     cov_inputs_scaled=cov_inputs_scaled,
+#     inv_cov_inputs_scaled=inv_cov_inputs_scaled
+# )
 
 
 def make_data(row_index, df=df):
