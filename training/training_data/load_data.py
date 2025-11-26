@@ -132,7 +132,8 @@ cols = Data.get_vector_column_names()
 
 ### Read the original data, by scraping all .csv files within the data directory
 # data_directory = Path(r"/home/faiza/Documents/NeuralFoil/training/training_data")
-data_directory = Path(r"/home/faiza/Downloads/training_data/training_data")
+# data_directory = Path(r"/home/faiza/Downloads/training_data/training_data")
+data_directory = Path(r"/home/faiza/Documents/NeuralFoil")
 
 raw_dfs = {}
 
@@ -297,7 +298,7 @@ inv_cov_inputs_scaled = np.linalg.pinv(cov_inputs_scaled)
 
 # Save everything to a .npz file
 np.savez(
-    "Peter_scaled_input_distribution_no_derivs.npz",
+    "gen2_scaled_input_distribution_no_derivs.npz",
     mean_inputs_scaled=mean_inputs_scaled,
     cov_inputs_scaled=cov_inputs_scaled,
     inv_cov_inputs_scaled=inv_cov_inputs_scaled
@@ -387,7 +388,7 @@ inv_cov_inputs_scaled = np.linalg.inv(cov_inputs_scaled)
 
 # Save everything to a .npz file
 np.savez(
-    "Peter_scaled_input_distribution.npz",
+    "gen2_scaled_input_distribution.npz",
     mean_inputs_scaled=mean_inputs_scaled,
     cov_inputs_scaled=cov_inputs_scaled,
     inv_cov_inputs_scaled=inv_cov_inputs_scaled
