@@ -390,7 +390,7 @@ mean_inputs_scaled = np.mean(df_inputs_scaled.to_numpy(), axis=0)
 cov_inputs_scaled = np.cov(df_inputs_scaled.to_numpy(), rowvar=False)
 
 # Compute the inverse of the covariance
-inv_cov_inputs_scaled = np.linalg.inv(cov_inputs_scaled)
+inv_cov_inputs_scaled = np.linalg.pinv(cov_inputs_scaled)
 
 # Save everything to a .npz file
 np.savez(
