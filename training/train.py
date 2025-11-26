@@ -46,15 +46,10 @@ class Net(torch.nn.Module):
         self.net = torch.nn.Sequential(*layers)
 
     def squared_mahalanobis_distance(self, x: torch.Tensor):
-        keep_idx = torch.tensor(list(range(0, 18)) + list(range(42, 49)), device=x.device)
-        x_subset = x[:, keep_idx]
-        # This new logic does subsetting within the function so that the outside analysis 
-        # confidence is not affected. 
-
         return torch.sum(
-            (x_subset - self.mean_inputs_scaled)
+            (x - self.mean_inputs_scaled)
             @ self.inv_cov_inputs_scaled
-            * (x_subset - self.mean_inputs_scaled),
+            * (x - self.mean_inputs_scaled),
             dim=1,
         )
 
