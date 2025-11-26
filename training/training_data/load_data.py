@@ -291,18 +291,18 @@ df_inputs_scaled = pl.DataFrame(
 )
 print("Made scaled dataset")
 
-mean_inputs_scaled = np.mean(df_inputs_scaled.to_numpy(), axis=0)
-cov_inputs_scaled = np.cov(df_inputs_scaled.to_numpy(), rowvar=False)
+mean_inputs_scaled_noderiv = np.mean(df_inputs_scaled.to_numpy(), axis=0)
+cov_inputs_scaled_noderiv = np.cov(df_inputs_scaled.to_numpy(), rowvar=False)
 
 # Compute the inverse of the covariance
-inv_cov_inputs_scaled = np.linalg.pinv(cov_inputs_scaled)
+inv_cov_inputs_scaled_noderiv = np.linalg.pinv(cov_inputs_scaled_noderiv)
 
 # Save everything to a .npz file
 np.savez(
     "gen2_scaled_input_distribution_no_derivs.npz",
-    mean_inputs_scaled=mean_inputs_scaled,
-    cov_inputs_scaled=cov_inputs_scaled,
-    inv_cov_inputs_scaled=inv_cov_inputs_scaled
+    mean_inputs_scaled=mean_inputs_scaled_noderiv,
+    cov_inputs_scaled=cov_inputs_scaled_noderiv,
+    inv_cov_inputs_scaled=inv_cov_inputs_scaled_noderiv
 )
 
 print("Calculated and saved input distribution information without derivatives.")
@@ -386,19 +386,19 @@ print(f"The output test data is shaped as {df_test_outputs_scaled.describe()} ")
 # --------------------------------------------------
 # Commented out below distribution metrics because analysis confidence works 
 # with the distribution metrics calculated before the derivatives are added. 
-# mean_inputs_scaled = np.mean(df_inputs_scaled.to_numpy(), axis=0)
-# cov_inputs_scaled = np.cov(df_inputs_scaled.to_numpy(), rowvar=False)
+mean_inputs_scaled = np.mean(df_inputs_scaled.to_numpy(), axis=0)
+cov_inputs_scaled = np.cov(df_inputs_scaled.to_numpy(), rowvar=False)
 
-# # Compute the inverse of the covariance
-# inv_cov_inputs_scaled = np.linalg.inv(cov_inputs_scaled)
+# Compute the inverse of the covariance
+inv_cov_inputs_scaled = np.linalg.inv(cov_inputs_scaled)
 
-# # Save everything to a .npz file
-# np.savez(
-#     "gen2_scaled_input_distribution.npz",
-#     mean_inputs_scaled=mean_inputs_scaled,
-#     cov_inputs_scaled=cov_inputs_scaled,
-#     inv_cov_inputs_scaled=inv_cov_inputs_scaled
-# )
+# Save everything to a .npz file
+np.savez(
+    "gen2_scaled_input_distribution.npz",
+    mean_inputs_scaled=mean_inputs_scaled,
+    cov_inputs_scaled=cov_inputs_scaled,
+    inv_cov_inputs_scaled=inv_cov_inputs_scaled
+)
 
 
 def make_data(row_index, df=df):
