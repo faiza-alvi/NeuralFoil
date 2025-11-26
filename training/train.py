@@ -13,7 +13,7 @@ from torch.utils.data import TensorDataset, DataLoader
 N_inputs = len(df_train_inputs_scaled.columns)
 N_outputs = len(df_train_outputs_scaled.columns)
 
-cache_file = Path(__file__).parent / "nn-avian-v2.pth"
+cache_file = Path(__file__).parent / "nn-avian-v3.pth"
 n_hidden_layers = 5
 width = 512
 print("Cache file: ", cache_file)
@@ -46,10 +46,15 @@ class Net(torch.nn.Module):
         self.net = torch.nn.Sequential(*layers)
 
     def squared_mahalanobis_distance(self, x: torch.Tensor):
+        keep_idx = torch.tensor(list(range(0, 18)) + list(range(42, 49)), device=x.device)
+        x_subset = x[:, keep_idx]
+        # This new logic does subsetting within the function so that the outside analysis 
+        # confidence is not affected. 
+
         return torch.sum(
-            (x - self.mean_inputs_scaled)
+            (x_subset - self.mean_inputs_scaled)
             @ self.inv_cov_inputs_scaled
-            * (x - self.mean_inputs_scaled),
+            * (x_subset - self.mean_inputs_scaled),
             dim=1,
         )
 
@@ -57,6 +62,7 @@ class Net(torch.nn.Module):
         ### First, evaluate the network normally
         y = self.net(x)
         y[:, 0] = y[:, 0] - self.squared_mahalanobis_distance(x=x) / (2 * N_inputs)
+        # Note that N_inputs here is 25 not 49 because it excludes all the derivatives. 
         ### Add in the squared Mahalanobis distance to the analysis_confidence logit, to ensure it
         # asymptotes to untrustworthy as the inputs get further from the training data
 
