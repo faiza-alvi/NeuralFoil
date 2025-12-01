@@ -392,13 +392,13 @@ cov_inputs_scaled = np.cov(df_inputs_scaled.to_numpy(), rowvar=False)
 # Compute the inverse of the covariance
 inv_cov_inputs_scaled = np.linalg.pinv(cov_inputs_scaled)
 
-# Save everything to a .npz file
-np.savez(
-    "gen2_scaled_input_distribution.npz",
-    mean_inputs_scaled=mean_inputs_scaled,
-    cov_inputs_scaled=cov_inputs_scaled,
-    inv_cov_inputs_scaled=inv_cov_inputs_scaled
-)
+# # Save everything to a .npz file
+# np.savez(
+#     "gen2_scaled_input_distribution.npz",
+#     mean_inputs_scaled=mean_inputs_scaled,
+#     cov_inputs_scaled=cov_inputs_scaled,
+#     inv_cov_inputs_scaled=inv_cov_inputs_scaled
+# )
 
 
 def make_data(row_index, df=df):
