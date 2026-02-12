@@ -52,6 +52,8 @@ for i, data in enumerate(datas):
         df.to_csv("testrun.csv", mode='a', header=False, index=False)
 
 """
+# ----------------------------------------------
+# Code for plotting training losses
 import re
 import matplotlib.pyplot as plt
 
@@ -69,10 +71,14 @@ test_losses = []
 
 # List of log files
 log_files = [
+    r"avian-v3_gen2_pt1.log",
+    r"avian-v3_gen2_pt2.log",
+    r"avian-v3_gen2_pt3.log",
+    r"avian-v3_gen2_pt4.log"
     # r"C:\Users\booki\Documents\BIRD Lab\Airfoil Project\NeuralFoil\training\avian-v2.log",
     # r"C:\Users\booki\Documents\BIRD Lab\Airfoil Project\NeuralFoil\training\avian-v2_pt2.log", 
     # r"C:\Users\booki\Documents\BIRD Lab\Airfoil Project\NeuralFoil\training\avian-v2_pt3.log"
-    r"C:\Users\booki\Documents\BIRD Lab\Airfoil Project\NeuralFoil\training\log.log-25543001"
+    # r"C:\Users\booki\Documents\BIRD Lab\Airfoil Project\NeuralFoil\training\log.log-25543001"
 ]
 
 for file in log_files:
@@ -105,17 +111,298 @@ plt.legend()
 plt.title("Avian Training Progress")
 plt.show()
 
-import numpy as np
+# import numpy as np
 
-# Load the .npz file
-data = np.load('neuralfoil/nn_weights_and_biases/scaled_input_distribution.npz')
+# # Load the .npz file
+# data = np.load('neuralfoil/nn_weights_and_biases/avian_scaled_input_distribution.npz')
 
-# List all arrays stored in the file
-print(data.files)
+# # List all arrays stored in the file
+# print(data.files)
 
-# Loop through all arrays in the file
-for name in data.files:
-    array = data[name]
-    print(f"Array name: {name}")
-    print(f"Shape: {array.shape}")
-    print(f"Data preview:\n{array}\n")
+# # Loop through all arrays in the file
+# for name in data.files:
+#     array = data[name]
+#     print(f"Array name: {name}")
+#     print(f"Shape: {array.shape}")
+#     #print(f"Data preview:\n{array}\n")
+
+# # Extract the arrays
+# cov = data['cov_inputs_scaled']
+# inv_cov = data['inv_cov_inputs_scaled']
+# mean = data['mean_inputs_scaled']
+
+# new_inv = np.linalg.pinv(cov)
+
+# # Multiply the two matrices
+# product = cov @ inv_cov  # matrix multiplication
+# print(np.allclose(product, np.eye(cov.shape[0])))
+
+# new_product = cov @ new_inv  # matrix multiplication
+# print("New pinv")
+# print(np.allclose(new_product, np.eye(cov.shape[0])))
+
+# condition_number = np.linalg.cond(cov)
+# print("Condition number:", condition_number)
+
+# pinv = np.linalg.pinv(cov)
+
+# product = cov @ pinv
+# print("Symmetric:", np.allclose(product, product.T, atol=1e-8))
+# print("Idempotent:", np.allclose(product @ product, product, atol=1e-8))
+# print("Rank:", np.linalg.matrix_rank(cov), "/", cov.shape[0])
+
+# # Testing with a generated input vector for NACA 2412
+# import aerosandbox as asb
+# import aerosandbox.numpy as np
+# from aerosandbox.geometry.airfoil.airfoil_families import (
+#     get_NACA_coordinates,
+#     get_kulfan_parameters,
+# )
+# from scipy.special import comb
+
+
+# # ============================================================
+# # Derivative helper (with small bug fixes: np.length -> len)
+# # ============================================================
+# def derivatives_at_nodes(
+#     lower_weights,
+#     upper_weights,
+#     leading_edge_weight,
+#     TE_thickness,
+# ):
+#     N1 = 0.5
+#     N2 = 1.0
+
+#     n_weights_per_side = len(lower_weights)
+
+#     # Nodes for derivative evaluation
+#     x_nodes = np.linspace(0, 1, n_weights_per_side)
+#     x_nodes = x_nodes[1:-1]   # interior nodes only
+#     n_nodes = len(x_nodes)
+
+#     N = n_weights_per_side - 1
+#     K = comb(N, np.arange(N + 1))    # Bernstein coefficients
+
+#     dims = (n_weights_per_side, n_nodes)
+
+#     def wide(v):
+#         return np.tile(np.reshape(v, (1, dims[1])), (dims[0], 1))
+
+#     def tall(v):
+#         return np.tile(np.reshape(v, (dims[0], 1)), (1, dims[1]))
+
+#     # Exponents
+#     p = np.arange(N1, N1 + N + 1)
+#     q = N - np.arange(N + 1) + N2
+
+#     p_1 = p - 1
+#     q_1 = q - 1
+#     p_2 = p - 2
+#     q_2 = q - 2
+#     q_2[q_2 < 0] = 0
+
+#     slopes_matrix = (
+#         tall(K) * tall(p) * wide(x_nodes) ** tall(p_1) * wide(1 - x_nodes) ** tall(q)
+#         - tall(K) * tall(q) * wide(x_nodes) ** tall(p) * wide(1 - x_nodes) ** tall(q_1)
+#     )
+
+#     curvature_matrix = (
+#         tall(K) * tall(p) * tall(p_1) * wide(x_nodes) ** tall(p_2) * wide(1 - x_nodes) ** tall(q)
+#         - 2 * tall(K) * tall(q) * tall(p) * wide(x_nodes) ** tall(p_1) * wide(1 - x_nodes) ** tall(q_1)
+#         + tall(K) * tall(q) * tall(q_1) * wide(x_nodes) ** tall(p) * wide(1 - x_nodes) ** tall(q_2)
+#     )
+
+#     lowerslope = slopes_matrix.T @ lower_weights
+#     lowercurve = curvature_matrix.T @ lower_weights
+#     upperslope = slopes_matrix.T @ upper_weights
+#     uppercurve = curvature_matrix.T @ upper_weights
+
+#     # Leading edge modification
+#     m_upper = len(upper_weights) + 0.5
+#     m_lower = len(lower_weights) + 0.5
+
+#     LE_upper_slope = (
+#         leading_edge_weight * ((1 - x_nodes) ** m_upper)
+#         - leading_edge_weight * m_upper * x_nodes * ((1 - x_nodes) ** (m_upper - 1))
+#     )
+#     LE_lower_slope = (
+#         leading_edge_weight * ((1 - x_nodes) ** m_lower)
+#         - leading_edge_weight * m_lower * x_nodes * ((1 - x_nodes) ** (m_lower - 1))
+#     )
+
+#     LE_upper_curve = (
+#         -2 * leading_edge_weight * m_upper * ((1 - x_nodes) ** (m_upper - 1))
+#         + leading_edge_weight * m_upper * (m_upper - 1)
+#         * x_nodes * ((1 - x_nodes) ** (m_upper - 2))
+#     )
+#     LE_lower_curve = (
+#         -2 * leading_edge_weight * m_lower * ((1 - x_nodes) ** (m_lower - 1))
+#         + leading_edge_weight * m_lower * (m_lower - 1)
+#         * x_nodes * ((1 - x_nodes) ** (m_lower - 2))
+#     )
+
+#     upperslope += LE_upper_slope
+#     lowerslope += LE_lower_slope
+#     uppercurve += LE_upper_curve
+#     lowercurve += LE_lower_curve
+
+#     # TE thickness effect (constant slope shift)
+#     upperslope += TE_thickness / 2
+#     lowerslope -= TE_thickness / 2
+
+#     return {
+#         "upper_first_der": upperslope,
+#         "lower_first_der": lowerslope,
+#         "upper_second_der": uppercurve,
+#         "lower_second_der": lowercurve,
+#     }
+
+
+# # ============================================================
+# # Generate Kulfan parameters for NACA 2412
+# # ============================================================
+# coords = get_NACA_coordinates("naca2412", n_points_per_side=200)
+# kulfan = get_kulfan_parameters(
+#     coordinates=coords,
+#     n_weights_per_side=8,
+#     N1=0.5,
+#     N2=1.0,
+#     use_leading_edge_modification=True,
+#     normalize_coordinates=True,
+# )
+
+# # ============================================================
+# # Compute derivatives
+# # ============================================================
+# derivs = derivatives_at_nodes(
+#     lower_weights=kulfan["lower_weights"],
+#     upper_weights=kulfan["upper_weights"],
+#     leading_edge_weight=kulfan["leading_edge_weight"],
+#     TE_thickness=kulfan["TE_thickness"],
+# )
+
+# # ============================================================
+# # Form the input vector x
+# # ============================================================
+# Re = 100_000
+# alpha = 2.0
+# ncrit = 9.0
+# xtr_upper = 1.0
+# xtr_lower = 1.0
+
+# x = np.array([
+#     *kulfan["upper_weights"],
+#     *kulfan["lower_weights"],
+#     kulfan["leading_edge_weight"],
+#     kulfan["TE_thickness"] * 50,           # your scaling
+#     *derivs["upper_first_der"],
+#     *derivs["lower_first_der"],
+#     *derivs["upper_second_der"],
+#     *derivs["lower_second_der"],
+#     np.sind(2 * alpha),
+#     np.cosd(alpha),
+#     1 - np.cosd(alpha) ** 2,
+#     (np.log(Re) - 12.5) / 3.5,
+#     # No Mach
+#     (ncrit - 9) / 4.5,
+#     xtr_upper,
+#     xtr_lower,
+# ])
+
+# print("Final input vector x shape:", x.shape)
+# # print("x =", x)
+
+
+# x_centered = x - mean
+
+# # squared Mahalanobis distance
+# D2 = float(x_centered @ inv_cov @ x_centered)
+
+# print("Squared Mahalanobis distance with original 49x49 inv:", D2)
+
+# # Now using pinv instead of inv_cov
+# pinv_dist = float(x_centered @ pinv @ x_centered)
+# print("Squared Mahalanobis distance with 49x49 pinv: ", pinv_dist )
+
+# #Now with subsetting
+# remove_index = np.arange(18, 42)
+# # Indices to KEEP
+# keep = np.setdiff1d(np.arange(cov.shape[0]), remove_index)
+
+# # Remove rows and columns
+# cov_reduced = cov[np.ix_(keep, keep)]
+# inv_cov_reduced = np.linalg.inv(cov_reduced)
+
+# x_centered_reduced = x_centered[np.r_[0:18, 42:49]]
+
+# inv_dist_red = float(x_centered_reduced @ inv_cov_reduced @ x_centered_reduced)
+# print("Squared Mahalanobis distance with reduced 25x25 dimension and inverse: ", inv_dist_red )
+
+# pinv_reduced = np.linalg.pinv(cov_reduced)
+# print(pinv_reduced.shape)
+# pinv_dist_red = float(x_centered_reduced @ pinv_reduced @ x_centered_reduced)
+# print("Squared Mahalanobis distance with reduced 25x25 dimension and pinv: ", pinv_dist_red )
+# print("Rank of pinv reduced:", np.linalg.matrix_rank(pinv_reduced), "/", pinv_reduced.shape[0])
+
+# # Multiply the two matrices
+# product = cov_reduced @ pinv_reduced  # matrix multiplication
+# print("Is reduced matrix an inverse?: ", np.allclose(product, np.eye(cov_reduced.shape[0])))
+
+# data2 = np.load('neuralfoil/nn_weights_and_biases/scaled_input_distribution.npz')
+# cov2 = data2['cov_inputs_scaled']
+# inv_cov2 = data2['inv_cov_inputs_scaled']
+# mean2 = data2['mean_inputs_scaled']
+# orig_dist = float(x_centered_reduced @ inv_cov2 @ x_centered_reduced)
+# print("Mahalanobis distance for original database:", orig_dist)
+
+# frobenius_distance = np.linalg.norm(cov_reduced - cov2, ord='fro')
+# relative_frobenius_distance = frobenius_distance / np.linalg.norm(cov_reduced, ord='fro')
+
+# print("Frobenius distance:", frobenius_distance)
+# print("Relative Frobenius distance:", relative_frobenius_distance)
+# print("Percent difference:", relative_frobenius_distance * 100, "%")
+
+# # w1, v1 = np.linalg.eigh(cov_reduced)
+# # w2, v2 = np.linalg.eigh(cov2)
+
+# # print("Eigenvalues cov1:", w1)
+# # print("Eigenvalues cov2:", w2)
+
+# data3 = np.load('avian_scaled_input_distribution_no_derivs.npz')
+# cov3 = data3['cov_inputs_scaled']
+# inv_cov3 = data3['inv_cov_inputs_scaled']
+# mean3 = data3['mean_inputs_scaled']
+# no_deriv_dist = float(x_centered_reduced @ inv_cov3 @ x_centered_reduced)
+# print("Mahalanobis distance for avian database without derivatives:", no_deriv_dist)
+
+# data4 = np.load(r"neuralfoil\nn_weights_and_biases\gen2_scaled_input_distribution_no_derivs.npz")
+# cov4 = data4['cov_inputs_scaled']
+# inv_cov4 = data4['inv_cov_inputs_scaled']
+# mean4 = data4['mean_inputs_scaled']
+# no_deriv_dist_Peter = float(x_centered_reduced @ inv_cov4 @ x_centered_reduced)
+# print("Mahalanobis distance for Gen2's database without derivatives:", no_deriv_dist_Peter)
+
+# data4 = np.load('gen2_scaled_input_distribution.npz')
+# cov4 = data4['cov_inputs_scaled']
+# inv_cov4 = np.linalg.pinv(cov4)#data4['inv_cov_inputs_scaled']
+# mean4 = data4['mean_inputs_scaled']
+# no_deriv_dist_Peter = float(x_centered @ inv_cov4 @ x_centered)
+# print("Mahalanobis distance for Gen2's database with derivatives:", no_deriv_dist_Peter)
+
+
+# # Suppose cov1 and cov2 are your covariance matrices
+# eig1 = np.linalg.eigvalsh(cov_reduced)  # sorted ascending
+# eig2 = np.linalg.eigvalsh(cov2)
+# eig3 = np.linalg.eigvalsh(cov3)
+
+# # # Plot on a semilog scale to see small eigenvalues clearly
+# # plt.figure(figsize=(8,5))
+# # plt.semilogy(eig1, '.-', label='Avian Covariance - Reduced Matrix')
+# # plt.semilogy(eig2, 's-', label='Original Covariance')
+# # plt.semilogy(eig3, ':', label='Avian Covariance - no derivatives')
+# # plt.xlabel('Eigenvalue index')
+# # plt.ylabel('Eigenvalue (log scale)')
+# # plt.title('Comparison of Covariance Eigenvalues')
+# # plt.grid(True, which='both', ls='--', alpha=0.5)
+# # plt.legend()
+# # plt.show()
