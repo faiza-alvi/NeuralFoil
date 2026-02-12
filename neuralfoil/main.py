@@ -145,7 +145,7 @@ _scaled_input_distribution["N_inputs"]: int = len(
 
 # Additional new scaled input distribution information for Avian training data
 _avian_scaled_input_distribution = dict(
-    np.load(nn_weights_dir / "avian_scaled_input_distribution.npz")
+    np.load(nn_weights_dir / "gen2_scaled_input_distribution.npz")
 )
 _avian_scaled_input_distribution["N_inputs"]: int = len(
     _avian_scaled_input_distribution["mean_inputs_scaled"]
@@ -303,7 +303,7 @@ def get_aero_from_kulfan_parameters(
         TE_thickness=kulfan_parameters["TE_thickness"],
     )
 
-    if model_size=="avian-v2":
+    if model_size=="avian-v3":
         ### Prepare the inputs for the neural network
         # Only adds derivative if the avian model is selected
         input_rows: List[Union[float, np.ndarray]] = [
@@ -405,7 +405,10 @@ def get_aero_from_kulfan_parameters(
     #Despite differences in sizes of x for different models, the same output y is generated. 
     y = net(x)  # N_outputs x N_cases
 
-    if model_size == "avian-v2":
+    if model_size == "avian-v3":
+        # print("Neural Net Analysis confidence values: ", y[:, 0])
+        # print("Squared Mahalanobis Distance: ", _avian_squared_mahalanobis_distance(x))
+        # print("Difference between Neural Net and real", (y[:, 0]-_avian_squared_mahalanobis_distance(x)))
         y[:, 0] = y[:, 0] - _avian_squared_mahalanobis_distance(x) / (
             2 * _avian_scaled_input_distribution["N_inputs"]
         )
@@ -422,7 +425,7 @@ def get_aero_from_kulfan_parameters(
 
     # Accounts for the differences in input vector size. If Avian version is chosen then the avian version is evaluated first
     # Otherwise the old version is used. 
-    if model_size=="avian-v2": 
+    if model_size=="avian-v3": 
         x_flipped = (
             x + 0.0
         )  # This is an array-api-agnostic way to force a memory copy of the array to be made.
@@ -472,14 +475,16 @@ def get_aero_from_kulfan_parameters(
 
     y_flipped = net(x_flipped)
 
-    if model_size == "avian-v2": 
+    if model_size == "avian-v3": 
         y_flipped[:, 0] = y_flipped[:, 0] - _avian_squared_mahalanobis_distance(x_flipped) / (
             2 * _avian_scaled_input_distribution["N_inputs"]
         )
+        # print(f"{_avian_squared_mahalanobis_distance(x_flipped)}")
     else: 
         y_flipped[:, 0] = y_flipped[:, 0] - _squared_mahalanobis_distance(x_flipped) / (
             2 * _scaled_input_distribution["N_inputs"]
         )
+        # print(f"{_squared_mahalanobis_distance(x_flipped)}")
         # This was baked into training in order to ensure the network asymptotes to zero analysis confidence far away from the training data.
 
     ### The resulting outputs will also be flipped, so we need to flip them back to their normal orientation
