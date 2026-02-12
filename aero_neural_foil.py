@@ -26,10 +26,13 @@ Re, Alpha = np.meshgrid(re, alpha)
 CUT_OFF = 0.7
 
 #file path where the airfoils to run are located
-#Currently LucasAirfoils subfolder
-dir_path = r"C:\Users\booki\Documents\BIRD Lab\Airfoil Project\Airfoils2Run"
+# #Currently LucasAirfoils subfolder
+# dir_path = r"C:\Users\booki\Documents\BIRD Lab\Airfoil Project\Airfoils2Run"
 
-output_path = r"C:\Users\booki\Documents\BIRD Lab\Airfoil Project\BirdAvianFoilXTR0.1_V3midtrain"
+# output_path = r"C:\Users\booki\Documents\BIRD Lab\Airfoil Project\BirdAvianFoilXTR0.1_V3"
+
+dir_path = r"C:\Users\booki\Documents\BIRD Lab\Airfoil Project\ResampledLiveBirdAirfoils\FinalLiveAirfoils"
+output_path = r"C:\Users\booki\Documents\BIRD Lab\Airfoil Project\LiveBirdNeuralFoilXTR0.1_AvianV3"
 ##########################################################################################
 
 count = 0 #initialize count of airfoils ran
@@ -39,13 +42,26 @@ filenames = os.listdir(dir_path) #obtain all the airfoils
 total_airfoils = len(filenames) - 1
 csv_filenames = list(filter(lambda f: f.endswith('.csv'), filenames)) # limits to csv files
 
+if not os.path.exists(output_path):
+    os.mkdir(output_path)
+
 #loop through each file name
 for file in csv_filenames:
-    species_name = file.split("_")[3] + "_" + file.split("_")[4]
-    bird_id = file.split("_")[5]
-    pos = file.split("_")[6]
+    # used different index numbers for the
+    # non live airfoils bc they had dates too
+    species_name = file.split("_")[0] + "_" + file.split("_")[1]
+    bird_id = file.split("_")[2]
+    pos = file.split("_")[3]
     pos = pos[:4] # Makes sure the position doesn't also include .csv, only keeps the numbers
     output_filename = str_date + "_" + species_name + "_" + bird_id + "_" + pos + "_nf.csv" #create the output file name
+    
+    output_fullname = os.path.join(output_path, output_filename)
+
+    # ---- SKIP IF ALREADY WRITTEN ----
+    if os.path.exists(output_fullname):
+        print(f"Skipping (already exists): {output_filename}")
+        continue
+
     file_path = r"%s/%s" % (dir_path, file)
 
     with open(file_path, mode='r') as f:
@@ -90,8 +106,8 @@ for file in csv_filenames:
     # tracking the number of good results
     # total_good_results = total_good_results + len(indices)
 
-    if not os.path.exists(output_path):
-        os.mkdir(output_path)
+    # if not os.path.exists(output_path):
+    #     os.mkdir(output_path)
 
     output_fullname = os.path.join(output_path, output_filename) # outputs to a specific directory
     aero_output.to_csv(output_fullname)
