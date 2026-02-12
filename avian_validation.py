@@ -27,9 +27,9 @@ CUT_OFF = 0.7
 
 #file path where the airfoils to run are located
 #Currently LucasAirfoils subfolder
-dir_path = r"C:\Users\booki\Documents\BIRD Lab\Airfoil Project\BirdAirfoils"
-
-output_path = r"C:\Users\booki\Documents\BIRD Lab\Airfoil Project\BirdNeuralFoilXTR0.1_AvianV2"
+#Path to full airfoils folder "C:\Users\booki\Documents\BIRD Lab\Airfoil Project\BirdAirfoils"
+dir_path = r"C:\Users\booki\Documents\BIRD Lab\Airfoil Project\ResampledLiveBirdAirfoils\FinalLiveAirfoils"
+output_path = r"C:\Users\booki\Documents\BIRD Lab\Airfoil Project\LiveBirdNeuralFoilXTR0.1_AvianV3"
 ##########################################################################################
 
 count = 0 #initialize count of airfoils ran
@@ -60,7 +60,7 @@ for file in csv_filenames:
         Re=Re.flatten(),
         xtr_upper=0.1,  # Location of a forced top-side BL trip, as a fraction of chord
         xtr_lower=0.1,  # Location of a forced bottom-side BL trip, as a fraction of chord
-        model_size= "avian-v2",  # Optionally, specify your model size.
+        model_size= "avian-v3",  # Optionally, specify your model size.
     )
 
     #OBTAIN FIGURE, FROM NEURAL FOIL
