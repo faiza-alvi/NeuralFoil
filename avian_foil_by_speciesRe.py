@@ -18,21 +18,21 @@ str_date = current_date.strftime("%y_%m_%d")
 ##########################################################################################
 
 #angle of attack (lower angle, higher angle, value to determine the number of points
-re = np.arange(5e4, 5.5e5, 5e4)
+# re = np.arange(5e4, 5.5e5, 5e4)
 alpha = np.arange(-20, 20, 0.25)
 
-Re, Alpha = np.meshgrid(re, alpha)
+# Re, Alpha = np.meshgrid(re, alpha)
 
 CUT_OFF = 0.7
 
 #file path where the airfoils to run are located
 # #Currently LucasAirfoils subfolder
-# dir_path = r"C:\Users\booki\Documents\BIRD Lab\Airfoil Project\Airfoils2Run"
+dir_path = r"C:\Users\booki\Documents\BIRD Lab\Airfoil Project\Airfoils2Run"
 
-# output_path = r"C:\Users\booki\Documents\BIRD Lab\Airfoil Project\BirdAvianFoilXTR0.1_V3"
+output_path = r"C:\Users\booki\Documents\BIRD Lab\Airfoil Project\BirdRelevantReAvianFoilXTR0.1_V3_Complete"
 
-dir_path = r"C:\Users\booki\Documents\BIRD Lab\Airfoil Project\ResampledLiveBirdAirfoils\FinalLiveAirfoils"
-output_path = r"C:\Users\booki\Documents\BIRD Lab\Airfoil Project\LiveBirdNeuralFoilXTR0.1_AvianV3"
+# dir_path = r"C:\Users\booki\Documents\BIRD Lab\Airfoil Project\ResampledLiveBirdAirfoils\FinalLiveAirfoils"
+# output_path = r"C:\Users\booki\Documents\BIRD Lab\Airfoil Project\LiveBirdNeuralFoilXTR0.1_AvianV3"
 ##########################################################################################
 
 count = 0 #initialize count of airfoils ran
@@ -42,20 +42,33 @@ filenames = os.listdir(dir_path) #obtain all the airfoils
 total_airfoils = len(filenames) - 1
 csv_filenames = list(filter(lambda f: f.endswith('.csv'), filenames)) # limits to csv files
 
+# Read in species and relevant Reynolds number 
+# Read in species and relevant Reynolds number
+re_species_path = r"C:\Users\booki\Documents\BIRD Lab\Airfoil Project\bird_species_reynolds_numbers.csv"
+re_species_df = pd.read_csv(re_species_path)
+
+# Create dictionary: {species_name: Reynolds_number}
+species_re_dict = dict(zip(re_species_df['species'], re_species_df['Re']))
+
 if not os.path.exists(output_path):
     os.mkdir(output_path)
 
 #loop through each file name
 for file in csv_filenames:
-    # used different index numbers for the
-    # non live airfoils bc they had dates too
-    species_name = file.split("_")[0] + "_" + file.split("_")[1]
-    bird_id = file.split("_")[2]
-    pos = file.split("_")[3]
+
+    species_name = file.split("_")[3] + "_" + file.split("_")[4]
+    bird_id = file.split("_")[5]
+    pos = file.split("_")[6]
     pos = pos[:4] # Makes sure the position doesn't also include .csv, only keeps the numbers
-    output_filename = str_date + "_" + species_name + "_" + bird_id + "_" + pos + "_nf.csv" #create the output file name
+    output_filename = str_date + "_" + species_name + "_" + bird_id + "_" + pos + "_af.csv" #create the output file name
     
     output_fullname = os.path.join(output_path, output_filename)
+
+    #Adding 
+    if species_name not in species_re_dict:
+        print(f"WARNING: No Reynolds number found for {species_name}. Skipping.")
+        continue
+    species_re = species_re_dict[species_name]
 
     # ---- SKIP IF ALREADY WRITTEN ----
     if os.path.exists(output_fullname):
@@ -69,6 +82,10 @@ for file in csv_filenames:
         data = [row for row in csv_reader]
 
     df_array = np.array(data).astype(float)
+    
+    Re = np.full_like(alpha, species_re, dtype=float)
+    Alpha = alpha
+
     # ------- Run Neural Foil --------
     aero = nf.get_aero_from_coordinates(
         coordinates=df_array,
@@ -111,6 +128,9 @@ for file in csv_filenames:
 
     output_fullname = os.path.join(output_path, output_filename) # outputs to a specific directory
     aero_output.to_csv(output_fullname)
+    print(f"Finished {species_name} {bird_id} at {pos}")
+    
+
 
 # obtain the difference in time from the initial to obtain the time taken to run
 print("--- %s seconds ---" % (time.time() - start_time))
