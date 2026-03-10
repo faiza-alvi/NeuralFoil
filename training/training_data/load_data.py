@@ -133,14 +133,14 @@ cols = Data.get_vector_column_names()
 ### Read the original data, by scraping all .csv files within the data directory
 # data_directory = Path(r"/home/faiza/Documents/NeuralFoil/training/training_data")
 # data_directory = Path(r"/home/faiza/Downloads/training_data/training_data")
-data_directory = Path(r"/home/faiza/Documents/Gen2TrainingAirfoils")
+data_directory = Path(r"/home/huanglunzhu/Documents/Gen2TrainingAirfoils/test")
 
 raw_dfs = {}
 
 for csv_file in data_directory.glob("data*.csv"):
     print(f"Reading {csv_file}...")
     raw_dfs[csv_file.stem] = pl.read_csv(
-        csv_file, has_header=False, new_columns=cols, schema_overrides={col: pl.Float32 for col in cols}, infer_schema_length=10000, skip_rows=1
+        csv_file, has_header=False, new_columns=cols, dtypes={col: pl.Float32 for col in cols}, infer_schema_length=10000, skip_rows=1
     )
     print(f"\t{len(raw_dfs[csv_file.stem])} rows")
 
@@ -400,6 +400,9 @@ inv_cov_inputs_scaled = np.linalg.pinv(cov_inputs_scaled)
 #     inv_cov_inputs_scaled=inv_cov_inputs_scaled
 # )
 
+#Saving for testing: 
+df_inputs_scaled.write_csv("test_load_data_original_inputs.csv")
+derivatives_df.write_csv("test_load_data_original_derivatives.csv")
 
 def make_data(row_index, df=df):
     row = df[row_index]
