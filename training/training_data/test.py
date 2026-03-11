@@ -111,6 +111,9 @@ plt.legend()
 plt.title("Avian Training Progress")
 plt.show()
 
+# ------------------------------------------------------------
+# Code to test covariances 
+
 # import numpy as np
 
 # # Load the .npz file
@@ -406,3 +409,23 @@ plt.show()
 # # plt.grid(True, which='both', ls='--', alpha=0.5)
 # # plt.legend()
 # # plt.show()
+
+# --------------------------------------------------------
+# Code to check that two matrices (saved as .csv) are the same 
+
+import numpy as np
+import pandas as pd
+
+# Read csv files
+mat1 = pd.read_csv("test_load_data_original_inputs.csv",skiprows=1, header=None).to_numpy()
+mat2 = pd.read_csv("test_load_data_new64_inputs.csv", skiprows=1, header=None).to_numpy()
+print(mat1.shape)
+print(mat2.shape)
+# Check if matrices are identical
+are_equal = np.allclose(mat1, mat2, atol=1e-5)
+
+print("Matrices are identical:", are_equal)
+
+max_diff = np.max(np.abs(mat1 - mat2))
+print("Max absolute difference:", max_diff)
+
