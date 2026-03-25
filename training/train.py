@@ -16,7 +16,7 @@ from torch.utils.data import TensorDataset, DataLoader
 N_inputs = len(df_train_inputs_scaled.columns)
 N_outputs = len(df_train_outputs_scaled.columns)
 
-cache_file = Path(__file__).parent / "nn-avian-v3.pth"
+cache_file = Path(__file__).parent / "nn-avian-gen2-256-baseline.pth"
 n_hidden_layers = 5
 width = 512
 print("Cache file: ", cache_file)
