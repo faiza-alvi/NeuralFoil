@@ -384,4 +384,4 @@ if __name__ == "__main__":
             },
             cache_file,
         )
-        print(f"-- {time.time() - start_time} seconds since start, for Epoch {epoch} --" % )
+        print(f"-- {time.time() - start_time} seconds since start, for Epoch {epoch} --")
