@@ -10,6 +10,9 @@ from training_data.load_data import (
 import torch
 from torch.utils.data import TensorDataset, DataLoader
 
+# Improve Tensor Core usage on GPU Flag
+# torch.set_float32_matmul_precision("high")
+
 N_inputs = len(df_train_inputs_scaled.columns)
 N_outputs = len(df_train_outputs_scaled.columns)
 
@@ -144,6 +147,9 @@ if __name__ == "__main__":
         ),
     ).to(device)
 
+    #Add PyTorch Graph Compilation Flag
+    # net = torch.compile(net)
+
     # Define the optimizer
     learning_rate = 1e-4
     optimizer = torch.optim.RAdam(net.parameters(), lr=learning_rate, weight_decay=3e-5)
@@ -153,6 +159,9 @@ if __name__ == "__main__":
         patience=50,
         verbose=True,
     )
+    
+    # Implementation of AMP Flag
+    scaler = torch.cuda.amp.GradScaler()
 
     try:
         checkpoint = torch.load(cache_file)
@@ -179,7 +188,11 @@ if __name__ == "__main__":
         dataset=TensorDataset(train_inputs, train_outputs),
         batch_size=batch_size,
         shuffle=True,
-        num_workers=16,
+        num_workers=16, #Change to 20
+        # pin_memory=True,
+        # persistent_workers=True,
+        # prefetch_factor=4
+        # Flag
     )
 
     test_inputs = torch.tensor(
@@ -193,7 +206,11 @@ if __name__ == "__main__":
     test_loader = DataLoader(
         dataset=TensorDataset(test_inputs, test_outputs),
         batch_size=batch_size,#8192,
-        num_workers=16,
+        num_workers=16, #Change to 20
+        # pin_memory=True,
+        # persistent_workers=True,
+        # prefetch_factor=4
+        # Flag
     )
 
     # Prepare the loss function
@@ -270,11 +287,21 @@ if __name__ == "__main__":
             x = x.to(device)
             y_data = y_data.to(device)
 
-            loss = loss_function(y_pred=net(x), y_data=y_data)
+            # loss = loss_function(y_pred=net(x), y_data=y_data)
+            # Implementation of AMP Flag
+            with torch.cuda.amp.autocast():
+                y_pred = net(x)
+                loss = loss_function(y_pred=y_pred, y_data=y_data)
 
+            # optimizer.zero_grad()
+            # loss.backward()
+            # optimizer.step()
+            # Implementation of AMP Flag 
             optimizer.zero_grad()
-            loss.backward()
-            optimizer.step()
+
+            scaler.scale(loss).backward()
+            scaler.step(optimizer)
+            scaler.update()
 
             loss_from_each_training_batch.append(loss.detach())
 
@@ -289,11 +316,18 @@ if __name__ == "__main__":
         mae_from_each_test_batch = []
 
         for i, (x, y_data) in enumerate(test_loader):
+            # with torch.no_grad():
+            #     x = x.to(device)
+            #     y_data = y_data.to(device)
+
+            #     y_pred = net(x)
+            # Implementation of AMP Flag 
             with torch.no_grad():
                 x = x.to(device)
                 y_data = y_data.to(device)
 
-                y_pred = net(x)
+                with torch.cuda.amp.autocast():
+                    y_pred = net(x)
 
                 loss_components = loss_function(
                     y_pred=y_pred, y_data=y_data, return_individual_loss_components=True
