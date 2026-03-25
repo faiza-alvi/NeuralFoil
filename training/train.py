@@ -9,6 +9,7 @@ from training_data.load_data import (
 )
 import torch
 from torch.utils.data import TensorDataset, DataLoader
+import time
 
 # Improve Tensor Core usage on GPU Flag
 # torch.set_float32_matmul_precision("high")
@@ -21,6 +22,7 @@ n_hidden_layers = 5
 width = 512
 print("Cache file: ", cache_file)
 
+start_time = time.time() 
 
 # Define the model
 class Net(torch.nn.Module):
@@ -382,3 +384,4 @@ if __name__ == "__main__":
             },
             cache_file,
         )
+        print(f"-- {time.time() - start_time} seconds since start, for Epoch {epoch} --" % )
