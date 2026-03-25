@@ -260,7 +260,7 @@ cols = Data.get_vector_column_names()
 ### Read the original data, by scraping all .csv files within the data directory
 # data_directory = Path(r"/home/faiza/Documents/NeuralFoil/training/training_data")
 # data_directory = Path(r"/home/faiza/Downloads/training_data/training_data")
-data_directory = Path(r"/home/huanglunzhu/Documents/Gen2TrainingAirfoils/test")
+data_directory = Path(r"/home/huanglunzhu/Documents/Gen2TrainingAirfoils")
 
 raw_dfs = {}
 
