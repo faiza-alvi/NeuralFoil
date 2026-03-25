@@ -7,6 +7,7 @@ from neuralfoil._basic_data_type import Data
 import torch
 import math
 import time
+import shutil
 
 start_time = time.time() 
 
@@ -153,10 +154,10 @@ def precompute_bernstein(n_weights=8):
 
     # Binomial coefficients
     K = torch.tensor([math.comb(N, i) for i in range(N+1)],
-                     dtype=torch.float64, device=device)
+                     dtype=torch.float32, device=device)
 
-    p = torch.arange(N1, N1+N+1, device=device)
-    q = N - torch.arange(N+1, device=device) + N2
+    p = torch.arange(N1, N1+N+1, device=device, dtype=torch.float32)
+    q = N - torch.arange(N+1, device=device, dtype=torch.float32) + N2
 
     p1 = p - 1
     q1 = q - 1
@@ -210,50 +211,46 @@ def compute_derivatives_batch(lower, upper, LE, TE):
     return upperslope, lowerslope, uppercurve, lowercurve
 
 # ---------- Batch Processing Function ----------
-def process_airfoil_batches(df: pl.DataFrame, batch_size=1_000_000):
-    """
-    df: Polars dataframe with columns:
-        kulfan_lower_0..7, kulfan_upper_0..7, kulfan_LE_weight, kulfan_TE_thickness
-    """
+def process_airfoil_batches_to_disk(
+    df: pl.DataFrame,
+    output_dir: Path,
+    batch_size: int = 50_000
+):
     n = df.height
-    derivatives_list = []
-
     for start in range(0, n, batch_size):
-        end = min(start+batch_size, n)
+        end = min(start + batch_size, n)
         batch = df[start:end]
+
+        # Original row indices
+        row_indices = np.arange(start, end)
 
         # Convert batch to GPU tensors
         lower = torch.tensor(
             batch.select([f"kulfan_lower_{i}" for i in range(8)]).to_numpy(),
-            dtype=torch.float64, device=device
+            dtype=torch.float32, device=device
         )
         upper = torch.tensor(
             batch.select([f"kulfan_upper_{i}" for i in range(8)]).to_numpy(),
-            dtype=torch.float64, device=device
+            dtype=torch.float32, device=device
         )
-        LE = torch.tensor(batch["kulfan_LE_weight"].to_numpy(),
-                          dtype=torch.float64, device=device)
-        TE = torch.tensor(batch["kulfan_TE_thickness"].to_numpy(),
-                          dtype=torch.float64, device=device)
+        LE = torch.tensor(batch["kulfan_LE_weight"].to_numpy(), dtype=torch.float32, device=device)
+        TE = torch.tensor(batch["kulfan_TE_thickness"].to_numpy(), dtype=torch.float32, device=device)
 
         # Compute derivatives
         u_slope, l_slope, u_curve, l_curve = compute_derivatives_batch(lower, upper, LE, TE)
-
         n_nodes = u_slope.shape[1]
 
-        # Convert to Polars DataFrame
+        # Save batch immediately
         derivatives_batch = pl.DataFrame({
-            **{f"s_upper_first_der_{i}": u_slope[:,i].cpu().numpy() for i in range(n_nodes)},
-            **{f"s_lower_first_der_{i}": l_slope[:,i].cpu().numpy() for i in range(n_nodes)},
-            **{f"s_upper_second_der_{i}": u_curve[:,i].cpu().numpy() for i in range(n_nodes)},
-            **{f"s_lower_second_der_{i}": l_curve[:,i].cpu().numpy() for i in range(n_nodes)},
+            "row_index": row_indices,
+            **{f"s_upper_first_der_{i}": u_slope[:, i].cpu().numpy() for i in range(n_nodes)},
+            **{f"s_lower_first_der_{i}": l_slope[:, i].cpu().numpy() for i in range(n_nodes)},
+            **{f"s_upper_second_der_{i}": u_curve[:, i].cpu().numpy() for i in range(n_nodes)},
+            **{f"s_lower_second_der_{i}": l_curve[:, i].cpu().numpy() for i in range(n_nodes)},
         })
+        derivatives_batch.write_parquet(output_dir / f"batch_{start:08d}_{end:08d}.parquet")
+        print(f"Processed batch {start}-{end} / {n}")
 
-        derivatives_list.append(derivatives_batch)
-        print(f"Processed batch {start}–{end} / {n}")
-
-    # Concatenate all batches
-    return pl.concat(derivatives_list, how="vertical")
 
 cols = Data.get_vector_column_names()
 
@@ -261,6 +258,14 @@ cols = Data.get_vector_column_names()
 # data_directory = Path(r"/home/faiza/Documents/NeuralFoil/training/training_data")
 # data_directory = Path(r"/home/faiza/Downloads/training_data/training_data")
 data_directory = Path(r"/home/huanglunzhu/Documents/Gen2TrainingAirfoils")
+# Folder to store derivative batches
+derivatives_dir = Path("derivatives_batches")
+
+# --- Step 1: Delete old derivatives if exist ---
+if derivatives_dir.exists():
+    print(f"Deleting old derivatives in {derivatives_dir}...")
+    shutil.rmtree(derivatives_dir)
+derivatives_dir.mkdir(exist_ok=True)
 
 raw_dfs = {}
 
@@ -397,7 +402,14 @@ print("At calculation now")
 # Make the derivative dataset
 # Apply to all rows
 #derivatives_df = pl.DataFrame([compute_derivatives(row) for row in df.iter_rows(named=True)])
-derivatives_df = process_airfoil_batches(df, batch_size=1_000_000) 
+process_airfoil_batches_to_disk(df, derivatives_dir, batch_size=50_000) 
+
+derivatives_files = sorted(derivatives_dir.glob("batch_*.parquet"))
+derivatives_df = pl.concat([pl.read_parquet(f) for f in derivatives_files], how="vertical")
+
+# Sort by original row index to ensure alignment
+derivatives_df = derivatives_df.sort("row_index").drop("row_index")
+print(f"Computed and loaded derivatives shape: {derivatives_df.shape}")
 
 print(derivatives_df)
 
