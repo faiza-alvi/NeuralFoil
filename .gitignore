@@ -15,6 +15,9 @@ svg-inkscape/
 # Venv to ignore any virtual environment files 
 venv/
 
+# Ignore derivative batches
+derivatives_batches/
+
 ## Core latex/pdflatex auxiliary files:
 *.aux
 *.lof
