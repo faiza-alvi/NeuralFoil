@@ -8,6 +8,7 @@ import torch
 import math
 import time
 import shutil
+import gc
 
 start_time = time.time() 
 
@@ -282,6 +283,7 @@ df = pl.concat(raw_dfs.values())
 cols_to_nullify = Data.get_vector_output_column_names().copy()
 cols_to_nullify.remove("analysis_confidence")
 
+# Set analysis confidence to zero for all rows with nonpositive drag coefficients 
 c = pl.col("CD") <= 0
 print(f"Nullifying {int(df.select(c).sum().to_numpy()[0, 0])} rows with CD <= 0...")
 df = df.with_columns(
@@ -297,76 +299,116 @@ df = df.with_columns(
     ]
 )
 
-c = pl.any_horizontal(
-    [pl.col(f"upper_bl_theta_{i}") <= 0 for i in range(Data.N)]
-    + [pl.col(f"lower_bl_theta_{i}") <= 0 for i in range(Data.N)]
+# Set analysis confidence to 0 for all non positive boundary layer thetas 
+df = df.lazy() #Makes the dataframe lazy to avoid rewriting too much 
+# Compute the mask once and store it
+df = df.with_columns(
+    pl.any_horizontal(
+        [pl.col(f"upper_bl_theta_{i}") <= 0 for i in range(Data.N)] +
+        [pl.col(f"lower_bl_theta_{i}") <= 0 for i in range(Data.N)]
+    ).alias("mask_c")
 )
-print(
-    f"Nullifying {int(df.select(c).sum().to_numpy()[0, 0])} rows with nonpositive boundary layer thetas..."
-)
+
+# Count rows to log
+n_bad = df.select(pl.col("mask_c").sum()).collect().item()
+print(f"Nullifying {n_bad} rows with nonpositive boundary layer thetas...")
+
+# Apply transformations using the cached mask
 df = df.with_columns(
     [
-        pl.when(c)
+        pl.when(pl.col("mask_c"))
         .then(0)
         .otherwise(pl.col("analysis_confidence"))
         .alias("analysis_confidence"),
     ]
     + [
-        pl.when(c).then(None).otherwise(pl.col(col)).alias(col)
+        pl.when(pl.col("mask_c"))
+        .then(None)
+        .otherwise(pl.col(col))
+        .alias(col)
         for col in cols_to_nullify
     ]
 )
+# Drop the temporary mask column
+df = df.drop("mask_c")
+# Collect the lazy frame
+df = df.collect()
 
-c = pl.any_horizontal(
-    [pl.col(f"upper_bl_H_{i}") < 1 for i in range(Data.N)]
-    + [pl.col(f"lower_bl_H_{i}") < 1 for i in range(Data.N)]
+# Set analysis confidence = 0 for all rows with non physical BL 
+df = df.lazy()
+df = df.with_columns(
+    pl.any_horizontal(
+        [pl.col(f"upper_bl_H_{i}") < 1 for i in range(Data.N)] +
+        [pl.col(f"lower_bl_H_{i}") < 1 for i in range(Data.N)]
+    ).alias("mask_H")
 )
-print(
-    f"Nullifying {int(df.select(c).sum().to_numpy()[0, 0])} rows with H < 1 (non-physical BL)..."
-)
+# Count affected rows without recomputing
+n_bad_H = df.select(pl.col("mask_H").sum()).collect().item()
+print(f"Nullifying {n_bad_H} rows with H < 1 (non-physical BL)...")
+# Apply nullification / zeroing using the cached mask
 df = df.with_columns(
     [
-        pl.when(c)
+        pl.when(pl.col("mask_H"))
         .then(0)
         .otherwise(pl.col("analysis_confidence"))
         .alias("analysis_confidence"),
     ]
     + [
-        pl.when(c).then(None).otherwise(pl.col(col)).alias(col)
+        pl.when(pl.col("mask_H"))
+        .then(None)
+        .otherwise(pl.col(col))
+        .alias(col)
         for col in cols_to_nullify
     ]
 )
 
-c = pl.any_horizontal(
-    sum(
-        [
-            [
-                pl.col(f"upper_bl_ue/vinf_{i}") < -20,
-                pl.col(f"upper_bl_ue/vinf_{i}") > 20,
-                pl.col(f"lower_bl_ue/vinf_{i}") < -20,
-                pl.col(f"lower_bl_ue/vinf_{i}") > 20,
-            ]
-            for i in range(Data.N)
-        ],
-        start=[],
-    )
+# Drop the temporary mask column to save memory
+df = df.drop("mask_H")
+# Collect lazy frame (executes everything)
+df = df.collect()
+
+# Sets analysis confidence to 0 for all non-physical edge velocities 
+# Make sure the DataFrame is lazy
+df = df.lazy()
+# Build mask_ue safely using vectorized expressions
+mask_exprs = []
+for i in range(Data.N):
+    mask_exprs.extend([
+        pl.col(f"upper_bl_ue/vinf_{i}") < -20,
+        pl.col(f"upper_bl_ue/vinf_{i}") > 20,
+        pl.col(f"lower_bl_ue/vinf_{i}") < -20,
+        pl.col(f"lower_bl_ue/vinf_{i}") > 20,
+    ])
+df = df.with_columns(
+    pl.any_horizontal(mask_exprs).alias("mask_ue")
 )
-print(
-    f"Nullifying {int(df.select(c).sum().to_numpy()[0, 0])} rows with non-physical edge velocities..."
-)
+
+# Count affected rows
+n_bad_ue = df.select(pl.col("mask_ue").sum().alias("n")).collect()["n"][0]
+print(f"Nullifying {n_bad_ue} rows with non-physical edge velocities...")
+
+# Apply nullification / zeroing using the cached mask
 df = df.with_columns(
     [
-        pl.when(c)
+        pl.when(pl.col("mask_ue"))
         .then(0)
         .otherwise(pl.col("analysis_confidence"))
         .alias("analysis_confidence"),
     ]
     + [
-        pl.when(c).then(None).otherwise(pl.col(col)).alias(col)
+        pl.when(pl.col("mask_ue"))
+        .then(None)
+        .otherwise(pl.col(col))
+        .alias(col)
         for col in cols_to_nullify
     ]
 )
+# Drop the temporary mask column to save memory
+df = df.drop("mask_ue")
+# Collect lazy frame (execute everything)
+df = df.collect()
 
+# Set analysis confidence to zero for all rows with nonphysical transition locations 
 c = pl.any_horizontal(
     pl.col("Top_Xtr") < 0,
     pl.col("Top_Xtr") > 1,
@@ -461,7 +503,8 @@ print("cut dataframe at insertion index")
 df_inputs_scaled = pl.concat([before, derivatives_df, after], how="horizontal")
 print("stacked inputs using pl.concat")
 
-di = df_inputs_scaled.describe()
+# di = df_inputs_scaled.describe()
+
 
 df_outputs_scaled = pl.DataFrame(
     {
@@ -508,10 +551,19 @@ df_outputs_scaled = pl.DataFrame(
     }
 )
 
-do = df_outputs_scaled.describe([0.01, 0.99])
+# do = df_outputs_scaled.describe([0.01, 0.99])
 
 ### Split the dataset into train and test sets
 test_train_split_index = int(len(df) * 0.95)
+
+# Delete the variables
+del df, derivatives_df, before, after
+
+# Force garbage collection to free memory immediately
+gc.collect()
+
+print("Cleared df, derivatives_df, before, and after from memory.")
+
 # df_train = df[:test_train_split_index]
 # df_test = df[test_train_split_index:]
 df_train_inputs_scaled = df_inputs_scaled[:test_train_split_index]
@@ -525,13 +577,83 @@ print(f"The input test data is shaped as {df_test_inputs_scaled.describe()} ")
 print(f"The output test data is shaped as {df_test_outputs_scaled.describe()} ")
 
 # --------------------------------------------------
+import gc
+import polars as pl
+import numpy as np
+import sys
+
+print("🔍 Scanning memory for large Polars DataFrames and NumPy arrays...")
+
+# Force garbage collection to clear unused objects
+gc.collect()
+
+# Threshold for “large” objects (in bytes)
+LARGE_THRESHOLD = 10_000_000  # ~1 GB
+
+def format_bytes(n):
+    """Human-readable MB string"""
+    return f"{n / 1e6:.1f} MB"
+
+# Combine globals and locals
+objects_to_check = {**globals(), **locals()}
+
+found = False
+for name, obj in objects_to_check.items():
+    try:
+        if isinstance(obj, pl.DataFrame):
+            n_rows, n_cols = obj.shape
+            approx_bytes = n_rows * n_cols * 8  # float64 assumption
+            if approx_bytes > LARGE_THRESHOLD:
+                print(f"Polars DataFrame '{name}': {n_rows:,} rows x {n_cols:,} cols ~ {format_bytes(approx_bytes)}")
+                found = True
+        elif isinstance(obj, np.ndarray):
+            n_bytes = obj.nbytes
+            if n_bytes > LARGE_THRESHOLD:
+                print(f"NumPy array '{name}': shape={obj.shape}, dtype={obj.dtype}, size={format_bytes(n_bytes)}")
+                found = True
+    except Exception:
+        continue
+
+if not found:
+    print("✅ No large Polars DataFrames or NumPy arrays found in memory.")
+else:
+    print("💡 Consider deleting unneeded objects with `del var_name` + `gc.collect()` to free RAM.")
+
+
 # Commented out below distribution metrics because analysis confidence works 
 # with the distribution metrics calculated before the derivatives are added. 
-mean_inputs_scaled = np.mean(df_inputs_scaled.to_numpy(), axis=0)
-cov_inputs_scaled = np.cov(df_inputs_scaled.to_numpy(), rowvar=False)
+cols = df_inputs_scaled.columns
+p = len(cols)
 
-# Compute the inverse of the covariance
+# Compute mean of each column (eager DataFrame)
+mean_inputs_scaled = df_inputs_scaled.select([pl.col(c).mean() for c in cols]).to_numpy().flatten()
+
+# Compute covariance matrix
+cov_exprs = []
+for i in range(p):
+    for j in range(i, p):
+        col_i = pl.col(cols[i])
+        col_j = pl.col(cols[j])
+        cov_ij = ((col_i - mean_inputs_scaled[i]) * (col_j - mean_inputs_scaled[j])).mean()
+        cov_exprs.append(cov_ij.alias(f"cov_{i}_{j}"))
+
+cov_flat = df_inputs_scaled.select(cov_exprs).to_numpy().flatten()
+
+# Reshape into 49×49 covariance matrix
+cov_inputs_scaled = np.zeros((p, p))
+k = 0
+for i in range(p):
+    for j in range(i, p):
+        cov_inputs_scaled[i, j] = cov_flat[k]
+        cov_inputs_scaled[j, i] = cov_flat[k]
+        k += 1
+
+# Compute pseudo-inverse
 inv_cov_inputs_scaled = np.linalg.pinv(cov_inputs_scaled)
+
+del df_inputs_scaled, df_outputs_scaled
+gc.collect()
+print("Deleted df_inputs_scaled and df_outputs_scaled from RAM" )
 
 # # Save everything to a .npz file
 # np.savez(
@@ -547,10 +669,10 @@ inv_cov_inputs_scaled = np.linalg.pinv(cov_inputs_scaled)
 
 print("----------- %s seconds -------" % (time.time() - start_time))
 
-def make_data(row_index, df=df):
+def make_data(row_index, df=df_test_inputs_scaled):
     row = df[row_index]
     return Data.from_vector(row[cols].to_numpy().flatten())
 
 
 if __name__ == "__main__":
-    d = make_data(len(df) // 2)
+    d = make_data(len(df_test_inputs_scaled) // 2, df_test_inputs_scaled)
