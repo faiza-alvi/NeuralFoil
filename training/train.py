@@ -159,7 +159,7 @@ if __name__ == "__main__":
         optimizer,
         factor=0.5,
         patience=50,
-        verbose=True,
+    #    verbose=True,
     )
     
     # Implementation of AMP Flag
