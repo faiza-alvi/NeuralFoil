@@ -651,9 +651,9 @@ for i in range(p):
 # Compute pseudo-inverse
 inv_cov_inputs_scaled = np.linalg.pinv(cov_inputs_scaled)
 
-del df_inputs_scaled, df_outputs_scaled
-gc.collect()
-print("Deleted df_inputs_scaled and df_outputs_scaled from RAM" )
+# del df_inputs_scaled, df_outputs_scaled
+# gc.collect()
+# print("Deleted df_inputs_scaled and df_outputs_scaled from RAM" )
 
 # # Save everything to a .npz file
 # np.savez(
@@ -675,4 +675,47 @@ def make_data(row_index, df=df_test_inputs_scaled):
 
 
 if __name__ == "__main__":
-    d = make_data(len(df_test_inputs_scaled) // 2, df_test_inputs_scaled)
+    # d = make_data(len(df_test_inputs_scaled) // 2, df_test_inputs_scaled)
+
+    # Additional new scaled input distribution information for Avian training data
+    _avian_scaled_input_distribution = dict(
+        np.load("neuralfoil/nn_weights_and_biases/gen2_scaled_input_distribution.npz")
+    )
+    #Checked new code against old code that was run on Peter Sharpe data plus gen2 K1, K2, and K3
+    d = _avian_scaled_input_distribution
+    mean = d["mean_inputs_scaled"]
+    cov = d["cov_inputs_scaled"]
+
+    # direct_mean_inputs_scaled = np.mean(df_inputs_scaled.to_numpy(), axis=0)
+    # direct_cov_inputs_scaled = np.cov(df_inputs_scaled.to_numpy(), rowvar=False)
+
+    indices = list(range(0, 18)) + list(range(42, 49))
+        
+    mean_test = np.allclose(mean[indices], mean_inputs_scaled[indices], atol=1e-5)
+    cov_test = np.allclose(cov, cov_inputs_scaled, atol=1e-5)
+    print(f" Means match: {mean_test}, Covariance match: {cov_test}")
+
+    mean_test = np.allclose(direct_mean_inputs_scaled, mean_inputs_scaled, atol=1e-5)
+    cov_test = np.allclose(direct_cov_inputs_scaled, cov_inputs_scaled, atol=1e-5)
+    print(f"Direct test Means match: {mean_test}, Covariance match: {cov_test}")
+
+    max_diff = np.max(np.abs(mean - mean_inputs_scaled))
+    print("Max absolute difference in mean:", max_diff)
+
+    diff = np.abs(mean - mean_inputs_scaled)
+
+    max_idx = np.argmax(diff)
+    max_value = diff.flat[max_idx]   # or diff.reshape(-1)[max_idx]
+
+    print("Max absolute difference in mean:", max_value)
+    print("Index of max difference:", max_idx)
+
+    max_diff = np.max(np.abs(cov - cov_inputs_scaled))
+    print("Max absolute difference in covariance:", max_diff)
+    
+    print(f" Old Mean: {mean}")
+    print(f" New Mean: {mean_inputs_scaled}")
+
+    print("All done")
+
+
