@@ -8,8 +8,9 @@ from training_data.load_data import (
     cov_inputs_scaled,
 )
 import torch
-from torch.utils.data import TensorDataset, DataLoader
+from torch.utils.data import TensorDataset, DataLoader, Dataset
 import time
+import gc
 
 # Improve Tensor Core usage on GPU Flag
 # torch.set_float32_matmul_precision("high")
@@ -135,6 +136,45 @@ class Net(torch.nn.Module):
 
         return y_fused
 
+class StreamingDataset(Dataset):
+    #Dataset that only parses the polars inputs as it needs them WITHOUT blowing up the RAM 
+    def __init__(self, df_inputs, df_outputs):
+        self.X = df_inputs
+        self.y = df_outputs
+
+    def __len__(self):
+        return self.X.height
+
+    def __getitem__(self, idx):
+        x = self.X.slice(idx, 1).to_numpy()[0]
+        y = self.y.slice(idx, 1).to_numpy()[0]
+
+        return (
+            torch.from_numpy(x).float(),
+            torch.from_numpy(y).float(),
+        )
+
+class BatchDataset(torch.utils.data.Dataset):
+    def __init__(self, df_inputs, df_outputs, batch_size):
+        self.X = df_inputs
+        self.y = df_outputs
+        self.batch_size = batch_size
+        self.n = df_inputs.height
+
+    def __len__(self):
+        return self.n // self.batch_size
+
+    def __getitem__(self, idx):
+        i = idx * self.batch_size
+
+        x = self.X.slice(i, self.batch_size).to_numpy()
+        y = self.y.slice(i, self.batch_size).to_numpy()
+
+        return (
+            torch.from_numpy(x).float(),
+            torch.from_numpy(y).float(),
+        )
+
 
 if __name__ == "__main__":
     device = torch.device("cuda") if torch.cuda.is_available() else torch.device("cpu")
@@ -178,42 +218,102 @@ if __name__ == "__main__":
     print("Preparing data...")
 
     batch_size = 256
-    train_inputs = torch.tensor(
-        df_train_inputs_scaled.to_numpy(),
-        dtype=torch.float32,
-    )
-    train_outputs = torch.tensor(
-        df_train_outputs_scaled.to_numpy(),
-        dtype=torch.float32,
-    )
-    train_loader = DataLoader(
-        dataset=TensorDataset(train_inputs, train_outputs),
-        batch_size=batch_size,
-        shuffle=True,
-        num_workers=16, #Change to 20
-        # pin_memory=True,
-        # persistent_workers=True,
-        # prefetch_factor=4
-        # Flag
+
+    # # ---- TEST INPUTS ----
+    # test_np = df_test_inputs_scaled.to_numpy()
+    # del df_test_inputs_scaled
+    # gc.collect()
+
+    # test_inputs = torch.from_numpy(test_np).float()
+    # del test_np
+    # gc.collect()
+    # print("Test inputs done")
+
+    # # ---- TEST OUTPUTS ----
+    # test_np = df_test_outputs_scaled.to_numpy()
+    # del df_test_outputs_scaled
+    # gc.collect()
+
+    # test_outputs = torch.from_numpy(test_np).float()
+    # del test_np
+    # gc.collect()
+    # print("Test outputs done")
+
+    # test_loader = DataLoader(
+    #     dataset=TensorDataset(test_inputs, test_outputs),
+    #     batch_size=batch_size,#8192,
+    #     num_workers=16, #Change to 20
+    #     # pin_memory=True,
+    #     # persistent_workers=True,
+    #     # prefetch_factor=4
+    #     # Flag
+    # )
+
+    # # ---- TRAIN INPUTS ----
+    # train_np = df_train_inputs_scaled.to_numpy()
+    # del df_train_inputs_scaled  # free Polars memory
+    # gc.collect()
+
+    # train_inputs = torch.from_numpy(train_np).float()
+    # del train_np
+    # gc.collect()
+    # print("Train inputs done")
+
+    # # ---- TRAIN OUTPUTS ----
+    # train_np = df_train_outputs_scaled.to_numpy()
+    # del df_train_outputs_scaled
+    # gc.collect()
+    # print("numpy conversion done")
+
+    # train_outputs = torch.from_numpy(train_np).float()
+    # del train_np
+    # gc.collect()
+    # print("Train outputs done")
+    
+    # train_loader = DataLoader(
+    #     dataset=TensorDataset(train_inputs, train_outputs),
+    #     batch_size=batch_size,
+    #     shuffle=True,
+    #     num_workers=16, #Change to 20
+    #     # pin_memory=True,
+    #     # persistent_workers=True,
+    #     # prefetch_factor=4
+    #     # Flag
+    # )
+
+    train_dataset = StreamingDataset(
+        df_train_inputs_scaled,
+        df_train_outputs_scaled
     )
 
-    test_inputs = torch.tensor(
-        df_test_inputs_scaled.to_numpy(),
-        dtype=torch.float32,
+    train_loader = DataLoader(
+        BatchDataset(df_train_inputs_scaled, df_train_outputs_scaled, batch_size),
+        batch_size=None,
+        shuffle=True,
+        num_workers=16,
+        pin_memory=True
     )
-    test_outputs = torch.tensor(
-        df_test_outputs_scaled.to_numpy(),
-        dtype=torch.float32,
+
+    test_dataset = StreamingDataset(
+        df_test_inputs_scaled,
+        df_test_outputs_scaled
     )
-    test_loader = DataLoader(
-        dataset=TensorDataset(test_inputs, test_outputs),
-        batch_size=batch_size,#8192,
-        num_workers=16, #Change to 20
-        # pin_memory=True,
-        # persistent_workers=True,
-        # prefetch_factor=4
-        # Flag
+
+    train_loader = DataLoader(
+        BatchDataset(df_train_inputs_scaled, df_train_outputs_scaled, batch_size),
+        batch_size=None,
+        shuffle=True,
+        num_workers=16,
+        pin_memory=True
     )
+    
+    import psutil
+    mem = psutil.virtual_memory()
+
+    print(f"Total RAM: {mem.total / 1e9:.2f} GB")
+    print(f"Available RAM: {mem.available / 1e9:.2f} GB")
+    print(f"Used RAM: {mem.used / 1e9:.2f} GB")
+    print(f"RAM usage: {mem.percent}%")
 
     # Prepare the loss function
     loss_weights = torch.ones(N_outputs, dtype=torch.float32).to(device)
