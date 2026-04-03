@@ -588,7 +588,7 @@ print("🔍 Scanning memory for large Polars DataFrames and NumPy arrays...")
 gc.collect()
 
 # Threshold for “large” objects (in bytes)
-LARGE_THRESHOLD = 10_000_000  # ~1 GB
+LARGE_THRESHOLD = 10_000  # ~1 GB
 
 def format_bytes(n):
     """Human-readable MB string"""
@@ -651,13 +651,22 @@ for i in range(p):
 # Compute pseudo-inverse
 inv_cov_inputs_scaled = np.linalg.pinv(cov_inputs_scaled)
 
-# del df_inputs_scaled, df_outputs_scaled
-# gc.collect()
-# print("Deleted df_inputs_scaled and df_outputs_scaled from RAM" )
+del df_inputs_scaled, df_outputs_scaled
+gc.collect()
+print("Deleted df_inputs_scaled and df_outputs_scaled from RAM" )
 
-# # Save everything to a .npz file
+import psutil
+
+mem = psutil.virtual_memory()
+
+print(f"Total RAM: {mem.total / 1e9:.2f} GB")
+print(f"Available RAM: {mem.available / 1e9:.2f} GB")
+print(f"Used RAM: {mem.used / 1e9:.2f} GB")
+print(f"RAM usage: {mem.percent}%")
+
+# Save everything to a .npz file
 # np.savez(
-#     "gen2_scaled_input_distribution.npz",
+#     "gen2_scaled_input_distribution_K1-6.npz",
 #     mean_inputs_scaled=mean_inputs_scaled,
 #     cov_inputs_scaled=cov_inputs_scaled,
 #     inv_cov_inputs_scaled=inv_cov_inputs_scaled
@@ -693,11 +702,11 @@ if __name__ == "__main__":
         
     mean_test = np.allclose(mean[indices], mean_inputs_scaled[indices], atol=1e-5)
     cov_test = np.allclose(cov, cov_inputs_scaled, atol=1e-5)
-    print(f" Means match: {mean_test}, Covariance match: {cov_test}")
+    # print(f" Means match: {mean_test}, Covariance match: {cov_test}")
 
-    mean_test = np.allclose(direct_mean_inputs_scaled, mean_inputs_scaled, atol=1e-5)
-    cov_test = np.allclose(direct_cov_inputs_scaled, cov_inputs_scaled, atol=1e-5)
-    print(f"Direct test Means match: {mean_test}, Covariance match: {cov_test}")
+    # mean_test = np.allclose(direct_mean_inputs_scaled, mean_inputs_scaled, atol=1e-5)
+    # cov_test = np.allclose(direct_cov_inputs_scaled, cov_inputs_scaled, atol=1e-5)
+    # print(f"Direct test Means match: {mean_test}, Covariance match: {cov_test}")
 
     max_diff = np.max(np.abs(mean - mean_inputs_scaled))
     print("Max absolute difference in mean:", max_diff)
