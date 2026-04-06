@@ -300,7 +300,7 @@ if __name__ == "__main__":
     )
 
     train_loader = DataLoader(
-        BatchDataset(df_train_inputs_scaled, df_train_outputs_scaled, batch_size),
+        BatchDataset(df_test_inputs_scaled, df_test_outputs_scaled, batch_size),
         batch_size=None,
         shuffle=True,
         num_workers=16,
