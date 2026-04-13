@@ -348,6 +348,7 @@ if __name__ == "__main__":
 
     num_epochs = 10**9  # Effectively loop until manually stopped
     for epoch in range(num_epochs):
+        start_time = time.time()
         # Put the model in training mode
         net.train()
 
@@ -434,6 +435,8 @@ if __name__ == "__main__":
             "Top_Xtr": test_residual_mae[4],
             "Bot_Xtr": test_residual_mae[5],
         }
+        end_time = time.time()
+        epoch_duration = end_time - start_time
         print(
             f"Epoch: {epoch} | Train Loss: {train_loss.item():.6g} | Test Loss: {test_loss.item():.6g} | "
             + " | ".join([f"{k}: {v:.6g}" for k, v in labeled_maes.items()])
@@ -444,6 +447,8 @@ if __name__ == "__main__":
             print(
                 f"\t{df_train_outputs_scaled.columns[i]:25}: {test_loss_components[i].item():.6g}"
             )
+        
+        print(f"Duration of Epoch: {epoch} was {epoch_duration} seconds")
 
         scheduler.step(test_loss)
 
