@@ -186,9 +186,7 @@ if __name__ == "__main__":
 
     # ---- TEST INPUTS ----
     test_np = df_test_inputs_scaled.to_numpy()
-    del df_test_inputs_scaled
-    gc.collect()
-
+    
     test_inputs = torch.from_numpy(test_np).float()
     del test_np
     gc.collect()
@@ -196,12 +194,11 @@ if __name__ == "__main__":
 
     # ---- TEST OUTPUTS ----
     test_np = df_test_outputs_scaled.to_numpy()
-    del df_test_outputs_scaled
-    gc.collect()
-
+    
     test_outputs = torch.from_numpy(test_np).float()
     del test_np
     gc.collect()
+    
     print("Test outputs done")
 
     test_loader = DataLoader(
@@ -216,9 +213,7 @@ if __name__ == "__main__":
 
     # ---- TRAIN INPUTS ----
     train_np = df_train_inputs_scaled.to_numpy()
-    del df_train_inputs_scaled  # free Polars memory
-    gc.collect()
-
+    
     train_inputs = torch.from_numpy(train_np).float()
     del train_np
     gc.collect()
@@ -226,10 +221,7 @@ if __name__ == "__main__":
 
     # ---- TRAIN OUTPUTS ----
     train_np = df_train_outputs_scaled.to_numpy()
-    del df_train_outputs_scaled
-    gc.collect()
-    print("numpy conversion done")
-
+    
     train_outputs = torch.from_numpy(train_np).float()
     del train_np
     gc.collect()
