@@ -413,19 +413,58 @@ plt.show()
 # --------------------------------------------------------
 # Code to check that two matrices (saved as .csv) are the same 
 
-import numpy as np
+# import numpy as np
+# import pandas as pd
+
+# # Read csv files
+# mat1 = pd.read_csv("test_load_data_original_inputs.csv",skiprows=1, header=None).to_numpy()
+# mat2 = pd.read_csv("test_load_data_new64_inputs.csv", skiprows=1, header=None).to_numpy()
+# print(mat1.shape)
+# print(mat2.shape)
+# # Check if matrices are identical
+# are_equal = np.allclose(mat1, mat2, atol=1e-5)
+
+# print("Matrices are identical:", are_equal)
+
+# max_diff = np.max(np.abs(mat1 - mat2))
+# print("Max absolute difference:", max_diff)
+
+# --------------------------------------------------------
+# Code to plot the airfoils from one training dataset 
 import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import aerosandbox as asb
+from aerosandbox.geometry.airfoil.airfoil_families import (
+    get_kulfan_coordinates,
+)
 
-# Read csv files
-mat1 = pd.read_csv("test_load_data_original_inputs.csv",skiprows=1, header=None).to_numpy()
-mat2 = pd.read_csv("test_load_data_new64_inputs.csv", skiprows=1, header=None).to_numpy()
-print(mat1.shape)
-print(mat2.shape)
-# Check if matrices are identical
-are_equal = np.allclose(mat1, mat2, atol=1e-5)
+# --- Load CSV ---
+df = pd.read_csv("your_file.csv")
 
-print("Matrices are identical:", are_equal)
+# --- Extract first 18 columns as Kulfan parameters ---
+kulfan_params = df.iloc[:, :18].values  # shape: (num_airfoils, 18)
 
-max_diff = np.max(np.abs(mat1 - mat2))
-print("Max absolute difference:", max_diff)
+# --- Plot setup ---
+plt.figure(figsize=(8, 4))
 
+# --- Loop through each airfoil ---
+for i, params in enumerate(kulfan_params):
+    coords = get_kulfan_coordinates(
+        kulfan_parameters=params,
+        n_points_per_side=100  # adjust resolution if needed
+    )
+    
+    x = coords[:, 0]
+    y = coords[:, 1]
+    
+    plt.plot(x, y, alpha=0.5)
+
+# --- Formatting ---
+plt.gca().set_aspect('equal', adjustable='box')
+plt.xlabel("x")
+plt.ylabel("y")
+plt.title("Gen2 Training Airfoils")
+plt.grid(True)
+
+plt.show()
