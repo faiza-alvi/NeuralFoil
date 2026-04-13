@@ -6,6 +6,7 @@ from training_data.load_data import (
     df_test_outputs_scaled,
     mean_inputs_scaled,
     cov_inputs_scaled,
+    inv_cov_inputs_scaled,
 )
 import torch
 from torch.utils.data import TensorDataset, DataLoader
@@ -24,12 +25,12 @@ print("Cache file: ", cache_file)
 
 # Define the model
 class Net(torch.nn.Module):
-    def __init__(self, mean_inputs_scaled, cov_inputs_scaled):
+    def __init__(self, mean_inputs_scaled, cov_inputs_scaled, inv_cov_inputs_scaled):
         super().__init__()
 
         self.mean_inputs_scaled = mean_inputs_scaled
         self.cov_inputs_scaled = cov_inputs_scaled
-        self.inv_cov_inputs_scaled = torch.inverse(cov_inputs_scaled)
+        self.inv_cov_inputs_scaled = inv_cov_inputs_scaled
         self.N_inputs = len(mean_inputs_scaled)
 
         layers = [
@@ -143,6 +144,9 @@ if __name__ == "__main__":
             device
         ),
         cov_inputs_scaled=torch.tensor(cov_inputs_scaled, dtype=torch.float32).to(
+            device
+        ),
+        inv_cov_inputs_scaled=torch.tensor(inv_cov_inputs_scaled, dtype=torch.float32).to(
             device
         ),
     ).to(device)
