@@ -137,44 +137,44 @@ class Net(torch.nn.Module):
 
         return y_fused
 
-class StreamingDataset(Dataset):
-    #Dataset that only parses the polars inputs as it needs them WITHOUT blowing up the RAM 
-    def __init__(self, df_inputs, df_outputs):
-        self.X = df_inputs
-        self.y = df_outputs
+# class StreamingDataset(Dataset):
+#     #Dataset that only parses the polars inputs as it needs them WITHOUT blowing up the RAM 
+#     def __init__(self, df_inputs, df_outputs):
+#         self.X = df_inputs
+#         self.y = df_outputs
 
-    def __len__(self):
-        return self.X.height
+#     def __len__(self):
+#         return self.X.height
 
-    def __getitem__(self, idx):
-        x = self.X.slice(idx, 1).to_numpy()[0]
-        y = self.y.slice(idx, 1).to_numpy()[0]
+#     def __getitem__(self, idx):
+#         x = self.X.slice(idx, 1).to_numpy()[0]
+#         y = self.y.slice(idx, 1).to_numpy()[0]
 
-        return (
-            torch.from_numpy(x).float(),
-            torch.from_numpy(y).float(),
-        )
+#         return (
+#             torch.from_numpy(x).float(),
+#             torch.from_numpy(y).float(),
+#         )
 
-class BatchDataset(torch.utils.data.Dataset):
-    def __init__(self, df_inputs, df_outputs, batch_size):
-        self.X = df_inputs
-        self.y = df_outputs
-        self.batch_size = batch_size
-        self.n = df_inputs.height
+# class BatchDataset(torch.utils.data.Dataset):
+#     def __init__(self, df_inputs, df_outputs, batch_size):
+#         self.X = df_inputs
+#         self.y = df_outputs
+#         self.batch_size = batch_size
+#         self.n = df_inputs.height
 
-    def __len__(self):
-        return self.n // self.batch_size
+#     def __len__(self):
+#         return self.n // self.batch_size
 
-    def __getitem__(self, idx):
-        i = idx * self.batch_size
+#     def __getitem__(self, idx):
+#         i = idx * self.batch_size
 
-        x = self.X.slice(i, self.batch_size).to_numpy()
-        y = self.y.slice(i, self.batch_size).to_numpy()
+#         x = self.X.slice(i, self.batch_size).to_numpy()
+#         y = self.y.slice(i, self.batch_size).to_numpy()
 
-        return (
-            torch.from_numpy(x).float(),
-            torch.from_numpy(y).float(),
-        )
+#         return (
+#             torch.from_numpy(x).float(),
+#             torch.from_numpy(y).float(),
+#         )
 
 
 if __name__ == "__main__":
@@ -223,101 +223,67 @@ if __name__ == "__main__":
 
     batch_size = 256
 
-    # # ---- TEST INPUTS ----
-    # test_np = df_test_inputs_scaled.to_numpy()
-    # del df_test_inputs_scaled
-    # gc.collect()
+    # ---- TEST INPUTS ----
+    test_np = df_test_inputs_scaled.to_numpy()
+    del df_test_inputs_scaled
+    gc.collect()
 
-    # test_inputs = torch.from_numpy(test_np).float()
-    # del test_np
-    # gc.collect()
-    # print("Test inputs done")
+    test_inputs = torch.from_numpy(test_np).float()
+    del test_np
+    gc.collect()
+    print("Test inputs done")
 
-    # # ---- TEST OUTPUTS ----
-    # test_np = df_test_outputs_scaled.to_numpy()
-    # del df_test_outputs_scaled
-    # gc.collect()
+    # ---- TEST OUTPUTS ----
+    test_np = df_test_outputs_scaled.to_numpy()
+    del df_test_outputs_scaled
+    gc.collect()
 
-    # test_outputs = torch.from_numpy(test_np).float()
-    # del test_np
-    # gc.collect()
-    # print("Test outputs done")
+    test_outputs = torch.from_numpy(test_np).float()
+    del test_np
+    gc.collect()
+    print("Test outputs done")
 
-    # test_loader = DataLoader(
-    #     dataset=TensorDataset(test_inputs, test_outputs),
-    #     batch_size=batch_size,#8192,
-    #     num_workers=16, #Change to 20
-    #     # pin_memory=True,
-    #     # persistent_workers=True,
-    #     # prefetch_factor=4
-    #     # Flag
-    # )
+    test_loader = DataLoader(
+        dataset=TensorDataset(test_inputs, test_outputs),
+        batch_size=batch_size,#8192,
+        num_workers=16, #Change to 20
+        # pin_memory=True,
+        # persistent_workers=True,
+        # prefetch_factor=4
+        # Flag
+    )
 
-    # # ---- TRAIN INPUTS ----
-    # train_np = df_train_inputs_scaled.to_numpy()
-    # del df_train_inputs_scaled  # free Polars memory
-    # gc.collect()
+    # ---- TRAIN INPUTS ----
+    train_np = df_train_inputs_scaled.to_numpy()
+    del df_train_inputs_scaled  # free Polars memory
+    gc.collect()
 
-    # train_inputs = torch.from_numpy(train_np).float()
-    # del train_np
-    # gc.collect()
-    # print("Train inputs done")
+    train_inputs = torch.from_numpy(train_np).float()
+    del train_np
+    gc.collect()
+    print("Train inputs done")
 
-    # # ---- TRAIN OUTPUTS ----
-    # train_np = df_train_outputs_scaled.to_numpy()
-    # del df_train_outputs_scaled
-    # gc.collect()
-    # print("numpy conversion done")
+    # ---- TRAIN OUTPUTS ----
+    train_np = df_train_outputs_scaled.to_numpy()
+    del df_train_outputs_scaled
+    gc.collect()
+    print("numpy conversion done")
 
-    # train_outputs = torch.from_numpy(train_np).float()
-    # del train_np
-    # gc.collect()
-    # print("Train outputs done")
+    train_outputs = torch.from_numpy(train_np).float()
+    del train_np
+    gc.collect()
+    print("Train outputs done")
     
-    # train_loader = DataLoader(
-    #     dataset=TensorDataset(train_inputs, train_outputs),
-    #     batch_size=batch_size,
-    #     shuffle=True,
-    #     num_workers=16, #Change to 20
-    #     # pin_memory=True,
-    #     # persistent_workers=True,
-    #     # prefetch_factor=4
-    #     # Flag
-    # )
-
-    train_dataset = StreamingDataset(
-        df_train_inputs_scaled,
-        df_train_outputs_scaled
-    )
-
     train_loader = DataLoader(
-        BatchDataset(df_train_inputs_scaled, df_train_outputs_scaled, batch_size),
-        batch_size=None,
+        dataset=TensorDataset(train_inputs, train_outputs),
+        batch_size=batch_size,
         shuffle=True,
-        num_workers=16,
-        pin_memory=True
+        num_workers=16, #Change to 20
+        # pin_memory=True,
+        # persistent_workers=True,
+        # prefetch_factor=4
+        # Flag
     )
-
-    test_dataset = StreamingDataset(
-        df_test_inputs_scaled,
-        df_test_outputs_scaled
-    )
-
-    train_loader = DataLoader(
-        BatchDataset(df_test_inputs_scaled, df_test_outputs_scaled, batch_size),
-        batch_size=None,
-        shuffle=True,
-        num_workers=16,
-        pin_memory=True
-    )
-    
-    import psutil
-    mem = psutil.virtual_memory()
-
-    print(f"Total RAM: {mem.total / 1e9:.2f} GB")
-    print(f"Available RAM: {mem.available / 1e9:.2f} GB")
-    print(f"Used RAM: {mem.used / 1e9:.2f} GB")
-    print(f"RAM usage: {mem.percent}%")
 
     # Prepare the loss function
     loss_weights = torch.ones(N_outputs, dtype=torch.float32).to(device)
