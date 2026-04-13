@@ -582,7 +582,7 @@ import polars as pl
 import numpy as np
 import sys
 
-print("🔍 Scanning memory for large Polars DataFrames and NumPy arrays...")
+print("Scanning memory for large Polars DataFrames and NumPy arrays...")
 
 # Force garbage collection to clear unused objects
 gc.collect()
@@ -615,9 +615,9 @@ for name, obj in objects_to_check.items():
         continue
 
 if not found:
-    print("✅ No large Polars DataFrames or NumPy arrays found in memory.")
+    print("No large Polars DataFrames or NumPy arrays found in memory.")
 else:
-    print("💡 Consider deleting unneeded objects with `del var_name` + `gc.collect()` to free RAM.")
+    print("Consider deleting unneeded objects with `del var_name` + `gc.collect()` to free RAM.")
 
 
 # Commented out below distribution metrics because analysis confidence works 
