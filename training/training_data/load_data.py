@@ -7,6 +7,8 @@ from neuralfoil._basic_data_type import Data
 import torch
 import math
 import time
+import shutil
+import gc
 
 start_time = time.time() 
 
@@ -153,10 +155,10 @@ def precompute_bernstein(n_weights=8):
 
     # Binomial coefficients
     K = torch.tensor([math.comb(N, i) for i in range(N+1)],
-                     dtype=torch.float64, device=device)
+                     dtype=torch.float32, device=device)
 
-    p = torch.arange(N1, N1+N+1, device=device)
-    q = N - torch.arange(N+1, device=device) + N2
+    p = torch.arange(N1, N1+N+1, device=device, dtype=torch.float32)
+    q = N - torch.arange(N+1, device=device, dtype=torch.float32) + N2
 
     p1 = p - 1
     q1 = q - 1
@@ -210,57 +212,61 @@ def compute_derivatives_batch(lower, upper, LE, TE):
     return upperslope, lowerslope, uppercurve, lowercurve
 
 # ---------- Batch Processing Function ----------
-def process_airfoil_batches(df: pl.DataFrame, batch_size=1_000_000):
-    """
-    df: Polars dataframe with columns:
-        kulfan_lower_0..7, kulfan_upper_0..7, kulfan_LE_weight, kulfan_TE_thickness
-    """
+def process_airfoil_batches_to_disk(
+    df: pl.DataFrame,
+    output_dir: Path,
+    batch_size: int = 50_000
+):
     n = df.height
-    derivatives_list = []
-
     for start in range(0, n, batch_size):
-        end = min(start+batch_size, n)
+        end = min(start + batch_size, n)
         batch = df[start:end]
+
+        # Original row indices
+        row_indices = np.arange(start, end)
 
         # Convert batch to GPU tensors
         lower = torch.tensor(
             batch.select([f"kulfan_lower_{i}" for i in range(8)]).to_numpy(),
-            dtype=torch.float64, device=device
+            dtype=torch.float32, device=device
         )
         upper = torch.tensor(
             batch.select([f"kulfan_upper_{i}" for i in range(8)]).to_numpy(),
-            dtype=torch.float64, device=device
+            dtype=torch.float32, device=device
         )
-        LE = torch.tensor(batch["kulfan_LE_weight"].to_numpy(),
-                          dtype=torch.float64, device=device)
-        TE = torch.tensor(batch["kulfan_TE_thickness"].to_numpy(),
-                          dtype=torch.float64, device=device)
+        LE = torch.tensor(batch["kulfan_LE_weight"].to_numpy(), dtype=torch.float32, device=device)
+        TE = torch.tensor(batch["kulfan_TE_thickness"].to_numpy(), dtype=torch.float32, device=device)
 
         # Compute derivatives
         u_slope, l_slope, u_curve, l_curve = compute_derivatives_batch(lower, upper, LE, TE)
-
         n_nodes = u_slope.shape[1]
 
-        # Convert to Polars DataFrame
+        # Save batch immediately
         derivatives_batch = pl.DataFrame({
-            **{f"s_upper_first_der_{i}": u_slope[:,i].cpu().numpy() for i in range(n_nodes)},
-            **{f"s_lower_first_der_{i}": l_slope[:,i].cpu().numpy() for i in range(n_nodes)},
-            **{f"s_upper_second_der_{i}": u_curve[:,i].cpu().numpy() for i in range(n_nodes)},
-            **{f"s_lower_second_der_{i}": l_curve[:,i].cpu().numpy() for i in range(n_nodes)},
+            "row_index": row_indices,
+            **{f"s_upper_first_der_{i}": u_slope[:, i].cpu().numpy() for i in range(n_nodes)},
+            **{f"s_lower_first_der_{i}": l_slope[:, i].cpu().numpy() for i in range(n_nodes)},
+            **{f"s_upper_second_der_{i}": u_curve[:, i].cpu().numpy() for i in range(n_nodes)},
+            **{f"s_lower_second_der_{i}": l_curve[:, i].cpu().numpy() for i in range(n_nodes)},
         })
+        derivatives_batch.write_parquet(output_dir / f"batch_{start:08d}_{end:08d}.parquet")
+        print(f"Processed batch {start}-{end} / {n}")
 
-        derivatives_list.append(derivatives_batch)
-        print(f"Processed batch {start}–{end} / {n}")
-
-    # Concatenate all batches
-    return pl.concat(derivatives_list, how="vertical")
 
 cols = Data.get_vector_column_names()
 
 ### Read the original data, by scraping all .csv files within the data directory
 # data_directory = Path(r"/home/faiza/Documents/NeuralFoil/training/training_data")
 # data_directory = Path(r"/home/faiza/Downloads/training_data/training_data")
-data_directory = Path(r"/home/huanglunzhu/Documents/Gen2TrainingAirfoils/test")
+data_directory = Path(r"/home/huanglunzhu/Documents/Gen2TrainingAirfoils")
+# Folder to store derivative batches
+derivatives_dir = Path("derivatives_batches")
+
+# --- Step 1: Delete old derivatives if exist ---
+if derivatives_dir.exists():
+    print(f"Deleting old derivatives in {derivatives_dir}...")
+    shutil.rmtree(derivatives_dir)
+derivatives_dir.mkdir(exist_ok=True)
 
 raw_dfs = {}
 
@@ -277,6 +283,7 @@ df = pl.concat(raw_dfs.values())
 cols_to_nullify = Data.get_vector_output_column_names().copy()
 cols_to_nullify.remove("analysis_confidence")
 
+# Set analysis confidence to zero for all rows with nonpositive drag coefficients 
 c = pl.col("CD") <= 0
 print(f"Nullifying {int(df.select(c).sum().to_numpy()[0, 0])} rows with CD <= 0...")
 df = df.with_columns(
@@ -292,76 +299,116 @@ df = df.with_columns(
     ]
 )
 
-c = pl.any_horizontal(
-    [pl.col(f"upper_bl_theta_{i}") <= 0 for i in range(Data.N)]
-    + [pl.col(f"lower_bl_theta_{i}") <= 0 for i in range(Data.N)]
+# Set analysis confidence to 0 for all non positive boundary layer thetas 
+df = df.lazy() #Makes the dataframe lazy to avoid rewriting too much 
+# Compute the mask once and store it
+df = df.with_columns(
+    pl.any_horizontal(
+        [pl.col(f"upper_bl_theta_{i}") <= 0 for i in range(Data.N)] +
+        [pl.col(f"lower_bl_theta_{i}") <= 0 for i in range(Data.N)]
+    ).alias("mask_c")
 )
-print(
-    f"Nullifying {int(df.select(c).sum().to_numpy()[0, 0])} rows with nonpositive boundary layer thetas..."
-)
+
+# Count rows to log
+n_bad = df.select(pl.col("mask_c").sum()).collect().item()
+print(f"Nullifying {n_bad} rows with nonpositive boundary layer thetas...")
+
+# Apply transformations using the cached mask
 df = df.with_columns(
     [
-        pl.when(c)
+        pl.when(pl.col("mask_c"))
         .then(0)
         .otherwise(pl.col("analysis_confidence"))
         .alias("analysis_confidence"),
     ]
     + [
-        pl.when(c).then(None).otherwise(pl.col(col)).alias(col)
+        pl.when(pl.col("mask_c"))
+        .then(None)
+        .otherwise(pl.col(col))
+        .alias(col)
         for col in cols_to_nullify
     ]
 )
+# Drop the temporary mask column
+df = df.drop("mask_c")
+# Collect the lazy frame
+df = df.collect()
 
-c = pl.any_horizontal(
-    [pl.col(f"upper_bl_H_{i}") < 1 for i in range(Data.N)]
-    + [pl.col(f"lower_bl_H_{i}") < 1 for i in range(Data.N)]
+# Set analysis confidence = 0 for all rows with non physical BL 
+df = df.lazy()
+df = df.with_columns(
+    pl.any_horizontal(
+        [pl.col(f"upper_bl_H_{i}") < 1 for i in range(Data.N)] +
+        [pl.col(f"lower_bl_H_{i}") < 1 for i in range(Data.N)]
+    ).alias("mask_H")
 )
-print(
-    f"Nullifying {int(df.select(c).sum().to_numpy()[0, 0])} rows with H < 1 (non-physical BL)..."
-)
+# Count affected rows without recomputing
+n_bad_H = df.select(pl.col("mask_H").sum()).collect().item()
+print(f"Nullifying {n_bad_H} rows with H < 1 (non-physical BL)...")
+# Apply nullification / zeroing using the cached mask
 df = df.with_columns(
     [
-        pl.when(c)
+        pl.when(pl.col("mask_H"))
         .then(0)
         .otherwise(pl.col("analysis_confidence"))
         .alias("analysis_confidence"),
     ]
     + [
-        pl.when(c).then(None).otherwise(pl.col(col)).alias(col)
+        pl.when(pl.col("mask_H"))
+        .then(None)
+        .otherwise(pl.col(col))
+        .alias(col)
         for col in cols_to_nullify
     ]
 )
 
-c = pl.any_horizontal(
-    sum(
-        [
-            [
-                pl.col(f"upper_bl_ue/vinf_{i}") < -20,
-                pl.col(f"upper_bl_ue/vinf_{i}") > 20,
-                pl.col(f"lower_bl_ue/vinf_{i}") < -20,
-                pl.col(f"lower_bl_ue/vinf_{i}") > 20,
-            ]
-            for i in range(Data.N)
-        ],
-        start=[],
-    )
+# Drop the temporary mask column to save memory
+df = df.drop("mask_H")
+# Collect lazy frame (executes everything)
+df = df.collect()
+
+# Sets analysis confidence to 0 for all non-physical edge velocities 
+# Make sure the DataFrame is lazy
+df = df.lazy()
+# Build mask_ue safely using vectorized expressions
+mask_exprs = []
+for i in range(Data.N):
+    mask_exprs.extend([
+        pl.col(f"upper_bl_ue/vinf_{i}") < -20,
+        pl.col(f"upper_bl_ue/vinf_{i}") > 20,
+        pl.col(f"lower_bl_ue/vinf_{i}") < -20,
+        pl.col(f"lower_bl_ue/vinf_{i}") > 20,
+    ])
+df = df.with_columns(
+    pl.any_horizontal(mask_exprs).alias("mask_ue")
 )
-print(
-    f"Nullifying {int(df.select(c).sum().to_numpy()[0, 0])} rows with non-physical edge velocities..."
-)
+
+# Count affected rows
+n_bad_ue = df.select(pl.col("mask_ue").sum().alias("n")).collect()["n"][0]
+print(f"Nullifying {n_bad_ue} rows with non-physical edge velocities...")
+
+# Apply nullification / zeroing using the cached mask
 df = df.with_columns(
     [
-        pl.when(c)
+        pl.when(pl.col("mask_ue"))
         .then(0)
         .otherwise(pl.col("analysis_confidence"))
         .alias("analysis_confidence"),
     ]
     + [
-        pl.when(c).then(None).otherwise(pl.col(col)).alias(col)
+        pl.when(pl.col("mask_ue"))
+        .then(None)
+        .otherwise(pl.col(col))
+        .alias(col)
         for col in cols_to_nullify
     ]
 )
+# Drop the temporary mask column to save memory
+df = df.drop("mask_ue")
+# Collect lazy frame (execute everything)
+df = df.collect()
 
+# Set analysis confidence to zero for all rows with nonphysical transition locations 
 c = pl.any_horizontal(
     pl.col("Top_Xtr") < 0,
     pl.col("Top_Xtr") > 1,
@@ -397,7 +444,14 @@ print("At calculation now")
 # Make the derivative dataset
 # Apply to all rows
 #derivatives_df = pl.DataFrame([compute_derivatives(row) for row in df.iter_rows(named=True)])
-derivatives_df = process_airfoil_batches(df, batch_size=1_000_000) 
+process_airfoil_batches_to_disk(df, derivatives_dir, batch_size=50_000) 
+
+derivatives_files = sorted(derivatives_dir.glob("batch_*.parquet"))
+derivatives_df = pl.concat([pl.read_parquet(f) for f in derivatives_files], how="vertical")
+
+# Sort by original row index to ensure alignment
+derivatives_df = derivatives_df.sort("row_index").drop("row_index")
+print(f"Computed and loaded derivatives shape: {derivatives_df.shape}")
 
 print(derivatives_df)
 
@@ -449,7 +503,8 @@ print("cut dataframe at insertion index")
 df_inputs_scaled = pl.concat([before, derivatives_df, after], how="horizontal")
 print("stacked inputs using pl.concat")
 
-di = df_inputs_scaled.describe()
+# di = df_inputs_scaled.describe()
+
 
 df_outputs_scaled = pl.DataFrame(
     {
@@ -496,10 +551,19 @@ df_outputs_scaled = pl.DataFrame(
     }
 )
 
-do = df_outputs_scaled.describe([0.01, 0.99])
+# do = df_outputs_scaled.describe([0.01, 0.99])
 
 ### Split the dataset into train and test sets
 test_train_split_index = int(len(df) * 0.95)
+
+# Delete the variables
+del df, derivatives_df, before, after
+
+# Force garbage collection to free memory immediately
+gc.collect()
+
+print("Cleared df, derivatives_df, before, and after from memory.")
+
 # df_train = df[:test_train_split_index]
 # df_test = df[test_train_split_index:]
 df_train_inputs_scaled = df_inputs_scaled[:test_train_split_index]
@@ -513,17 +577,96 @@ print(f"The input test data is shaped as {df_test_inputs_scaled.describe()} ")
 print(f"The output test data is shaped as {df_test_outputs_scaled.describe()} ")
 
 # --------------------------------------------------
+import gc
+import polars as pl
+import numpy as np
+import sys
+
+print("🔍 Scanning memory for large Polars DataFrames and NumPy arrays...")
+
+# Force garbage collection to clear unused objects
+gc.collect()
+
+# Threshold for “large” objects (in bytes)
+LARGE_THRESHOLD = 10_000  # ~1 GB
+
+def format_bytes(n):
+    """Human-readable MB string"""
+    return f"{n / 1e6:.1f} MB"
+
+# Combine globals and locals
+objects_to_check = {**globals(), **locals()}
+
+found = False
+for name, obj in objects_to_check.items():
+    try:
+        if isinstance(obj, pl.DataFrame):
+            n_rows, n_cols = obj.shape
+            approx_bytes = n_rows * n_cols * 8  # float64 assumption
+            if approx_bytes > LARGE_THRESHOLD:
+                print(f"Polars DataFrame '{name}': {n_rows:,} rows x {n_cols:,} cols ~ {format_bytes(approx_bytes)}")
+                found = True
+        elif isinstance(obj, np.ndarray):
+            n_bytes = obj.nbytes
+            if n_bytes > LARGE_THRESHOLD:
+                print(f"NumPy array '{name}': shape={obj.shape}, dtype={obj.dtype}, size={format_bytes(n_bytes)}")
+                found = True
+    except Exception:
+        continue
+
+if not found:
+    print("✅ No large Polars DataFrames or NumPy arrays found in memory.")
+else:
+    print("💡 Consider deleting unneeded objects with `del var_name` + `gc.collect()` to free RAM.")
+
+
 # Commented out below distribution metrics because analysis confidence works 
 # with the distribution metrics calculated before the derivatives are added. 
-mean_inputs_scaled = np.mean(df_inputs_scaled.to_numpy(), axis=0)
-cov_inputs_scaled = np.cov(df_inputs_scaled.to_numpy(), rowvar=False)
+cols = df_inputs_scaled.columns
+p = len(cols)
 
-# Compute the inverse of the covariance
+# Compute mean of each column (eager DataFrame)
+mean_inputs_scaled = df_inputs_scaled.select([pl.col(c).mean() for c in cols]).to_numpy().flatten()
+
+# Compute covariance matrix
+cov_exprs = []
+for i in range(p):
+    for j in range(i, p):
+        col_i = pl.col(cols[i])
+        col_j = pl.col(cols[j])
+        cov_ij = ((col_i - mean_inputs_scaled[i]) * (col_j - mean_inputs_scaled[j])).mean()
+        cov_exprs.append(cov_ij.alias(f"cov_{i}_{j}"))
+
+cov_flat = df_inputs_scaled.select(cov_exprs).to_numpy().flatten()
+
+# Reshape into 49×49 covariance matrix
+cov_inputs_scaled = np.zeros((p, p))
+k = 0
+for i in range(p):
+    for j in range(i, p):
+        cov_inputs_scaled[i, j] = cov_flat[k]
+        cov_inputs_scaled[j, i] = cov_flat[k]
+        k += 1
+
+# Compute pseudo-inverse
 inv_cov_inputs_scaled = np.linalg.pinv(cov_inputs_scaled)
 
-# # Save everything to a .npz file
+del df_inputs_scaled, df_outputs_scaled
+gc.collect()
+print("Deleted df_inputs_scaled and df_outputs_scaled from RAM" )
+
+import psutil
+
+mem = psutil.virtual_memory()
+
+print(f"Total RAM: {mem.total / 1e9:.2f} GB")
+print(f"Available RAM: {mem.available / 1e9:.2f} GB")
+print(f"Used RAM: {mem.used / 1e9:.2f} GB")
+print(f"RAM usage: {mem.percent}%")
+
+# Save everything to a .npz file
 # np.savez(
-#     "gen2_scaled_input_distribution.npz",
+#     "gen2_scaled_input_distribution_K1-6.npz",
 #     mean_inputs_scaled=mean_inputs_scaled,
 #     cov_inputs_scaled=cov_inputs_scaled,
 #     inv_cov_inputs_scaled=inv_cov_inputs_scaled
@@ -535,10 +678,53 @@ inv_cov_inputs_scaled = np.linalg.pinv(cov_inputs_scaled)
 
 print("----------- %s seconds -------" % (time.time() - start_time))
 
-def make_data(row_index, df=df):
+def make_data(row_index, df=df_test_inputs_scaled):
     row = df[row_index]
     return Data.from_vector(row[cols].to_numpy().flatten())
 
 
 if __name__ == "__main__":
-    d = make_data(len(df) // 2)
+    # d = make_data(len(df_test_inputs_scaled) // 2, df_test_inputs_scaled)
+
+    # Additional new scaled input distribution information for Avian training data
+    _avian_scaled_input_distribution = dict(
+        np.load("neuralfoil/nn_weights_and_biases/gen2_scaled_input_distribution.npz")
+    )
+    #Checked new code against old code that was run on Peter Sharpe data plus gen2 K1, K2, and K3
+    d = _avian_scaled_input_distribution
+    mean = d["mean_inputs_scaled"]
+    cov = d["cov_inputs_scaled"]
+
+    # direct_mean_inputs_scaled = np.mean(df_inputs_scaled.to_numpy(), axis=0)
+    # direct_cov_inputs_scaled = np.cov(df_inputs_scaled.to_numpy(), rowvar=False)
+
+    indices = list(range(0, 18)) + list(range(42, 49))
+        
+    mean_test = np.allclose(mean[indices], mean_inputs_scaled[indices], atol=1e-5)
+    cov_test = np.allclose(cov, cov_inputs_scaled, atol=1e-5)
+    # print(f" Means match: {mean_test}, Covariance match: {cov_test}")
+
+    # mean_test = np.allclose(direct_mean_inputs_scaled, mean_inputs_scaled, atol=1e-5)
+    # cov_test = np.allclose(direct_cov_inputs_scaled, cov_inputs_scaled, atol=1e-5)
+    # print(f"Direct test Means match: {mean_test}, Covariance match: {cov_test}")
+
+    max_diff = np.max(np.abs(mean - mean_inputs_scaled))
+    print("Max absolute difference in mean:", max_diff)
+
+    diff = np.abs(mean - mean_inputs_scaled)
+
+    max_idx = np.argmax(diff)
+    max_value = diff.flat[max_idx]   # or diff.reshape(-1)[max_idx]
+
+    print("Max absolute difference in mean:", max_value)
+    print("Index of max difference:", max_idx)
+
+    max_diff = np.max(np.abs(cov - cov_inputs_scaled))
+    print("Max absolute difference in covariance:", max_diff)
+    
+    print(f" Old Mean: {mean}")
+    print(f" New Mean: {mean_inputs_scaled}")
+
+    print("All done")
+
+
