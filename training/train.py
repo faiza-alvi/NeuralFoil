@@ -137,45 +137,6 @@ class Net(torch.nn.Module):
 
         return y_fused
 
-# class StreamingDataset(Dataset):
-#     #Dataset that only parses the polars inputs as it needs them WITHOUT blowing up the RAM 
-#     def __init__(self, df_inputs, df_outputs):
-#         self.X = df_inputs
-#         self.y = df_outputs
-
-#     def __len__(self):
-#         return self.X.height
-
-#     def __getitem__(self, idx):
-#         x = self.X.slice(idx, 1).to_numpy()[0]
-#         y = self.y.slice(idx, 1).to_numpy()[0]
-
-#         return (
-#             torch.from_numpy(x).float(),
-#             torch.from_numpy(y).float(),
-#         )
-
-# class BatchDataset(torch.utils.data.Dataset):
-#     def __init__(self, df_inputs, df_outputs, batch_size):
-#         self.X = df_inputs
-#         self.y = df_outputs
-#         self.batch_size = batch_size
-#         self.n = df_inputs.height
-
-#     def __len__(self):
-#         return self.n // self.batch_size
-
-#     def __getitem__(self, idx):
-#         i = idx * self.batch_size
-
-#         x = self.X.slice(i, self.batch_size).to_numpy()
-#         y = self.y.slice(i, self.batch_size).to_numpy()
-
-#         return (
-#             torch.from_numpy(x).float(),
-#             torch.from_numpy(y).float(),
-#         )
-
 
 if __name__ == "__main__":
     device = torch.device("cuda") if torch.cuda.is_available() else torch.device("cpu")
