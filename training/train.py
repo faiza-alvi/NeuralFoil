@@ -168,7 +168,7 @@ if __name__ == "__main__":
     )
     
     # Implementation of AMP Flag
-    scaler = torch.cuda.amp.GradScaler("cuda")
+    scaler = torch.amp.GradScaler(device_type=device.type)
 
     try:
         checkpoint = torch.load(cache_file)
@@ -313,14 +313,15 @@ if __name__ == "__main__":
             x = x.to(device)
             y_data = y_data.to(device)
 
+            optimizer.zero_grad()
+
             # loss = loss_function(y_pred=net(x), y_data=y_data)
             # Implementation of AMP Flag
-            with torch.cuda.amp.autocast():
+            with torch.amp.autocast(device_type=device.type):
                 y_pred = net(x)
-                loss = loss_function(y_pred=y_pred, y_data=y_data)
-
+            
+            loss = loss_function(y_pred=y_pred.float(), y_data=y_data.float())
             # Implementation of AMP Flag 
-            optimizer.zero_grad()
             # loss.backward()
             # optimizer.step()
 
@@ -352,9 +353,10 @@ if __name__ == "__main__":
                 y_data = y_data.to(device)
 
                 # y_pred = net(x)
-                with torch.cuda.amp.autocast():
+                with torch.amp.autocast(device_type=device.type):
                     y_pred = net(x)
 
+                y_pred = y_pred.float()
                 loss_components = loss_function(
                     y_pred=y_pred, y_data=y_data, return_individual_loss_components=True
                 )
