@@ -313,23 +313,20 @@ if __name__ == "__main__":
             x = x.to(device)
             y_data = y_data.to(device)
 
-            loss = loss_function(y_pred=net(x), y_data=y_data)
+            # loss = loss_function(y_pred=net(x), y_data=y_data)
             # Implementation of AMP Flag
-            # with torch.cuda.amp.autocast():
-            #     y_pred = net(x)
-            #     loss = loss_function(y_pred=y_pred, y_data=y_data)
+            with torch.cuda.amp.autocast():
+                y_pred = net(x)
+                loss = loss_function(y_pred=y_pred, y_data=y_data)
 
-            # optimizer.zero_grad()
-            # loss.backward()
-            # optimizer.step()
             # Implementation of AMP Flag 
             optimizer.zero_grad()
-            loss.backward()
-            optimizer.step()
+            # loss.backward()
+            # optimizer.step()
 
-            # scaler.scale(loss).backward()
-            # scaler.step(optimizer)
-            # scaler.update()
+            scaler.scale(loss).backward()
+            scaler.step(optimizer)
+            scaler.update()
 
             loss_from_each_training_batch.append(loss.detach())
 
@@ -354,9 +351,9 @@ if __name__ == "__main__":
                 x = x.to(device)
                 y_data = y_data.to(device)
 
-                y_pred = net(x)
-                # with torch.cuda.amp.autocast():
-                #     y_pred = net(x)
+                # y_pred = net(x)
+                with torch.cuda.amp.autocast():
+                    y_pred = net(x)
 
                 loss_components = loss_function(
                     y_pred=y_pred, y_data=y_data, return_individual_loss_components=True
