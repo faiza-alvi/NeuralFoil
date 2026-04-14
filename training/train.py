@@ -168,7 +168,7 @@ if __name__ == "__main__":
     )
     
     # Implementation of AMP Flag
-    scaler = torch.cuda.amp.GradScaler()
+    scaler = torch.cuda.amp.GradScaler("cuda")
 
     try:
         checkpoint = torch.load(cache_file)
