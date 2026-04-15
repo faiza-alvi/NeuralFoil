@@ -320,7 +320,7 @@ if __name__ == "__main__":
             with torch.amp.autocast("cuda"):
                 y_pred = net(x)
             
-            with torch.amp.autocast(enabled=False):
+            with torch.amp.autocast("cuda", enabled=False):
                 loss = loss_function(
                     y_pred=y_pred,
                     y_data=y_data
