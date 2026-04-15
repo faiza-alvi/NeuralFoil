@@ -14,7 +14,7 @@ import time
 import gc
 
 # Improve Tensor Core usage on GPU Flag
-# torch.set_float32_matmul_precision("high")
+torch.set_float32_matmul_precision("high")
 
 N_inputs = len(df_train_inputs_scaled.columns)
 N_outputs = len(df_train_outputs_scaled.columns)
