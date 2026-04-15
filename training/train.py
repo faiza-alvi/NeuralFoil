@@ -19,7 +19,7 @@ import gc
 N_inputs = len(df_train_inputs_scaled.columns)
 N_outputs = len(df_train_outputs_scaled.columns)
 
-cache_file = Path(__file__).parent / "nn-avian-gen2-256-amp.pth"
+cache_file = Path(__file__).parent / "nn-avian-gen2-256-amp-2.pth"
 n_hidden_layers = 5
 width = 512
 print("Cache file: ", cache_file)
@@ -320,7 +320,11 @@ if __name__ == "__main__":
             with torch.amp.autocast("cuda"):
                 y_pred = net(x)
             
-            loss = loss_function(y_pred=y_pred.float(), y_data=y_data.float())
+            with torch.amp.autocast(enabled=False):
+                loss = loss_function(
+                    y_pred=y_pred,
+                    y_data=y_data
+                )
             # Implementation of AMP Flag 
             # loss.backward()
             # optimizer.step()
