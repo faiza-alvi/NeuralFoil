@@ -19,7 +19,7 @@ import gc
 N_inputs = len(df_train_inputs_scaled.columns)
 N_outputs = len(df_train_outputs_scaled.columns)
 
-cache_file = Path(__file__).parent / "nn-avian-gen2-256-amp-2.pth"
+cache_file = Path(__file__).parent / "nn-avian-gen2-256-baseline.pth"
 n_hidden_layers = 5
 width = 512
 print("Cache file: ", cache_file)
@@ -168,7 +168,7 @@ if __name__ == "__main__":
     )
     
     # Implementation of AMP Flag
-    scaler = torch.amp.GradScaler("cuda")
+    # scaler = torch.cuda.amp.GradScaler()
 
     try:
         checkpoint = torch.load(cache_file)
@@ -313,25 +313,23 @@ if __name__ == "__main__":
             x = x.to(device)
             y_data = y_data.to(device)
 
-            optimizer.zero_grad()
-
-            # loss = loss_function(y_pred=net(x), y_data=y_data)
+            loss = loss_function(y_pred=net(x), y_data=y_data)
             # Implementation of AMP Flag
-            with torch.amp.autocast("cuda"):
-                y_pred = net(x)
-            
-            with torch.amp.autocast("cuda", enabled=False):
-                loss = loss_function(
-                    y_pred=y_pred,
-                    y_data=y_data
-                )
-            # Implementation of AMP Flag 
+            # with torch.cuda.amp.autocast():
+            #     y_pred = net(x)
+            #     loss = loss_function(y_pred=y_pred, y_data=y_data)
+
+            # optimizer.zero_grad()
             # loss.backward()
             # optimizer.step()
+            # Implementation of AMP Flag 
+            optimizer.zero_grad()
+            loss.backward()
+            optimizer.step()
 
-            scaler.scale(loss).backward()
-            scaler.step(optimizer)
-            scaler.update()
+            # scaler.scale(loss).backward()
+            # scaler.step(optimizer)
+            # scaler.update()
 
             loss_from_each_training_batch.append(loss.detach())
 
@@ -356,11 +354,10 @@ if __name__ == "__main__":
                 x = x.to(device)
                 y_data = y_data.to(device)
 
-                # y_pred = net(x)
-                with torch.amp.autocast("cuda"):
-                    y_pred = net(x)
+                y_pred = net(x)
+                # with torch.cuda.amp.autocast():
+                #     y_pred = net(x)
 
-                y_pred = y_pred.float()
                 loss_components = loss_function(
                     y_pred=y_pred, y_data=y_data, return_individual_loss_components=True
                 )
