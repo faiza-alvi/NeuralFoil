@@ -154,8 +154,6 @@ if __name__ == "__main__":
         ),
     ).to(device)
 
-    #Add PyTorch Graph Compilation Flag
-    net = torch.compile(net)
 
     # Define the optimizer
     learning_rate = 1e-4
@@ -178,6 +176,9 @@ if __name__ == "__main__":
         print("Model found, resuming training.")
     except FileNotFoundError:
         print("No existing model found, starting fresh.")
+
+    #Add PyTorch Graph Compilation Flag
+    net = torch.compile(net)
 
     # Define the data loader
     print("Preparing data...")
@@ -405,9 +406,12 @@ if __name__ == "__main__":
 
         scheduler.step(test_loss)
 
+        # Move back after using the PyTorch Graph Compile
+        model_to_save = net._orig_mod if hasattr(net, "_orig_mod") else net
+
         torch.save(
             {
-                "model_state_dict": net.state_dict(),
+                "model_state_dict": model_to_save.state_dict(),
                 "optimizer_state_dict": optimizer.state_dict(),
             },
             cache_file,
