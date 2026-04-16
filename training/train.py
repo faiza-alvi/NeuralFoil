@@ -155,7 +155,7 @@ if __name__ == "__main__":
     ).to(device)
 
     #Add PyTorch Graph Compilation Flag
-    # net = torch.compile(net)
+    net = torch.compile(net)
 
     # Define the optimizer
     learning_rate = 1e-4
