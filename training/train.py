@@ -19,7 +19,7 @@ torch.set_float32_matmul_precision("high")
 N_inputs = len(df_train_inputs_scaled.columns)
 N_outputs = len(df_train_outputs_scaled.columns)
 
-cache_file = Path(__file__).parent / "nn-avian-gen2-256-matmul.pth"
+cache_file = Path(__file__).parent / "nn-avian-gen2-256-pinmemory.pth"
 n_hidden_layers = 5
 width = 512
 print("Cache file: ", cache_file)
@@ -206,7 +206,7 @@ if __name__ == "__main__":
         dataset=TensorDataset(test_inputs, test_outputs),
         batch_size=batch_size,#8192,
         num_workers=16, #Change to 20
-        # pin_memory=True,
+        pin_memory=True,
         # persistent_workers=True,
         # prefetch_factor=4
         # Flag
@@ -233,7 +233,7 @@ if __name__ == "__main__":
         batch_size=batch_size,
         shuffle=True,
         num_workers=16, #Change to 20
-        # pin_memory=True,
+        pin_memory=True,
         # persistent_workers=True,
         # prefetch_factor=4
         # Flag
