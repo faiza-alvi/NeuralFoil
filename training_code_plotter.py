@@ -1,9 +1,10 @@
 import os
 import re
 import matplotlib.pyplot as plt
+import numpy as np
 
 #Set folder path
-FOLDER_PATH = r"C:\Users\taylo\Downloads\TrainingLoopImprovementLogs\TrainingLoopImprovementLogs"
+FOLDER_PATH = r"/home/faiza/Documents/NeuralFoil/avian_gen2_improvement_testing"
 
 
 def parse_log_file(filepath):
@@ -128,6 +129,7 @@ def process_folder(folder_path):
             #Time plot
             time_output = os.path.join(folder_path, filename.replace(".log", "_Time_Plot.png"))
             plot_time(epochs, times, filename, time_output)
+            print(f"{filename} took an average of {np.mean(times)} seconds per epoch")
 
             #Save data for combined plots
             all_train_data.append((filename, epochs, train_losses))
