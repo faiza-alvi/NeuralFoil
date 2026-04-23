@@ -14,12 +14,12 @@ import time
 import gc
 
 # Improve Tensor Core usage on GPU Flag
-torch.set_float32_matmul_precision("high")
+torch.set_float32_matmul_precision("highest")
 
 N_inputs = len(df_train_inputs_scaled.columns)
 N_outputs = len(df_train_outputs_scaled.columns)
 
-cache_file = Path(__file__).parent / "nn-avian-gen2-256-swappiness20.pth"
+cache_file = Path(__file__).parent / "nn-avian-gen2-256.pth"
 n_hidden_layers = 5
 width = 512
 print("Cache file: ", cache_file)
@@ -205,10 +205,10 @@ if __name__ == "__main__":
     test_loader = DataLoader(
         dataset=TensorDataset(test_inputs, test_outputs),
         batch_size=batch_size,#8192,
-        num_workers=16, #Change to 20
-        pin_memory=True,
+        num_workers=8, #Change to 20
+        pin_memory=False,
         persistent_workers=True,
-        prefetch_factor=4
+        prefetch_factor=2
         # Flag
     )
 
@@ -232,10 +232,10 @@ if __name__ == "__main__":
         dataset=TensorDataset(train_inputs, train_outputs),
         batch_size=batch_size,
         shuffle=True,
-        num_workers=16, #Change to 20
-        pin_memory=True,
+        num_workers=8, #Change to 20
+        pin_memory=False,
         persistent_workers=True,
-        prefetch_factor=4
+        prefetch_factor=2
         # Flag
     )
 
