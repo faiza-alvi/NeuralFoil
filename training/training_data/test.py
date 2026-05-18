@@ -71,13 +71,12 @@ test_losses = []
 
 # List of log files
 log_files = [
-    r"avian-v3_gen2_pt1.log",
-    r"avian-v3_gen2_pt2.log",
-    r"avian-v3_gen2_pt3.log",
-    r"avian-v3_gen2_pt4.log"
-    # r"C:\Users\booki\Documents\BIRD Lab\Airfoil Project\NeuralFoil\training\avian-v2.log",
-    # r"C:\Users\booki\Documents\BIRD Lab\Airfoil Project\NeuralFoil\training\avian-v2_pt2.log", 
-    # r"C:\Users\booki\Documents\BIRD Lab\Airfoil Project\NeuralFoil\training\avian-v2_pt3.log"
+    r"avian_gen2_256.log",
+    r"avian_gen2_256-2.log"
+    # r"C:\Users\booki\Documents\BIRD Lab\Airfoil Project\NeuralFoil\avian-v3_gen2_pt1.log",
+    # r"C:\Users\booki\Documents\BIRD Lab\Airfoil Project\NeuralFoil\avian-v3_gen2_pt2.log", 
+    # r"C:\Users\booki\Documents\BIRD Lab\Airfoil Project\NeuralFoil\avian-v3_gen2_pt3.log",
+    # r"C:\Users\booki\Documents\BIRD Lab\Airfoil Project\NeuralFoil\avian-v3_gen2_pt4.log"
     # r"C:\Users\booki\Documents\BIRD Lab\Airfoil Project\NeuralFoil\training\log.log-25543001"
 ]
 
@@ -95,20 +94,20 @@ test_sub = test_losses[-50:]
 train_conv_error = max(train_sub) - min(train_sub)
 test_conv_error = max(test_sub) - min(test_sub)
 print(f"The training convergence error is {train_conv_error}")
-print(f"The test convergence error is {test_conv_error}")
+print(f"The validation convergence error is {test_conv_error}")
 print(f"This is comparing over the last {len(train_sub)} epochs")
 print(f"The two loss values are approximately {max(test_sub) - min(train_sub)} apart.")
 
 # Plot
-plt.plot(train_losses, label="Train Loss", linewidth=1)
-plt.plot(test_losses, label="Test Loss", linewidth=1)
+plt.plot(train_losses, label="Train Loss", linewidth=2, color="#0faeae")
+plt.plot(test_losses, label="Validation Loss", linewidth=2, color="#e9692c")
 plt.xlabel("Epoch")
 plt.ylabel("Loss")
 #plt.xlim(0,250)
 #plt.ylim(0, 2)
 plt.yscale("log")   # if you want log scale like before
 plt.legend()
-plt.title("Avian Training Progress")
+# plt.title("AvianFoil Preliminary Model Loss")
 plt.show()
 
 # ------------------------------------------------------------
@@ -439,32 +438,32 @@ from aerosandbox.geometry.airfoil.airfoil_families import (
     get_kulfan_coordinates,
 )
 
-# --- Load CSV ---
-df = pd.read_csv("your_file.csv")
+# # --- Load CSV ---
+# df = pd.read_csv("your_file.csv")
 
-# --- Extract first 18 columns as Kulfan parameters ---
-kulfan_params = df.iloc[:, :18].values  # shape: (num_airfoils, 18)
+# # --- Extract first 18 columns as Kulfan parameters ---
+# kulfan_params = df.iloc[:, :18].values  # shape: (num_airfoils, 18)
 
-# --- Plot setup ---
-plt.figure(figsize=(8, 4))
+# # --- Plot setup ---
+# plt.figure(figsize=(8, 4))
 
-# --- Loop through each airfoil ---
-for i, params in enumerate(kulfan_params):
-    coords = get_kulfan_coordinates(
-        kulfan_parameters=params,
-        n_points_per_side=100  # adjust resolution if needed
-    )
+# # --- Loop through each airfoil ---
+# for i, params in enumerate(kulfan_params):
+#     coords = get_kulfan_coordinates(
+#         kulfan_parameters=params,
+#         n_points_per_side=100  # adjust resolution if needed
+#     )
     
-    x = coords[:, 0]
-    y = coords[:, 1]
+#     x = coords[:, 0]
+#     y = coords[:, 1]
     
-    plt.plot(x, y, alpha=0.5)
+#     plt.plot(x, y, alpha=0.5)
 
-# --- Formatting ---
-plt.gca().set_aspect('equal', adjustable='box')
-plt.xlabel("x")
-plt.ylabel("y")
-plt.title("Gen2 Training Airfoils")
-plt.grid(True)
+# # --- Formatting ---
+# plt.gca().set_aspect('equal', adjustable='box')
+# plt.xlabel("x")
+# plt.ylabel("y")
+# plt.title("Gen2 Training Airfoils")
+# plt.grid(True)
 
-plt.show()
+# plt.show()
