@@ -7,6 +7,9 @@ import csv
 import time
 import datetime
 
+# Code for analyzing all bird airfoils. 
+# Remember bird airfoil file name is YY_MM_DD_Species_name_BirdID_pos_coords.csv
+
 #obtain the initial time of the process
 start_time = time.time()
 
@@ -49,9 +52,9 @@ if not os.path.exists(output_path):
 for file in csv_filenames:
     # used different index numbers for the
     # non live airfoils bc they had dates too
-    species_name = file.split("_")[0] + "_" + file.split("_")[1]
-    bird_id = file.split("_")[2]
-    pos = file.split("_")[3]
+    species_name = file.split("_")[3] + "_" + file.split("_")[4]
+    bird_id = file.split("_")[5]
+    pos = file.split("_")[6]
     pos = pos[:4] # Makes sure the position doesn't also include .csv, only keeps the numbers
     output_filename = str_date + "_" + species_name + "_" + bird_id + "_" + pos + "_nf.csv" #create the output file name
     
