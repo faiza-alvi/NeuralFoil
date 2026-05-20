@@ -12,6 +12,7 @@ import torch
 from torch.utils.data import TensorDataset, DataLoader, Dataset
 import time
 import gc
+import re
 
 # Improve Tensor Core usage on GPU Flag
 torch.set_float32_matmul_precision("highest")
@@ -23,6 +24,26 @@ cache_file = Path(__file__).parent / "nn-avian-gen2-256.pth"
 n_hidden_layers = 5
 width = 512
 print("Cache file: ", cache_file)
+
+train_loss_history = []
+pattern = re.compile(
+    r"Epoch:\s*(\d+)\s*\|\s*Train Loss:\s*([0-9eE+.\-]+)\s*\|\s*Test Loss:\s*([0-9eE+.\-]+)"
+)
+
+log_files = [
+   r"avian_gen2_256.log",
+]
+
+for file in log_files:
+    with open(file, "r", encoding="utf-8", errors="ignore") as f:
+        for line in f:
+            match = pattern.search(line)
+            if match:
+                train_loss_history.append(float(match.group(2)))
+
+print(f"Loaded {len(train_loss_history)} previous train losses.")
+convergence_threshold = 1e-5 # Converged once it reaches 10^-6
+convergence_window = 50 # looking at last 50 epochs
 
 start_time = time.time() 
 
@@ -417,3 +438,14 @@ if __name__ == "__main__":
             cache_file,
         )
         print(f"-- {time.time() - start_time} seconds since start, for Epoch {epoch} --")
+        
+        # Keep list of training loss to check convergence. 
+        train_loss_history.append(train_loss.item())
+        
+        if len(train_loss_history) >= convergence_window: #only works when training 
+            
+            train_sub = train_loss_history[-convergence_window:]
+            train_conv_error = max(train_sub) - min(train_sub)
+            if train_conv_error < convergence_threshold:
+                print(f"Converged and stopped at epoch {epoch} with convergence error {train_conv_error}")
+                break
