@@ -72,8 +72,8 @@ test_losses = []
 # List of log files
 log_files = [
     r"avian_gen2_256.log",
-    r"avian_gen2_256-2.log"
-    # r"C:\Users\booki\Documents\BIRD Lab\Airfoil Project\NeuralFoil\avian-v3_gen2_pt1.log",
+    # r"avian_gen2_256-2.log"
+    # # r"C:\Users\booki\Documents\BIRD Lab\Airfoil Project\NeuralFoil\avian-v3_gen2_pt1.log",
     # r"C:\Users\booki\Documents\BIRD Lab\Airfoil Project\NeuralFoil\avian-v3_gen2_pt2.log", 
     # r"C:\Users\booki\Documents\BIRD Lab\Airfoil Project\NeuralFoil\avian-v3_gen2_pt3.log",
     # r"C:\Users\booki\Documents\BIRD Lab\Airfoil Project\NeuralFoil\avian-v3_gen2_pt4.log"
