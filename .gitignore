@@ -21,7 +21,7 @@ derivatives_batches/
 ## Core latex/pdflatex auxiliary files:
 *.aux
 *.lof
-*.log
+# *.log
 *.lot
 *.fls
 *.out
