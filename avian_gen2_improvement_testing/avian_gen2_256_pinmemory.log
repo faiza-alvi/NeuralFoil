@@ -1,0 +1,2220 @@
+Script started on 2026-04-16 12:17:17-07:00 [TERM="xterm-256color" TTY="/dev/pts/2" COLUMNS="226" LINES="35"]
+[?2004h]0;faiza@birdlab-arl: ~/Documents/NeuralFoil[01;32mfaiza@birdlab-arl[00m:[01;34m~/Documents/NeuralFoil[00m$ exitpython training/train.pysource venv/bin/activate
+[?2004l[?2004h(venv) ]0;faiza@birdlab-arl: ~/Documents/NeuralFoil[01;32mfaiza@birdlab-arl[00m:[01;34m~/Documents/NeuralFoil[00m$ source venv/bin/activateexit[Kpython training/train.py
+[?2004lUsing device: cuda
+Deleting old derivatives in derivatives_batches...
+Reading /home/faiza/Documents/Gen2TrainingAirfoils/data_xfoil_comp3e.csv...
+	2187653 rows
+Reading /home/faiza/Documents/Gen2TrainingAirfoils/data_xfoil_comp3b.csv...
+	151906 rows
+Reading /home/faiza/Documents/Gen2TrainingAirfoils/data_xfoil_gen2_K1.csv...
+	1203 rows
+Reading /home/faiza/Documents/Gen2TrainingAirfoils/data_xfoil_comp1b.csv...
+	165535 rows
+Reading /home/faiza/Documents/Gen2TrainingAirfoils/data_xfoil_gen2_K2.csv...
+	2344196 rows
+Reading /home/faiza/Documents/Gen2TrainingAirfoils/data_xfoil_gen2_K3.csv...
+	1239797 rows
+Reading /home/faiza/Documents/Gen2TrainingAirfoils/data_xfoil_gen2_K6.csv...
+	6534163 rows
+Reading /home/faiza/Documents/Gen2TrainingAirfoils/data_xfoil_comp1e.csv...
+	186283 rows
+Reading /home/faiza/Documents/Gen2TrainingAirfoils/data_xfoil_comp3.csv...
+	301034 rows
+Reading /home/faiza/Documents/Gen2TrainingAirfoils/data_xfoil_comp1.csv...
+	209005 rows
+Reading /home/faiza/Documents/Gen2TrainingAirfoils/data_xfoil_comp1d.csv...
+	1159664 rows
+Reading /home/faiza/Documents/Gen2TrainingAirfoils/data_xfoil_gen2_K5.csv...
+	1735481 rows
+Reading /home/faiza/Documents/Gen2TrainingAirfoils/data_xfoil_comp1c.csv...
+	1791317 rows
+Reading /home/faiza/Documents/Gen2TrainingAirfoils/data_xfoil_gen2_K4.csv...
+	2738238 rows
+Reading /home/faiza/Documents/Gen2TrainingAirfoils/data_xfoil_comp3c.csv...
+	1311441 rows
+Reading /home/faiza/Documents/Gen2TrainingAirfoils/data_xfoil_comp3d.csv...
+	449444 rows
+Nullifying 0 rows with CD <= 0...
+Nullifying 5921 rows with nonpositive boundary layer thetas...
+Nullifying 1 rows with H < 1 (non-physical BL)...
+Nullifying 0 rows with non-physical edge velocities...
+Nullifying 229 rows with non-physical transition locations...
+Dataset:
+shape: (22_506_360, 222)
+┌────────────────┬────────────────┬────────────────┬────────────────┬───┬─────────────────────┬─────────────────────┬─────────────────────┬─────────────────────┐
+│ kulfan_upper_0 ┆ kulfan_upper_1 ┆ kulfan_upper_2 ┆ kulfan_upper_3 ┆ … ┆ lower_bl_ue/vinf_28 ┆ lower_bl_ue/vinf_29 ┆ lower_bl_ue/vinf_30 ┆ lower_bl_ue/vinf_31 │
+│ ---            ┆ ---            ┆ ---            ┆ ---            ┆   ┆ ---                 ┆ ---                 ┆ ---                 ┆ ---                 │
+│ f32            ┆ f32            ┆ f32            ┆ f32            ┆   ┆ f32                 ┆ f32                 ┆ f32                 ┆ f32                 │
+╞════════════════╪════════════════╪════════════════╪════════════════╪═══╪═════════════════════╪═════════════════════╪═════════════════════╪═════════════════════╡
+│ 0.213851       ┆ 0.296635       ┆ 0.479535       ┆ 0.474042       ┆ … ┆ -1.194428           ┆ -1.193814           ┆ -1.193133           ┆ -1.192336           │
+│ 0.213851       ┆ 0.296635       ┆ 0.479535       ┆ 0.474042       ┆ … ┆ -1.172788           ┆ -1.172011           ┆ -1.171099           ┆ -1.170002           │
+│ 0.213851       ┆ 0.296635       ┆ 0.479535       ┆ 0.474042       ┆ … ┆ -1.156238           ┆ -1.15489            ┆ -1.153343           ┆ -1.151452           │
+│ 0.213851       ┆ 0.296635       ┆ 0.479535       ┆ 0.474042       ┆ … ┆ -1.149135           ┆ -1.146455           ┆ -1.14345            ┆ -1.139882           │
+│ 0.213851       ┆ 0.296635       ┆ 0.479535       ┆ 0.474042       ┆ … ┆ -1.126875           ┆ -1.122241           ┆ -1.118442           ┆ -1.123533           │
+│ …              ┆ …              ┆ …              ┆ …              ┆ … ┆ …                   ┆ …                   ┆ …                   ┆ …                   │
+│ 0.253225       ┆ 0.247037       ┆ 0.175044       ┆ 0.230349       ┆ … ┆ -0.940495           ┆ -0.943572           ┆ -0.944839           ┆ -0.932447           │
+│ 0.253225       ┆ 0.247037       ┆ 0.175044       ┆ 0.230349       ┆ … ┆ -0.968138           ┆ -0.983459           ┆ -1.00131            ┆ -1.012413           │
+│ 0.253225       ┆ 0.247037       ┆ 0.175044       ┆ 0.230349       ┆ … ┆ -1.048352           ┆ -1.073317           ┆ -1.102965           ┆ -1.128218           │
+│ 0.201772       ┆ 0.388362       ┆ 0.14599        ┆ 0.308504       ┆ … ┆ -1.059382           ┆ -1.018705           ┆ -0.971745           ┆ -0.924764           │
+│ 0.201772       ┆ 0.388362       ┆ 0.14599        ┆ 0.308504       ┆ … ┆ -1.065438           ┆ -1.028754           ┆ -0.981216           ┆ -0.926123           │
+└────────────────┴────────────────┴────────────────┴────────────────┴───┴─────────────────────┴─────────────────────┴─────────────────────┴─────────────────────┘
+At calculation now
+Processed batch 0-50000 / 22506360
+Processed batch 50000-100000 / 22506360
+Processed batch 100000-150000 / 22506360
+Processed batch 150000-200000 / 22506360
+Processed batch 200000-250000 / 22506360
+Processed batch 250000-300000 / 22506360
+Processed batch 300000-350000 / 22506360
+Processed batch 350000-400000 / 22506360
+Processed batch 400000-450000 / 22506360
+Processed batch 450000-500000 / 22506360
+Processed batch 500000-550000 / 22506360
+Processed batch 550000-600000 / 22506360
+Processed batch 600000-650000 / 22506360
+Processed batch 650000-700000 / 22506360
+Processed batch 700000-750000 / 22506360
+Processed batch 750000-800000 / 22506360
+Processed batch 800000-850000 / 22506360
+Processed batch 850000-900000 / 22506360
+Processed batch 900000-950000 / 22506360
+Processed batch 950000-1000000 / 22506360
+Processed batch 1000000-1050000 / 22506360
+Processed batch 1050000-1100000 / 22506360
+Processed batch 1100000-1150000 / 22506360
+Processed batch 1150000-1200000 / 22506360
+Processed batch 1200000-1250000 / 22506360
+Processed batch 1250000-1300000 / 22506360
+Processed batch 1300000-1350000 / 22506360
+Processed batch 1350000-1400000 / 22506360
+Processed batch 1400000-1450000 / 22506360
+Processed batch 1450000-1500000 / 22506360
+Processed batch 1500000-1550000 / 22506360
+Processed batch 1550000-1600000 / 22506360
+Processed batch 1600000-1650000 / 22506360
+Processed batch 1650000-1700000 / 22506360
+Processed batch 1700000-1750000 / 22506360
+Processed batch 1750000-1800000 / 22506360
+Processed batch 1800000-1850000 / 22506360
+Processed batch 1850000-1900000 / 22506360
+Processed batch 1900000-1950000 / 22506360
+Processed batch 1950000-2000000 / 22506360
+Processed batch 2000000-2050000 / 22506360
+Processed batch 2050000-2100000 / 22506360
+Processed batch 2100000-2150000 / 22506360
+Processed batch 2150000-2200000 / 22506360
+Processed batch 2200000-2250000 / 22506360
+Processed batch 2250000-2300000 / 22506360
+Processed batch 2300000-2350000 / 22506360
+Processed batch 2350000-2400000 / 22506360
+Processed batch 2400000-2450000 / 22506360
+Processed batch 2450000-2500000 / 22506360
+Processed batch 2500000-2550000 / 22506360
+Processed batch 2550000-2600000 / 22506360
+Processed batch 2600000-2650000 / 22506360
+Processed batch 2650000-2700000 / 22506360
+Processed batch 2700000-2750000 / 22506360
+Processed batch 2750000-2800000 / 22506360
+Processed batch 2800000-2850000 / 22506360
+Processed batch 2850000-2900000 / 22506360
+Processed batch 2900000-2950000 / 22506360
+Processed batch 2950000-3000000 / 22506360
+Processed batch 3000000-3050000 / 22506360
+Processed batch 3050000-3100000 / 22506360
+Processed batch 3100000-3150000 / 22506360
+Processed batch 3150000-3200000 / 22506360
+Processed batch 3200000-3250000 / 22506360
+Processed batch 3250000-3300000 / 22506360
+Processed batch 3300000-3350000 / 22506360
+Processed batch 3350000-3400000 / 22506360
+Processed batch 3400000-3450000 / 22506360
+Processed batch 3450000-3500000 / 22506360
+Processed batch 3500000-3550000 / 22506360
+Processed batch 3550000-3600000 / 22506360
+Processed batch 3600000-3650000 / 22506360
+Processed batch 3650000-3700000 / 22506360
+Processed batch 3700000-3750000 / 22506360
+Processed batch 3750000-3800000 / 22506360
+Processed batch 3800000-3850000 / 22506360
+Processed batch 3850000-3900000 / 22506360
+Processed batch 3900000-3950000 / 22506360
+Processed batch 3950000-4000000 / 22506360
+Processed batch 4000000-4050000 / 22506360
+Processed batch 4050000-4100000 / 22506360
+Processed batch 4100000-4150000 / 22506360
+Processed batch 4150000-4200000 / 22506360
+Processed batch 4200000-4250000 / 22506360
+Processed batch 4250000-4300000 / 22506360
+Processed batch 4300000-4350000 / 22506360
+Processed batch 4350000-4400000 / 22506360
+Processed batch 4400000-4450000 / 22506360
+Processed batch 4450000-4500000 / 22506360
+Processed batch 4500000-4550000 / 22506360
+Processed batch 4550000-4600000 / 22506360
+Processed batch 4600000-4650000 / 22506360
+Processed batch 4650000-4700000 / 22506360
+Processed batch 4700000-4750000 / 22506360
+Processed batch 4750000-4800000 / 22506360
+Processed batch 4800000-4850000 / 22506360
+Processed batch 4850000-4900000 / 22506360
+Processed batch 4900000-4950000 / 22506360
+Processed batch 4950000-5000000 / 22506360
+Processed batch 5000000-5050000 / 22506360
+Processed batch 5050000-5100000 / 22506360
+Processed batch 5100000-5150000 / 22506360
+Processed batch 5150000-5200000 / 22506360
+Processed batch 5200000-5250000 / 22506360
+Processed batch 5250000-5300000 / 22506360
+Processed batch 5300000-5350000 / 22506360
+Processed batch 5350000-5400000 / 22506360
+Processed batch 5400000-5450000 / 22506360
+Processed batch 5450000-5500000 / 22506360
+Processed batch 5500000-5550000 / 22506360
+Processed batch 5550000-5600000 / 22506360
+Processed batch 5600000-5650000 / 22506360
+Processed batch 5650000-5700000 / 22506360
+Processed batch 5700000-5750000 / 22506360
+Processed batch 5750000-5800000 / 22506360
+Processed batch 5800000-5850000 / 22506360
+Processed batch 5850000-5900000 / 22506360
+Processed batch 5900000-5950000 / 22506360
+Processed batch 5950000-6000000 / 22506360
+Processed batch 6000000-6050000 / 22506360
+Processed batch 6050000-6100000 / 22506360
+Processed batch 6100000-6150000 / 22506360
+Processed batch 6150000-6200000 / 22506360
+Processed batch 6200000-6250000 / 22506360
+Processed batch 6250000-6300000 / 22506360
+Processed batch 6300000-6350000 / 22506360
+Processed batch 6350000-6400000 / 22506360
+Processed batch 6400000-6450000 / 22506360
+Processed batch 6450000-6500000 / 22506360
+Processed batch 6500000-6550000 / 22506360
+Processed batch 6550000-6600000 / 22506360
+Processed batch 6600000-6650000 / 22506360
+Processed batch 6650000-6700000 / 22506360
+Processed batch 6700000-6750000 / 22506360
+Processed batch 6750000-6800000 / 22506360
+Processed batch 6800000-6850000 / 22506360
+Processed batch 6850000-6900000 / 22506360
+Processed batch 6900000-6950000 / 22506360
+Processed batch 6950000-7000000 / 22506360
+Processed batch 7000000-7050000 / 22506360
+Processed batch 7050000-7100000 / 22506360
+Processed batch 7100000-7150000 / 22506360
+Processed batch 7150000-7200000 / 22506360
+Processed batch 7200000-7250000 / 22506360
+Processed batch 7250000-7300000 / 22506360
+Processed batch 7300000-7350000 / 22506360
+Processed batch 7350000-7400000 / 22506360
+Processed batch 7400000-7450000 / 22506360
+Processed batch 7450000-7500000 / 22506360
+Processed batch 7500000-7550000 / 22506360
+Processed batch 7550000-7600000 / 22506360
+Processed batch 7600000-7650000 / 22506360
+Processed batch 7650000-7700000 / 22506360
+Processed batch 7700000-7750000 / 22506360
+Processed batch 7750000-7800000 / 22506360
+Processed batch 7800000-7850000 / 22506360
+Processed batch 7850000-7900000 / 22506360
+Processed batch 7900000-7950000 / 22506360
+Processed batch 7950000-8000000 / 22506360
+Processed batch 8000000-8050000 / 22506360
+Processed batch 8050000-8100000 / 22506360
+Processed batch 8100000-8150000 / 22506360
+Processed batch 8150000-8200000 / 22506360
+Processed batch 8200000-8250000 / 22506360
+Processed batch 8250000-8300000 / 22506360
+Processed batch 8300000-8350000 / 22506360
+Processed batch 8350000-8400000 / 22506360
+Processed batch 8400000-8450000 / 22506360
+Processed batch 8450000-8500000 / 22506360
+Processed batch 8500000-8550000 / 22506360
+Processed batch 8550000-8600000 / 22506360
+Processed batch 8600000-8650000 / 22506360
+Processed batch 8650000-8700000 / 22506360
+Processed batch 8700000-8750000 / 22506360
+Processed batch 8750000-8800000 / 22506360
+Processed batch 8800000-8850000 / 22506360
+Processed batch 8850000-8900000 / 22506360
+Processed batch 8900000-8950000 / 22506360
+Processed batch 8950000-9000000 / 22506360
+Processed batch 9000000-9050000 / 22506360
+Processed batch 9050000-9100000 / 22506360
+Processed batch 9100000-9150000 / 22506360
+Processed batch 9150000-9200000 / 22506360
+Processed batch 9200000-9250000 / 22506360
+Processed batch 9250000-9300000 / 22506360
+Processed batch 9300000-9350000 / 22506360
+Processed batch 9350000-9400000 / 22506360
+Processed batch 9400000-9450000 / 22506360
+Processed batch 9450000-9500000 / 22506360
+Processed batch 9500000-9550000 / 22506360
+Processed batch 9550000-9600000 / 22506360
+Processed batch 9600000-9650000 / 22506360
+Processed batch 9650000-9700000 / 22506360
+Processed batch 9700000-9750000 / 22506360
+Processed batch 9750000-9800000 / 22506360
+Processed batch 9800000-9850000 / 22506360
+Processed batch 9850000-9900000 / 22506360
+Processed batch 9900000-9950000 / 22506360
+Processed batch 9950000-10000000 / 22506360
+Processed batch 10000000-10050000 / 22506360
+Processed batch 10050000-10100000 / 22506360
+Processed batch 10100000-10150000 / 22506360
+Processed batch 10150000-10200000 / 22506360
+Processed batch 10200000-10250000 / 22506360
+Processed batch 10250000-10300000 / 22506360
+Processed batch 10300000-10350000 / 22506360
+Processed batch 10350000-10400000 / 22506360
+Processed batch 10400000-10450000 / 22506360
+Processed batch 10450000-10500000 / 22506360
+Processed batch 10500000-10550000 / 22506360
+Processed batch 10550000-10600000 / 22506360
+Processed batch 10600000-10650000 / 22506360
+Processed batch 10650000-10700000 / 22506360
+Processed batch 10700000-10750000 / 22506360
+Processed batch 10750000-10800000 / 22506360
+Processed batch 10800000-10850000 / 22506360
+Processed batch 10850000-10900000 / 22506360
+Processed batch 10900000-10950000 / 22506360
+Processed batch 10950000-11000000 / 22506360
+Processed batch 11000000-11050000 / 22506360
+Processed batch 11050000-11100000 / 22506360
+Processed batch 11100000-11150000 / 22506360
+Processed batch 11150000-11200000 / 22506360
+Processed batch 11200000-11250000 / 22506360
+Processed batch 11250000-11300000 / 22506360
+Processed batch 11300000-11350000 / 22506360
+Processed batch 11350000-11400000 / 22506360
+Processed batch 11400000-11450000 / 22506360
+Processed batch 11450000-11500000 / 22506360
+Processed batch 11500000-11550000 / 22506360
+Processed batch 11550000-11600000 / 22506360
+Processed batch 11600000-11650000 / 22506360
+Processed batch 11650000-11700000 / 22506360
+Processed batch 11700000-11750000 / 22506360
+Processed batch 11750000-11800000 / 22506360
+Processed batch 11800000-11850000 / 22506360
+Processed batch 11850000-11900000 / 22506360
+Processed batch 11900000-11950000 / 22506360
+Processed batch 11950000-12000000 / 22506360
+Processed batch 12000000-12050000 / 22506360
+Processed batch 12050000-12100000 / 22506360
+Processed batch 12100000-12150000 / 22506360
+Processed batch 12150000-12200000 / 22506360
+Processed batch 12200000-12250000 / 22506360
+Processed batch 12250000-12300000 / 22506360
+Processed batch 12300000-12350000 / 22506360
+Processed batch 12350000-12400000 / 22506360
+Processed batch 12400000-12450000 / 22506360
+Processed batch 12450000-12500000 / 22506360
+Processed batch 12500000-12550000 / 22506360
+Processed batch 12550000-12600000 / 22506360
+Processed batch 12600000-12650000 / 22506360
+Processed batch 12650000-12700000 / 22506360
+Processed batch 12700000-12750000 / 22506360
+Processed batch 12750000-12800000 / 22506360
+Processed batch 12800000-12850000 / 22506360
+Processed batch 12850000-12900000 / 22506360
+Processed batch 12900000-12950000 / 22506360
+Processed batch 12950000-13000000 / 22506360
+Processed batch 13000000-13050000 / 22506360
+Processed batch 13050000-13100000 / 22506360
+Processed batch 13100000-13150000 / 22506360
+Processed batch 13150000-13200000 / 22506360
+Processed batch 13200000-13250000 / 22506360
+Processed batch 13250000-13300000 / 22506360
+Processed batch 13300000-13350000 / 22506360
+Processed batch 13350000-13400000 / 22506360
+Processed batch 13400000-13450000 / 22506360
+Processed batch 13450000-13500000 / 22506360
+Processed batch 13500000-13550000 / 22506360
+Processed batch 13550000-13600000 / 22506360
+Processed batch 13600000-13650000 / 22506360
+Processed batch 13650000-13700000 / 22506360
+Processed batch 13700000-13750000 / 22506360
+Processed batch 13750000-13800000 / 22506360
+Processed batch 13800000-13850000 / 22506360
+Processed batch 13850000-13900000 / 22506360
+Processed batch 13900000-13950000 / 22506360
+Processed batch 13950000-14000000 / 22506360
+Processed batch 14000000-14050000 / 22506360
+Processed batch 14050000-14100000 / 22506360
+Processed batch 14100000-14150000 / 22506360
+Processed batch 14150000-14200000 / 22506360
+Processed batch 14200000-14250000 / 22506360
+Processed batch 14250000-14300000 / 22506360
+Processed batch 14300000-14350000 / 22506360
+Processed batch 14350000-14400000 / 22506360
+Processed batch 14400000-14450000 / 22506360
+Processed batch 14450000-14500000 / 22506360
+Processed batch 14500000-14550000 / 22506360
+Processed batch 14550000-14600000 / 22506360
+Processed batch 14600000-14650000 / 22506360
+Processed batch 14650000-14700000 / 22506360
+Processed batch 14700000-14750000 / 22506360
+Processed batch 14750000-14800000 / 22506360
+Processed batch 14800000-14850000 / 22506360
+Processed batch 14850000-14900000 / 22506360
+Processed batch 14900000-14950000 / 22506360
+Processed batch 14950000-15000000 / 22506360
+Processed batch 15000000-15050000 / 22506360
+Processed batch 15050000-15100000 / 22506360
+Processed batch 15100000-15150000 / 22506360
+Processed batch 15150000-15200000 / 22506360
+Processed batch 15200000-15250000 / 22506360
+Processed batch 15250000-15300000 / 22506360
+Processed batch 15300000-15350000 / 22506360
+Processed batch 15350000-15400000 / 22506360
+Processed batch 15400000-15450000 / 22506360
+Processed batch 15450000-15500000 / 22506360
+Processed batch 15500000-15550000 / 22506360
+Processed batch 15550000-15600000 / 22506360
+Processed batch 15600000-15650000 / 22506360
+Processed batch 15650000-15700000 / 22506360
+Processed batch 15700000-15750000 / 22506360
+Processed batch 15750000-15800000 / 22506360
+Processed batch 15800000-15850000 / 22506360
+Processed batch 15850000-15900000 / 22506360
+Processed batch 15900000-15950000 / 22506360
+Processed batch 15950000-16000000 / 22506360
+Processed batch 16000000-16050000 / 22506360
+Processed batch 16050000-16100000 / 22506360
+Processed batch 16100000-16150000 / 22506360
+Processed batch 16150000-16200000 / 22506360
+Processed batch 16200000-16250000 / 22506360
+Processed batch 16250000-16300000 / 22506360
+Processed batch 16300000-16350000 / 22506360
+Processed batch 16350000-16400000 / 22506360
+Processed batch 16400000-16450000 / 22506360
+Processed batch 16450000-16500000 / 22506360
+Processed batch 16500000-16550000 / 22506360
+Processed batch 16550000-16600000 / 22506360
+Processed batch 16600000-16650000 / 22506360
+Processed batch 16650000-16700000 / 22506360
+Processed batch 16700000-16750000 / 22506360
+Processed batch 16750000-16800000 / 22506360
+Processed batch 16800000-16850000 / 22506360
+Processed batch 16850000-16900000 / 22506360
+Processed batch 16900000-16950000 / 22506360
+Processed batch 16950000-17000000 / 22506360
+Processed batch 17000000-17050000 / 22506360
+Processed batch 17050000-17100000 / 22506360
+Processed batch 17100000-17150000 / 22506360
+Processed batch 17150000-17200000 / 22506360
+Processed batch 17200000-17250000 / 22506360
+Processed batch 17250000-17300000 / 22506360
+Processed batch 17300000-17350000 / 22506360
+Processed batch 17350000-17400000 / 22506360
+Processed batch 17400000-17450000 / 22506360
+Processed batch 17450000-17500000 / 22506360
+Processed batch 17500000-17550000 / 22506360
+Processed batch 17550000-17600000 / 22506360
+Processed batch 17600000-17650000 / 22506360
+Processed batch 17650000-17700000 / 22506360
+Processed batch 17700000-17750000 / 22506360
+Processed batch 17750000-17800000 / 22506360
+Processed batch 17800000-17850000 / 22506360
+Processed batch 17850000-17900000 / 22506360
+Processed batch 17900000-17950000 / 22506360
+Processed batch 17950000-18000000 / 22506360
+Processed batch 18000000-18050000 / 22506360
+Processed batch 18050000-18100000 / 22506360
+Processed batch 18100000-18150000 / 22506360
+Processed batch 18150000-18200000 / 22506360
+Processed batch 18200000-18250000 / 22506360
+Processed batch 18250000-18300000 / 22506360
+Processed batch 18300000-18350000 / 22506360
+Processed batch 18350000-18400000 / 22506360
+Processed batch 18400000-18450000 / 22506360
+Processed batch 18450000-18500000 / 22506360
+Processed batch 18500000-18550000 / 22506360
+Processed batch 18550000-18600000 / 22506360
+Processed batch 18600000-18650000 / 22506360
+Processed batch 18650000-18700000 / 22506360
+Processed batch 18700000-18750000 / 22506360
+Processed batch 18750000-18800000 / 22506360
+Processed batch 18800000-18850000 / 22506360
+Processed batch 18850000-18900000 / 22506360
+Processed batch 18900000-18950000 / 22506360
+Processed batch 18950000-19000000 / 22506360
+Processed batch 19000000-19050000 / 22506360
+Processed batch 19050000-19100000 / 22506360
+Processed batch 19100000-19150000 / 22506360
+Processed batch 19150000-19200000 / 22506360
+Processed batch 19200000-19250000 / 22506360
+Processed batch 19250000-19300000 / 22506360
+Processed batch 19300000-19350000 / 22506360
+Processed batch 19350000-19400000 / 22506360
+Processed batch 19400000-19450000 / 22506360
+Processed batch 19450000-19500000 / 22506360
+Processed batch 19500000-19550000 / 22506360
+Processed batch 19550000-19600000 / 22506360
+Processed batch 19600000-19650000 / 22506360
+Processed batch 19650000-19700000 / 22506360
+Processed batch 19700000-19750000 / 22506360
+Processed batch 19750000-19800000 / 22506360
+Processed batch 19800000-19850000 / 22506360
+Processed batch 19850000-19900000 / 22506360
+Processed batch 19900000-19950000 / 22506360
+Processed batch 19950000-20000000 / 22506360
+Processed batch 20000000-20050000 / 22506360
+Processed batch 20050000-20100000 / 22506360
+Processed batch 20100000-20150000 / 22506360
+Processed batch 20150000-20200000 / 22506360
+Processed batch 20200000-20250000 / 22506360
+Processed batch 20250000-20300000 / 22506360
+Processed batch 20300000-20350000 / 22506360
+Processed batch 20350000-20400000 / 22506360
+Processed batch 20400000-20450000 / 22506360
+Processed batch 20450000-20500000 / 22506360
+Processed batch 20500000-20550000 / 22506360
+Processed batch 20550000-20600000 / 22506360
+Processed batch 20600000-20650000 / 22506360
+Processed batch 20650000-20700000 / 22506360
+Processed batch 20700000-20750000 / 22506360
+Processed batch 20750000-20800000 / 22506360
+Processed batch 20800000-20850000 / 22506360
+Processed batch 20850000-20900000 / 22506360
+Processed batch 20900000-20950000 / 22506360
+Processed batch 20950000-21000000 / 22506360
+Processed batch 21000000-21050000 / 22506360
+Processed batch 21050000-21100000 / 22506360
+Processed batch 21100000-21150000 / 22506360
+Processed batch 21150000-21200000 / 22506360
+Processed batch 21200000-21250000 / 22506360
+Processed batch 21250000-21300000 / 22506360
+Processed batch 21300000-21350000 / 22506360
+Processed batch 21350000-21400000 / 22506360
+Processed batch 21400000-21450000 / 22506360
+Processed batch 21450000-21500000 / 22506360
+Processed batch 21500000-21550000 / 22506360
+Processed batch 21550000-21600000 / 22506360
+Processed batch 21600000-21650000 / 22506360
+Processed batch 21650000-21700000 / 22506360
+Processed batch 21700000-21750000 / 22506360
+Processed batch 21750000-21800000 / 22506360
+Processed batch 21800000-21850000 / 22506360
+Processed batch 21850000-21900000 / 22506360
+Processed batch 21900000-21950000 / 22506360
+Processed batch 21950000-22000000 / 22506360
+Processed batch 22000000-22050000 / 22506360
+Processed batch 22050000-22100000 / 22506360
+Processed batch 22100000-22150000 / 22506360
+Processed batch 22150000-22200000 / 22506360
+Processed batch 22200000-22250000 / 22506360
+Processed batch 22250000-22300000 / 22506360
+Processed batch 22300000-22350000 / 22506360
+Processed batch 22350000-22400000 / 22506360
+Processed batch 22400000-22450000 / 22506360
+Processed batch 22450000-22500000 / 22506360
+Processed batch 22500000-22506360 / 22506360
+Computed and loaded derivatives shape: (22506360, 24)
+shape: (22_506_360, 24)
+┌─────────────────────┬─────────────────────┬─────────────────────┬─────────────────────┬───┬──────────────────────┬──────────────────────┬──────────────────────┬──────────────────────┐
+│ s_upper_first_der_0 ┆ s_upper_first_der_1 ┆ s_upper_first_der_2 ┆ s_upper_first_der_3 ┆ … ┆ s_lower_second_der_2 ┆ s_lower_second_der_3 ┆ s_lower_second_der_4 ┆ s_lower_second_der_5 │
+│ ---                 ┆ ---                 ┆ ---                 ┆ ---                 ┆   ┆ ---                  ┆ ---                  ┆ ---                  ┆ ---                  │
+│ f32                 ┆ f32                 ┆ f32                 ┆ f32                 ┆   ┆ f32                  ┆ f32                  ┆ f32                  ┆ f32                  │
+╞═════════════════════╪═════════════════════╪═════════════════════╪═════════════════════╪═══╪══════════════════════╪══════════════════════╪══════════════════════╪══════════════════════╡
+│ 0.198335            ┆ 0.066196            ┆ -0.035885           ┆ -0.13141            ┆ … ┆ 0.264619             ┆ -0.081193            ┆ -0.324382            ┆ -0.210052            │
+│ 0.125249            ┆ -0.072208           ┆ -0.136651           ┆ -0.122617           ┆ … ┆ 0.088476             ┆ -0.162807            ┆ 0.229901             ┆ 1.346411             │
+│ 0.07111             ┆ -0.046609           ┆ -0.048086           ┆ -0.032414           ┆ … ┆ 0.160309             ┆ 0.196097             ┆ 0.162517             ┆ 0.748417             │
+│ 0.249189            ┆ 0.060671            ┆ -0.056629           ┆ -0.148289           ┆ … ┆ 0.523047             ┆ 0.210201             ┆ -0.112632            ┆ -0.751377            │
+│ 0.215158            ┆ 0.074315            ┆ -0.022225           ┆ -0.094566           ┆ … ┆ -0.16435             ┆ -0.14511             ┆ -0.062018            ┆ -0.004797            │
+│ …                   ┆ …                   ┆ …                   ┆ …                   ┆ … ┆ …                    ┆ …                    ┆ …                    ┆ …                    │
+│ 0.352399            ┆ 0.059614            ┆ -0.140265           ┆ -0.236047           ┆ … ┆ 0.760238             ┆ 0.330984             ┆ -0.543602            ┆ -0.509943            │
+│ 0.142109            ┆ -0.012077           ┆ -0.057115           ┆ -0.131074           ┆ … ┆ 0.11325              ┆ -0.110729            ┆ -0.133299            ┆ 0.654087             │
+│ 0.177451            ┆ 0.095089            ┆ 0.020312            ┆ -0.076074           ┆ … ┆ -0.00174             ┆ -0.332212            ┆ 0.064134             ┆ -0.38018             │
+│ 0.192884            ┆ -0.005314           ┆ -0.097306           ┆ -0.120621           ┆ … ┆ -0.402769            ┆ -0.0505              ┆ 0.019916             ┆ -0.549398            │
+│ 0.144652            ┆ 0.059436            ┆ 0.005352            ┆ -0.020051           ┆ … ┆ 0.480331             ┆ 0.31826              ┆ -0.366172            ┆ -0.720224            │
+└─────────────────────┴─────────────────────┴─────────────────────┴─────────────────────┴───┴──────────────────────┴──────────────────────┴──────────────────────┴──────────────────────┘
+Made scaled dataset
+Calculated and saved input distribution information without derivatives.
+found insertion index
+cut dataframe at insertion index
+stacked inputs using pl.concat
+/home/faiza/Documents/NeuralFoil/venv/lib/python3.10/site-packages/polars/series/series.py:1561: RuntimeWarning: divide by zero encountered in log
+  lambda out: ufunc(*args, out=out, dtype=dtype_char, **kwargs),
+Cleared df, derivatives_df, before, and after from memory.
+Splitting data between test and train sets has been completed
+The input training data is shaped as shape: (9, 50)
+┌────────────┬──────────────────┬──────────────────┬──────────────────┬───┬─────────────┬─────────────┬─────────────┬─────────────┐
+│ statistic  ┆ s_kulfan_upper_0 ┆ s_kulfan_upper_1 ┆ s_kulfan_upper_2 ┆ … ┆ s_Re        ┆ s_n_crit    ┆ s_xtr_upper ┆ s_xtr_lower │
+│ ---        ┆ ---              ┆ ---              ┆ ---              ┆   ┆ ---         ┆ ---         ┆ ---         ┆ ---         │
+│ str        ┆ f64              ┆ f64              ┆ f64              ┆   ┆ f64         ┆ f64         ┆ f64         ┆ f64         │
+╞════════════╪══════════════════╪══════════════════╪══════════════════╪═══╪═════════════╪═════════════╪═════════════╪═════════════╡
+│ count      ┆ 2.1381042e7      ┆ 2.1381042e7      ┆ 2.1381042e7      ┆ … ┆ 2.1381042e7 ┆ 2.1381042e7 ┆ 2.1381042e7 ┆ 2.1381042e7 │
+│ null_count ┆ 0.0              ┆ 0.0              ┆ 0.0              ┆ … ┆ 0.0         ┆ 0.0         ┆ 0.0         ┆ 0.0         │
+│ mean       ┆ 0.16878          ┆ 0.203309         ┆ 0.258006         ┆ … ┆ 0.039448    ┆ 0.0011      ┆ 0.90001     ┆ 0.899715    │
+│ std        ┆ 0.117169         ┆ 0.243623         ┆ 0.306081         ┆ … ┆ 0.984912    ┆ 1.154936    ┆ 0.237976    ┆ 0.238408    │
+│ min        ┆ -0.777743        ┆ -3.512043        ┆ -4.826776        ┆ … ┆ -5.021853   ┆ -2.0        ┆ 0.000001    ┆ 0.000001    │
+│ 25%        ┆ 0.090993         ┆ 0.05416          ┆ 0.076216         ┆ … ┆ -0.622267   ┆ -0.998878   ┆ 1.0         ┆ 1.0         │
+│ 50%        ┆ 0.163522         ┆ 0.197699         ┆ 0.251593         ┆ … ┆ 0.043357    ┆ 0.002143    ┆ 1.0         ┆ 1.0         │
+│ 75%        ┆ 0.240077         ┆ 0.347682         ┆ 0.434375         ┆ … ┆ 0.708691    ┆ 1.001044    ┆ 1.0         ┆ 1.0         │
+│ max        ┆ 1.409122         ┆ 4.508533         ┆ 6.261123         ┆ … ┆ 4.934646    ┆ 2.0         ┆ 1.0         ┆ 1.0         │
+└────────────┴──────────────────┴──────────────────┴──────────────────┴───┴─────────────┴─────────────┴─────────────┴─────────────┘ 
+The output training data is shaped as shape: (9, 199)
+┌────────────┬───────────────────────┬─────────────┬─────────────┬───┬───────────────────────┬───────────────────────┬───────────────────────┬───────────────────────┐
+│ statistic  ┆ s_analysis_confidence ┆ s_CL        ┆ s_ln_CD     ┆ … ┆ s_lower_bl_ue/vinf_28 ┆ s_lower_bl_ue/vinf_29 ┆ s_lower_bl_ue/vinf_30 ┆ s_lower_bl_ue/vinf_31 │
+│ ---        ┆ ---                   ┆ ---         ┆ ---         ┆   ┆ ---                   ┆ ---                   ┆ ---                   ┆ ---                   │
+│ str        ┆ f64                   ┆ f64         ┆ f64         ┆   ┆ f64                   ┆ f64                   ┆ f64                   ┆ f64                   │
+╞════════════╪═══════════════════════╪═════════════╪═════════════╪═══╪═══════════════════════╪═══════════════════════╪═══════════════════════╪═══════════════════════╡
+│ count      ┆ 2.1381042e7           ┆ 1.2304497e7 ┆ 1.2304497e7 ┆ … ┆ 1.2304497e7           ┆ 1.2304497e7           ┆ 1.2304497e7           ┆ 1.2304497e7           │
+│ null_count ┆ 0.0                   ┆ 9.076545e6  ┆ 9.076545e6  ┆ … ┆ 9.076545e6            ┆ 9.076545e6            ┆ 9.076545e6            ┆ 9.076545e6            │
+│ mean       ┆ 0.575486              ┆ 0.607132    ┆ 0.341986    ┆ … ┆ -0.999898             ┆ -1.000527             ┆ -1.002941             ┆ -1.008055             │
+│ std        ┆ 0.494269              ┆ 1.623266    ┆ 0.624894    ┆ … ┆ 0.119513              ┆ 0.119578              ┆ 0.120163              ┆ 0.119591              │
+│ min        ┆ 0.0                   ┆ -14.5694    ┆ -1.63941    ┆ … ┆ -2.642103             ┆ -2.632642             ┆ -2.941834             ┆ -2.632471             │
+│ 25%        ┆ 0.0                   ┆ -0.6082     ┆ -0.230102   ┆ … ┆ -1.089606             ┆ -1.091936             ┆ -1.096933             ┆ -1.105003             │
+│ 50%        ┆ 1.0                   ┆ 0.512       ┆ 0.309008    ┆ … ┆ -0.995871             ┆ -0.995298             ┆ -0.99613              ┆ -0.995504             │
+│ 75%        ┆ 1.0                   ┆ 1.7932      ┆ 0.941158    ┆ … ┆ -0.914794             ┆ -0.914033             ┆ -0.913431             ┆ -0.912672             │
+│ max        ┆ 1.0                   ┆ 6.8782      ┆ 4.364104    ┆ … ┆ 0.743489              ┆ 1.03891               ┆ 1.359499              ┆ 1.706279              │
+└────────────┴───────────────────────┴─────────────┴─────────────┴───┴───────────────────────┴───────────────────────┴───────────────────────┴───────────────────────┘ 
+The input test data is shaped as shape: (9, 50)
+┌────────────┬──────────────────┬──────────────────┬──────────────────┬───┬────────────┬────────────┬─────────────┬─────────────┐
+│ statistic  ┆ s_kulfan_upper_0 ┆ s_kulfan_upper_1 ┆ s_kulfan_upper_2 ┆ … ┆ s_Re       ┆ s_n_crit   ┆ s_xtr_upper ┆ s_xtr_lower │
+│ ---        ┆ ---              ┆ ---              ┆ ---              ┆   ┆ ---        ┆ ---        ┆ ---         ┆ ---         │
+│ str        ┆ f64              ┆ f64              ┆ f64              ┆   ┆ f64        ┆ f64        ┆ f64         ┆ f64         │
+╞════════════╪══════════════════╪══════════════════╪══════════════════╪═══╪════════════╪════════════╪═════════════╪═════════════╡
+│ count      ┆ 1.125318e6       ┆ 1.125318e6       ┆ 1.125318e6       ┆ … ┆ 1.125318e6 ┆ 1.125318e6 ┆ 1.125318e6  ┆ 1.125318e6  │
+│ null_count ┆ 0.0              ┆ 0.0              ┆ 0.0              ┆ … ┆ 0.0        ┆ 0.0        ┆ 0.0         ┆ 0.0         │
+│ mean       ┆ 0.168908         ┆ 0.20349          ┆ 0.257942         ┆ … ┆ 0.039245   ┆ 0.000916   ┆ 0.900442    ┆ 0.899836    │
+│ std        ┆ 0.117164         ┆ 0.243116         ┆ 0.30609          ┆ … ┆ 0.984897   ┆ 1.154598   ┆ 0.237335    ┆ 0.238246    │
+│ min        ┆ -0.630615        ┆ -2.735741        ┆ -3.603876        ┆ … ┆ -4.798998  ┆ -1.999991  ┆ 0.000002    ┆ 0.000001    │
+│ 25%        ┆ 0.091093         ┆ 0.054405         ┆ 0.076078         ┆ … ┆ -0.623428  ┆ -0.998517  ┆ 1.0         ┆ 1.0         │
+│ 50%        ┆ 0.163715         ┆ 0.197999         ┆ 0.251962         ┆ … ┆ 0.042739   ┆ 0.002488   ┆ 1.0         ┆ 1.0         │
+│ 75%        ┆ 0.240078         ┆ 0.347743         ┆ 0.43411          ┆ … ┆ 0.707172   ┆ 0.999916   ┆ 1.0         ┆ 1.0         │
+│ max        ┆ 1.408089         ┆ 3.350594         ┆ 4.479575         ┆ … ┆ 4.656488   ┆ 1.999997   ┆ 1.0         ┆ 1.0         │
+└────────────┴──────────────────┴──────────────────┴──────────────────┴───┴────────────┴────────────┴─────────────┴─────────────┘ 
+The output test data is shaped as shape: (9, 199)
+┌────────────┬───────────────────────┬──────────┬───────────┬───┬───────────────────────┬───────────────────────┬───────────────────────┬───────────────────────┐
+│ statistic  ┆ s_analysis_confidence ┆ s_CL     ┆ s_ln_CD   ┆ … ┆ s_lower_bl_ue/vinf_28 ┆ s_lower_bl_ue/vinf_29 ┆ s_lower_bl_ue/vinf_30 ┆ s_lower_bl_ue/vinf_31 │
+│ ---        ┆ ---                   ┆ ---      ┆ ---       ┆   ┆ ---                   ┆ ---                   ┆ ---                   ┆ ---                   │
+│ str        ┆ f64                   ┆ f64      ┆ f64       ┆   ┆ f64                   ┆ f64                   ┆ f64                   ┆ f64                   │
+╞════════════╪═══════════════════════╪══════════╪═══════════╪═══╪═══════════════════════╪═══════════════════════╪═══════════════════════╪═══════════════════════╡
+│ count      ┆ 1.125318e6            ┆ 647609.0 ┆ 647609.0  ┆ … ┆ 647609.0              ┆ 647609.0              ┆ 647609.0              ┆ 647609.0              │
+│ null_count ┆ 0.0                   ┆ 477709.0 ┆ 477709.0  ┆ … ┆ 477709.0              ┆ 477709.0              ┆ 477709.0              ┆ 477709.0              │
+│ mean       ┆ 0.57549               ┆ 0.601653 ┆ 0.341435  ┆ … ┆ -0.999823             ┆ -1.000408             ┆ -1.002785             ┆ -1.00788              │
+│ std        ┆ 0.494269              ┆ 1.625185 ┆ 0.624616  ┆ … ┆ 0.119657              ┆ 0.119719              ┆ 0.120313              ┆ 0.119707              │
+│ min        ┆ 0.0                   ┆ -5.3332  ┆ -1.541054 ┆ … ┆ -1.673368             ┆ -1.672757             ┆ -1.686384             ┆ -1.714363             │
+│ 25%        ┆ 0.0                   ┆ -0.6136  ┆ -0.230535 ┆ … ┆ -1.089796             ┆ -1.092061             ┆ -1.097062             ┆ -1.10494              │
+│ 50%        ┆ 1.0                   ┆ 0.5006   ┆ 0.30945   ┆ … ┆ -0.995761             ┆ -0.995104             ┆ -0.995977             ┆ -0.995287             │
+│ 75%        ┆ 1.0                   ┆ 1.7898   ┆ 0.941033  ┆ … ┆ -0.914737             ┆ -0.913785             ┆ -0.913249             ┆ -0.912541             │
+│ max        ┆ 1.0                   ┆ 6.4714   ┆ 3.043363  ┆ … ┆ -0.364124             ┆ -0.335131             ┆ -0.371171             ┆ -0.492429             │
+└────────────┴───────────────────────┴──────────┴───────────┴───┴───────────────────────┴───────────────────────┴───────────────────────┴───────────────────────┘ 
+Scanning memory for large Polars DataFrames and NumPy arrays...
+Polars DataFrame 'df_inputs_scaled': 22,506,360 rows x 49 cols ~ 8822.5 MB
+Polars DataFrame 'df_outputs_scaled': 22,506,360 rows x 198 cols ~ 35650.1 MB
+Polars DataFrame 'df_train_inputs_scaled': 21,381,042 rows x 49 cols ~ 8381.4 MB
+Polars DataFrame 'df_train_outputs_scaled': 21,381,042 rows x 198 cols ~ 33867.6 MB
+Polars DataFrame 'df_test_inputs_scaled': 1,125,318 rows x 49 cols ~ 441.1 MB
+Polars DataFrame 'df_test_outputs_scaled': 1,125,318 rows x 198 cols ~ 1782.5 MB
+Consider deleting unneeded objects with `del var_name` + `gc.collect()` to free RAM.
+Deleted df_inputs_scaled and df_outputs_scaled from RAM
+Total RAM: 134.72 GB
+Available RAM: 81.37 GB
+Used RAM: 77.64 GB
+RAM usage: 39.6%
+----------- 170.157044172287 seconds -------
+Cache file:  /home/faiza/Documents/NeuralFoil/training/nn-avian-gen2-256-pinmemory.pth
+cuda
+/home/faiza/Documents/NeuralFoil/training/train.py:172: FutureWarning: You are using `torch.load` with `weights_only=False` (the current default value), which uses the default pickle module implicitly. It is possible to construct malicious pickle data which will execute arbitrary code during unpickling (See https://github.com/pytorch/pytorch/blob/main/SECURITY.md#untrusted-models for more details). In a future release, the default value for `weights_only` will be flipped to `True`. This limits the functions that could be executed during unpickling. Arbitrary objects will no longer be allowed to be loaded via this mode unless they are explicitly allowlisted by the user via `torch.serialization.add_safe_globals`. We recommend you start setting `weights_only=True` for any use case where you don't have full control of the loaded file. Please open an issue on GitHub for any issues related to this experimental feature.
+  checkpoint = torch.load(cache_file)
+No existing model found, starting fresh.
+Preparing data...
+Test inputs done
+Test outputs done
+Train inputs done
+Train outputs done
+Training...
+Epoch: 0 | Train Loss: 1.666 | Test Loss: 0.866126 | analysis_confidence: 0.160394 | CL: 0.0266094 | ln_CD: 0.0499182 | CM: 0.00432781 | Top_Xtr: 0.019109 | Bot_Xtr: 0.022512
+Loss contributors: 
+	s_analysis_confidence    : 0.238906
+	s_ln_CD                  : 0.197152
+	s_CL                     : 0.184602
+	s_CM                     : 0.0839795
+	s_Bot_Xtr                : 0.0171952
+	s_Top_Xtr                : 0.0126191
+	s_upper_bl_ret_0         : 0.00203699
+	s_lower_bl_ret_0         : 0.00197231
+	s_upper_bl_H_31          : 0.00178772
+	s_lower_bl_H_0           : 0.00173175
+Duration of Epoch: 0 was 931.150975227356 seconds
+-- 936.5204689502716 seconds since start, for Epoch 0 --
+Epoch: 1 | Train Loss: 0.755912 | Test Loss: 0.681262 | analysis_confidence: 0.14703 | CL: 0.0211756 | ln_CD: 0.0391087 | CM: 0.00338549 | Top_Xtr: 0.0141373 | Bot_Xtr: 0.0166124
+Loss contributors: 
+	s_analysis_confidence    : 0.220846
+	s_ln_CD                  : 0.147744
+	s_CL                     : 0.140124
+	s_CM                     : 0.0622693
+	s_Bot_Xtr                : 0.0116758
+	s_Top_Xtr                : 0.0083665
+	s_upper_bl_ret_0         : 0.00153642
+	s_lower_bl_ret_0         : 0.00148307
+	s_lower_bl_H_1           : 0.0012195
+	s_lower_bl_H_0           : 0.00120397
+Duration of Epoch: 1 was 920.9949657917023 seconds
+-- 1857.566415309906 seconds since start, for Epoch 1 --
+Epoch: 2 | Train Loss: 0.64596 | Test Loss: 0.609843 | analysis_confidence: 0.142882 | CL: 0.0189543 | ln_CD: 0.0340695 | CM: 0.00296148 | Top_Xtr: 0.0123881 | Bot_Xtr: 0.0143903
+Loss contributors: 
+	s_analysis_confidence    : 0.214363
+	s_ln_CD                  : 0.12546
+	s_CL                     : 0.123239
+	s_CM                     : 0.0529397
+	s_Bot_Xtr                : 0.0102207
+	s_Top_Xtr                : 0.00747209
+	s_upper_bl_ret_0         : 0.00125752
+	s_lower_bl_ret_0         : 0.00120763
+	s_lower_bl_H_1           : 0.00107332
+	s_lower_bl_H_0           : 0.0010329
+Duration of Epoch: 2 was 919.5614194869995 seconds
+-- 2777.182297706604 seconds since start, for Epoch 2 --
+Epoch: 3 | Train Loss: 0.603602 | Test Loss: 0.594882 | analysis_confidence: 0.143968 | CL: 0.0186979 | ln_CD: 0.0341037 | CM: 0.00280956 | Top_Xtr: 0.0121797 | Bot_Xtr: 0.0142179
+Loss contributors: 
+	s_analysis_confidence    : 0.211387
+	s_ln_CD                  : 0.126308
+	s_CL                     : 0.120601
+	s_CM                     : 0.0495314
+	s_Bot_Xtr                : 0.00941796
+	s_Top_Xtr                : 0.0067851
+	s_upper_bl_ret_0         : 0.00111583
+	s_lower_bl_ret_0         : 0.00108
+	s_lower_bl_H_1           : 0.000947828
+	s_lower_bl_H_3           : 0.000942582
+Duration of Epoch: 3 was 919.2253198623657 seconds
+-- 3696.4575209617615 seconds since start, for Epoch 3 --
+Epoch: 4 | Train Loss: 0.580208 | Test Loss: 0.576492 | analysis_confidence: 0.139504 | CL: 0.0175851 | ln_CD: 0.0343969 | CM: 0.00268264 | Top_Xtr: 0.0120012 | Bot_Xtr: 0.0143263
+Loss contributors: 
+	s_analysis_confidence    : 0.210929
+	s_ln_CD                  : 0.121704
+	s_CL                     : 0.113568
+	s_CM                     : 0.0469952
+	s_Bot_Xtr                : 0.00944614
+	s_Top_Xtr                : 0.00714909
+	s_upper_bl_ret_0         : 0.00101111
+	s_lower_bl_ret_0         : 0.00100361
+	s_upper_bl_H_31          : 0.000881761
+	s_lower_bl_H_3           : 0.000870937
+Duration of Epoch: 4 was 919.6493985652924 seconds
+-- 4616.159793615341 seconds since start, for Epoch 4 --
+Epoch: 5 | Train Loss: 0.564766 | Test Loss: 0.559701 | analysis_confidence: 0.137096 | CL: 0.0172924 | ln_CD: 0.0318333 | CM: 0.00262746 | Top_Xtr: 0.0111224 | Bot_Xtr: 0.0125882
+Loss contributors: 
+	s_analysis_confidence    : 0.207081
+	s_ln_CD                  : 0.116216
+	s_CL                     : 0.112169
+	s_CM                     : 0.0457427
+	s_Bot_Xtr                : 0.00853577
+	s_Top_Xtr                : 0.00644962
+	s_upper_bl_ret_0         : 0.00096801
+	s_lower_bl_ret_0         : 0.000912662
+	s_lower_bl_H_3           : 0.000825407
+	s_upper_bl_H_31          : 0.000822677
+Duration of Epoch: 5 was 928.112464427948 seconds
+-- 5544.313624382019 seconds since start, for Epoch 5 --
+Epoch: 6 | Train Loss: 0.553018 | Test Loss: 0.53943 | analysis_confidence: 0.135926 | CL: 0.0166948 | ln_CD: 0.0300435 | CM: 0.00258676 | Top_Xtr: 0.0096665 | Bot_Xtr: 0.0113303
+Loss contributors: 
+	s_analysis_confidence    : 0.206204
+	s_ln_CD                  : 0.109613
+	s_CL                     : 0.10674
+	s_CM                     : 0.0442753
+	s_Bot_Xtr                : 0.00737617
+	s_Top_Xtr                : 0.00513195
+	s_upper_bl_ret_0         : 0.000904807
+	s_lower_bl_ret_0         : 0.000884711
+	s_upper_bl_H_31          : 0.000764291
+	s_lower_bl_H_3           : 0.000756338
+Duration of Epoch: 6 was 925.0310230255127 seconds
+-- 6469.404470443726 seconds since start, for Epoch 6 --
+Epoch: 7 | Train Loss: 0.544411 | Test Loss: 0.54681 | analysis_confidence: 0.136864 | CL: 0.0173749 | ln_CD: 0.030821 | CM: 0.0025512 | Top_Xtr: 0.0097124 | Bot_Xtr: 0.0113639
+Loss contributors: 
+	s_analysis_confidence    : 0.205818
+	s_ln_CD                  : 0.115107
+	s_CL                     : 0.110528
+	s_CM                     : 0.0440042
+	s_Bot_Xtr                : 0.0073225
+	s_Top_Xtr                : 0.00516177
+	s_upper_bl_ret_0         : 0.000877425
+	s_lower_bl_ret_0         : 0.000857055
+	s_upper_bl_H_31          : 0.000758826
+	s_lower_bl_H_3           : 0.000739062
+Duration of Epoch: 7 was 917.172883272171 seconds
+-- 7386.625416278839 seconds since start, for Epoch 7 --
+Epoch: 8 | Train Loss: 0.537209 | Test Loss: 0.529387 | analysis_confidence: 0.136232 | CL: 0.0163152 | ln_CD: 0.0310657 | CM: 0.00240654 | Top_Xtr: 0.0101027 | Bot_Xtr: 0.011409
+Loss contributors: 
+	s_analysis_confidence    : 0.203831
+	s_ln_CD                  : 0.10974
+	s_CL                     : 0.103945
+	s_CM                     : 0.0412905
+	s_Bot_Xtr                : 0.00739788
+	s_Top_Xtr                : 0.00538694
+	s_upper_bl_ret_0         : 0.000854317
+	s_lower_bl_ret_0         : 0.000828858
+	s_upper_bl_H_31          : 0.000731299
+	s_lower_bl_H_4           : 0.000719276
+Duration of Epoch: 8 was 920.6514739990234 seconds
+-- 8307.337551355362 seconds since start, for Epoch 8 --
+Epoch: 9 | Train Loss: 0.531449 | Test Loss: 0.534873 | analysis_confidence: 0.135595 | CL: 0.016367 | ln_CD: 0.0315728 | CM: 0.00246299 | Top_Xtr: 0.0106222 | Bot_Xtr: 0.0120641
+Loss contributors: 
+	s_analysis_confidence    : 0.20407
+	s_ln_CD                  : 0.11215
+	s_CL                     : 0.104791
+	s_CM                     : 0.0423373
+	s_Bot_Xtr                : 0.00783997
+	s_Top_Xtr                : 0.00588556
+	s_upper_bl_ret_0         : 0.000824086
+	s_lower_bl_ret_0         : 0.000820304
+	s_lower_bl_H_4           : 0.000742611
+	s_upper_bl_H_31          : 0.000737781
+Duration of Epoch: 9 was 923.355058670044 seconds
+-- 9230.750650882721 seconds since start, for Epoch 9 --
+Epoch: 10 | Train Loss: 0.526629 | Test Loss: 0.520644 | analysis_confidence: 0.136714 | CL: 0.0155916 | ln_CD: 0.0303447 | CM: 0.0023839 | Top_Xtr: 0.00945955 | Bot_Xtr: 0.0105573
+Loss contributors: 
+	s_analysis_confidence    : 0.203726
+	s_ln_CD                  : 0.107755
+	s_CL                     : 0.101258
+	s_CM                     : 0.040908
+	s_Bot_Xtr                : 0.00685215
+	s_Top_Xtr                : 0.00488798
+	s_upper_bl_ret_0         : 0.00079543
+	s_lower_bl_ret_0         : 0.000770249
+	s_upper_bl_H_31          : 0.000711822
+	s_lower_bl_H_4           : 0.000706639
+Duration of Epoch: 10 was 926.6861431598663 seconds
+-- 10157.499791145325 seconds since start, for Epoch 10 --
+Epoch: 11 | Train Loss: 0.52238 | Test Loss: 0.514615 | analysis_confidence: 0.134572 | CL: 0.0158109 | ln_CD: 0.0281013 | CM: 0.00233993 | Top_Xtr: 0.00988423 | Bot_Xtr: 0.0112393
+Loss contributors: 
+	s_analysis_confidence    : 0.20273
+	s_ln_CD                  : 0.104494
+	s_CL                     : 0.101499
+	s_CM                     : 0.039861
+	s_Bot_Xtr                : 0.00682094
+	s_Top_Xtr                : 0.00490559
+	s_upper_bl_ret_0         : 0.000788673
+	s_lower_bl_ret_0         : 0.000778415
+	s_upper_bl_H_31          : 0.000699914
+	s_lower_bl_H_4           : 0.000681217
+Duration of Epoch: 11 was 924.903687953949 seconds
+-- 11082.469783306122 seconds since start, for Epoch 11 --
+Epoch: 12 | Train Loss: 0.518798 | Test Loss: 0.515281 | analysis_confidence: 0.133374 | CL: 0.0161902 | ln_CD: 0.0306221 | CM: 0.00233776 | Top_Xtr: 0.00900803 | Bot_Xtr: 0.0104298
+Loss contributors: 
+	s_analysis_confidence    : 0.202801
+	s_ln_CD                  : 0.106021
+	s_CL                     : 0.101678
+	s_CM                     : 0.0397636
+	s_Bot_Xtr                : 0.00663862
+	s_Top_Xtr                : 0.00480313
+	s_upper_bl_ret_0         : 0.000782173
+	s_lower_bl_ret_0         : 0.000766359
+	s_upper_bl_H_31          : 0.000694617
+	s_lower_bl_H_31          : 0.000658486
+Duration of Epoch: 12 was 923.897444486618 seconds
+-- 12006.418231248856 seconds since start, for Epoch 12 --
+Epoch: 13 | Train Loss: 0.515184 | Test Loss: 0.504831 | analysis_confidence: 0.135498 | CL: 0.0154682 | ln_CD: 0.0288755 | CM: 0.00228949 | Top_Xtr: 0.00884127 | Bot_Xtr: 0.0100415
+Loss contributors: 
+	s_analysis_confidence    : 0.201627
+	s_ln_CD                  : 0.10302
+	s_CL                     : 0.0984957
+	s_CM                     : 0.0388706
+	s_Bot_Xtr                : 0.00635052
+	s_Top_Xtr                : 0.00454768
+	s_upper_bl_ret_0         : 0.000758465
+	s_lower_bl_ret_0         : 0.000741162
+	s_upper_bl_H_31          : 0.000673027
+	s_lower_bl_H_4           : 0.00065023
+Duration of Epoch: 13 was 924.748779296875 seconds
+-- 12931.221547842026 seconds since start, for Epoch 13 --
+Epoch: 14 | Train Loss: 0.512488 | Test Loss: 0.500489 | analysis_confidence: 0.137181 | CL: 0.01539 | ln_CD: 0.0272157 | CM: 0.0023165 | Top_Xtr: 0.00878283 | Bot_Xtr: 0.0100985
+Loss contributors: 
+	s_analysis_confidence    : 0.20117
+	s_ln_CD                  : 0.0999257
+	s_CL                     : 0.0978525
+	s_CM                     : 0.0391939
+	s_Bot_Xtr                : 0.00632537
+	s_Top_Xtr                : 0.00455086
+	s_upper_bl_ret_0         : 0.00076086
+	s_lower_bl_ret_0         : 0.000744796
+	s_upper_bl_H_31          : 0.000667953
+	s_lower_bl_H_2           : 0.000639893
+Duration of Epoch: 14 was 919.9572689533234 seconds
+-- 13851.22077035904 seconds since start, for Epoch 14 --
+Epoch: 15 | Train Loss: 0.50997 | Test Loss: 0.508291 | analysis_confidence: 0.133059 | CL: 0.0163126 | ln_CD: 0.0278811 | CM: 0.00240896 | Top_Xtr: 0.0084686 | Bot_Xtr: 0.00993661
+Loss contributors: 
+	s_analysis_confidence    : 0.202247
+	s_CL                     : 0.101976
+	s_ln_CD                  : 0.101379
+	s_CM                     : 0.0407327
+	s_Bot_Xtr                : 0.00618508
+	s_Top_Xtr                : 0.0043899
+	s_upper_bl_ret_0         : 0.000740081
+	s_lower_bl_ret_0         : 0.000716408
+	s_lower_bl_H_1           : 0.00065066
+	s_upper_bl_H_31          : 0.00064961
+Duration of Epoch: 15 was 921.4123723506927 seconds
+-- 14772.682848930359 seconds since start, for Epoch 15 --
+Epoch: 16 | Train Loss: 0.507366 | Test Loss: 0.517668 | analysis_confidence: 0.133649 | CL: 0.0159273 | ln_CD: 0.0296351 | CM: 0.00243218 | Top_Xtr: 0.0084737 | Bot_Xtr: 0.0099912
+Loss contributors: 
+	s_analysis_confidence    : 0.203993
+	s_ln_CD                  : 0.107067
+	s_CL                     : 0.101847
+	s_CM                     : 0.041292
+	s_Bot_Xtr                : 0.00636386
+	s_Top_Xtr                : 0.00446044
+	s_upper_bl_ret_0         : 0.00073657
+	s_lower_bl_ret_0         : 0.000717812
+	s_lower_bl_H_1           : 0.000674892
+	s_upper_bl_H_31          : 0.000664852
+Duration of Epoch: 16 was 921.2104654312134 seconds
+-- 15693.945581912994 seconds since start, for Epoch 16 --
+Epoch: 17 | Train Loss: 0.505194 | Test Loss: 0.503008 | analysis_confidence: 0.131612 | CL: 0.0158441 | ln_CD: 0.0289915 | CM: 0.00222783 | Top_Xtr: 0.00894879 | Bot_Xtr: 0.0100945
+Loss contributors: 
+	s_analysis_confidence    : 0.200059
+	s_ln_CD                  : 0.102825
+	s_CL                     : 0.100578
+	s_CM                     : 0.0377737
+	s_Bot_Xtr                : 0.00639288
+	s_Top_Xtr                : 0.00459848
+	s_upper_bl_ret_0         : 0.000730699
+	s_lower_bl_ret_0         : 0.000718471
+	s_upper_bl_H_31          : 0.000699096
+	s_upper_bl_H_30          : 0.000663275
+Duration of Epoch: 17 was 920.8057379722595 seconds
+-- 16614.818879842758 seconds since start, for Epoch 17 --
+Epoch: 18 | Train Loss: 0.503411 | Test Loss: 0.498769 | analysis_confidence: 0.1337 | CL: 0.0151207 | ln_CD: 0.0274272 | CM: 0.00222348 | Top_Xtr: 0.00840641 | Bot_Xtr: 0.00971781
+Loss contributors: 
+	s_analysis_confidence    : 0.200718
+	s_ln_CD                  : 0.102527
+	s_CL                     : 0.0970143
+	s_CM                     : 0.0379116
+	s_Bot_Xtr                : 0.00612948
+	s_Top_Xtr                : 0.00435744
+	s_upper_bl_ret_0         : 0.000726241
+	s_lower_bl_ret_0         : 0.000704087
+	s_lower_bl_H_1           : 0.000662754
+	s_upper_bl_H_31          : 0.000632463
+Duration of Epoch: 18 was 920.1881957054138 seconds
+-- 17535.049344301224 seconds since start, for Epoch 18 --
+Epoch: 19 | Train Loss: 0.501444 | Test Loss: 0.499513 | analysis_confidence: 0.134275 | CL: 0.0153163 | ln_CD: 0.0275134 | CM: 0.00222137 | Top_Xtr: 0.00917087 | Bot_Xtr: 0.00999832
+Loss contributors: 
+	s_analysis_confidence    : 0.201896
+	s_ln_CD                  : 0.100393
+	s_CL                     : 0.0978878
+	s_CM                     : 0.0378364
+	s_Bot_Xtr                : 0.00632132
+	s_Top_Xtr                : 0.00482411
+	s_upper_bl_ret_0         : 0.000715582
+	s_lower_bl_ret_0         : 0.000712218
+	s_upper_bl_H_31          : 0.000644675
+	s_lower_bl_H_1           : 0.000627966
+Duration of Epoch: 19 was 924.7707357406616 seconds
+-- 18459.872537851334 seconds since start, for Epoch 19 --
+Epoch: 20 | Train Loss: 0.49965 | Test Loss: 0.499226 | analysis_confidence: 0.133021 | CL: 0.0153355 | ln_CD: 0.0285954 | CM: 0.00224219 | Top_Xtr: 0.00874826 | Bot_Xtr: 0.0100305
+Loss contributors: 
+	s_analysis_confidence    : 0.20071
+	s_ln_CD                  : 0.102573
+	s_CL                     : 0.0975666
+	s_CM                     : 0.0379528
+	s_Bot_Xtr                : 0.00613734
+	s_Top_Xtr                : 0.00449798
+	s_upper_bl_ret_0         : 0.000723536
+	s_lower_bl_ret_0         : 0.000716343
+	s_upper_bl_H_31          : 0.000639482
+	s_lower_bl_H_0           : 0.000625018
+Duration of Epoch: 20 was 920.1583046913147 seconds
+-- 19380.080893993378 seconds since start, for Epoch 20 --
+Epoch: 21 | Train Loss: 0.498042 | Test Loss: 0.501582 | analysis_confidence: 0.130194 | CL: 0.0152715 | ln_CD: 0.0278663 | CM: 0.00231148 | Top_Xtr: 0.00825276 | Bot_Xtr: 0.00959919
+Loss contributors: 
+	s_analysis_confidence    : 0.201015
+	s_ln_CD                  : 0.103343
+	s_CL                     : 0.0979348
+	s_CM                     : 0.0390068
+	s_Bot_Xtr                : 0.0060771
+	s_Top_Xtr                : 0.00431625
+	s_upper_bl_ret_0         : 0.00075285
+	s_lower_bl_ret_0         : 0.000719622
+	s_lower_bl_H_0           : 0.000637798
+	s_upper_bl_H_31          : 0.000632716
+Duration of Epoch: 21 was 919.7677774429321 seconds
+-- 20299.89448285103 seconds since start, for Epoch 21 --
+Epoch: 22 | Train Loss: 0.496535 | Test Loss: 0.50005 | analysis_confidence: 0.134655 | CL: 0.0151436 | ln_CD: 0.0278635 | CM: 0.00226825 | Top_Xtr: 0.00841685 | Bot_Xtr: 0.0097697
+Loss contributors: 
+	s_analysis_confidence    : 0.200887
+	s_ln_CD                  : 0.102744
+	s_CL                     : 0.0975912
+	s_CM                     : 0.0382653
+	s_Bot_Xtr                : 0.00610574
+	s_Top_Xtr                : 0.00428655
+	s_upper_bl_ret_0         : 0.000712571
+	s_lower_bl_ret_0         : 0.000703287
+	s_lower_bl_H_1           : 0.000620387
+	s_upper_bl_H_31          : 0.000618133
+Duration of Epoch: 22 was 925.5709943771362 seconds
+-- 21225.51536679268 seconds since start, for Epoch 22 --
+Epoch: 23 | Train Loss: 0.495117 | Test Loss: 0.495185 | analysis_confidence: 0.131269 | CL: 0.0151907 | ln_CD: 0.0275739 | CM: 0.00231482 | Top_Xtr: 0.00872394 | Bot_Xtr: 0.0101624
+Loss contributors: 
+	s_analysis_confidence    : 0.200485
+	s_ln_CD                  : 0.0993143
+	s_CL                     : 0.0965458
+	s_CM                     : 0.0388718
+	s_Bot_Xtr                : 0.00625388
+	s_Top_Xtr                : 0.00437568
+	s_upper_bl_ret_0         : 0.000709755
+	s_lower_bl_ret_0         : 0.000697521
+	s_upper_bl_H_31          : 0.000638178
+	s_upper_bl_H_30          : 0.000600021
+Duration of Epoch: 23 was 931.1548566818237 seconds
+-- 22156.72268152237 seconds since start, for Epoch 23 --
+Epoch: 24 | Train Loss: 0.49395 | Test Loss: 0.49383 | analysis_confidence: 0.133216 | CL: 0.0150431 | ln_CD: 0.0273503 | CM: 0.00240511 | Top_Xtr: 0.00824372 | Bot_Xtr: 0.00948241
+Loss contributors: 
+	s_analysis_confidence    : 0.200833
+	s_ln_CD                  : 0.0983219
+	s_CL                     : 0.0960982
+	s_CM                     : 0.0402986
+	s_Bot_Xtr                : 0.00595803
+	s_Top_Xtr                : 0.00433785
+	s_upper_bl_ret_0         : 0.000712927
+	s_lower_bl_ret_0         : 0.000693836
+	s_upper_bl_H_31          : 0.000615358
+	s_lower_bl_H_1           : 0.000592419
+Duration of Epoch: 24 was 927.5390155315399 seconds
+-- 23084.30744457245 seconds since start, for Epoch 24 --
+Epoch: 25 | Train Loss: 0.492482 | Test Loss: 0.489965 | analysis_confidence: 0.134053 | CL: 0.0149044 | ln_CD: 0.0265178 | CM: 0.0023079 | Top_Xtr: 0.00815178 | Bot_Xtr: 0.00949265
+Loss contributors: 
+	s_analysis_confidence    : 0.199524
+	s_ln_CD                  : 0.097459
+	s_CL                     : 0.0961556
+	s_CM                     : 0.0390037
+	s_Bot_Xtr                : 0.00592197
+	s_Top_Xtr                : 0.00410019
+	s_upper_bl_ret_0         : 0.000692837
+	s_lower_bl_ret_0         : 0.000690739
+	s_upper_bl_H_31          : 0.000627166
+	s_upper_bl_H_30          : 0.000593459
+Duration of Epoch: 25 was 914.1019291877747 seconds
+-- 23998.456526756287 seconds since start, for Epoch 25 --
+Epoch: 26 | Train Loss: 0.4913 | Test Loss: 0.492228 | analysis_confidence: 0.132549 | CL: 0.0153628 | ln_CD: 0.0271258 | CM: 0.00221296 | Top_Xtr: 0.0089801 | Bot_Xtr: 0.0106032
+Loss contributors: 
+	s_analysis_confidence    : 0.199809
+	s_ln_CD                  : 0.0984945
+	s_CL                     : 0.0971886
+	s_CM                     : 0.0374412
+	s_Bot_Xtr                : 0.00629249
+	s_Top_Xtr                : 0.0045482
+	s_upper_bl_ret_0         : 0.000696766
+	s_lower_bl_ret_0         : 0.000686472
+	s_upper_bl_H_31          : 0.00063871
+	s_lower_bl_H_1           : 0.000616334
+Duration of Epoch: 26 was 927.9931652545929 seconds
+-- 24926.49508523941 seconds since start, for Epoch 26 --
+Epoch: 27 | Train Loss: 0.490231 | Test Loss: 0.48803 | analysis_confidence: 0.132115 | CL: 0.0147804 | ln_CD: 0.0285594 | CM: 0.00212731 | Top_Xtr: 0.00783901 | Bot_Xtr: 0.00909309
+Loss contributors: 
+	s_analysis_confidence    : 0.199556
+	s_ln_CD                  : 0.100883
+	s_CL                     : 0.0949954
+	s_CM                     : 0.036264
+	s_Bot_Xtr                : 0.0055945
+	s_Top_Xtr                : 0.00399629
+	s_upper_bl_ret_0         : 0.000698299
+	s_lower_bl_ret_0         : 0.000682346
+	s_upper_bl_H_31          : 0.000602148
+	s_lower_bl_H_1           : 0.000584015
+Duration of Epoch: 27 was 912.7709360122681 seconds
+-- 25839.30698132515 seconds since start, for Epoch 27 --
+Epoch: 28 | Train Loss: 0.489105 | Test Loss: 0.488065 | analysis_confidence: 0.131512 | CL: 0.0147826 | ln_CD: 0.0274943 | CM: 0.0021724 | Top_Xtr: 0.00825922 | Bot_Xtr: 0.00959255
+Loss contributors: 
+	s_analysis_confidence    : 0.199164
+	s_ln_CD                  : 0.0992512
+	s_CL                     : 0.0947358
+	s_CM                     : 0.0366056
+	s_Bot_Xtr                : 0.00597899
+	s_Top_Xtr                : 0.00423979
+	s_lower_bl_ret_0         : 0.00068229
+	s_upper_bl_ret_0         : 0.000681796
+	s_lower_bl_H_2           : 0.000597943
+	s_lower_bl_H_1           : 0.000593783
+Duration of Epoch: 28 was 922.7870335578918 seconds
+-- 26762.142563819885 seconds since start, for Epoch 28 --
+Epoch: 29 | Train Loss: 0.488211 | Test Loss: 0.484679 | analysis_confidence: 0.132099 | CL: 0.0148665 | ln_CD: 0.0268524 | CM: 0.00212748 | Top_Xtr: 0.00801496 | Bot_Xtr: 0.00948528
+Loss contributors: 
+	s_analysis_confidence    : 0.198806
+	s_ln_CD                  : 0.0982704
+	s_CL                     : 0.0951871
+	s_CM                     : 0.035995
+	s_Bot_Xtr                : 0.00578008
+	s_Top_Xtr                : 0.00412663
+	s_upper_bl_ret_0         : 0.00068642
+	s_lower_bl_ret_0         : 0.000678002
+	s_upper_bl_H_31          : 0.000591486
+	s_lower_bl_H_1           : 0.000581165
+Duration of Epoch: 29 was 921.9788405895233 seconds
+-- 27684.184052467346 seconds since start, for Epoch 29 --
+Epoch: 30 | Train Loss: 0.487244 | Test Loss: 0.488337 | analysis_confidence: 0.132224 | CL: 0.0146634 | ln_CD: 0.0284827 | CM: 0.00221539 | Top_Xtr: 0.00803859 | Bot_Xtr: 0.00917191
+Loss contributors: 
+	s_analysis_confidence    : 0.200252
+	s_ln_CD                  : 0.100162
+	s_CL                     : 0.0944597
+	s_CM                     : 0.0372636
+	s_Bot_Xtr                : 0.00563964
+	s_Top_Xtr                : 0.00402401
+	s_upper_bl_ret_0         : 0.000714195
+	s_lower_bl_ret_0         : 0.000705944
+	s_upper_bl_H_31          : 0.000633042
+	s_upper_bl_H_30          : 0.000614909
+Duration of Epoch: 30 was 919.3004853725433 seconds
+-- 28603.528254032135 seconds since start, for Epoch 30 --
+Epoch: 31 | Train Loss: 0.486336 | Test Loss: 0.483543 | analysis_confidence: 0.132785 | CL: 0.0146578 | ln_CD: 0.0270876 | CM: 0.0022247 | Top_Xtr: 0.00842563 | Bot_Xtr: 0.00991137
+Loss contributors: 
+	s_analysis_confidence    : 0.199386
+	s_ln_CD                  : 0.0964895
+	s_CL                     : 0.0937205
+	s_CM                     : 0.0372589
+	s_Bot_Xtr                : 0.00611558
+	s_Top_Xtr                : 0.00421128
+	s_upper_bl_ret_0         : 0.000698372
+	s_lower_bl_ret_0         : 0.000686896
+	s_lower_bl_H_1           : 0.000595332
+	s_upper_bl_H_31          : 0.000586802
+Duration of Epoch: 31 was 917.6208848953247 seconds
+-- 29521.201794862747 seconds since start, for Epoch 31 --
+Epoch: 32 | Train Loss: 0.485615 | Test Loss: 0.484573 | analysis_confidence: 0.13017 | CL: 0.0147413 | ln_CD: 0.0286059 | CM: 0.00218448 | Top_Xtr: 0.00775228 | Bot_Xtr: 0.00900521
+Loss contributors: 
+	s_analysis_confidence    : 0.199311
+	s_ln_CD                  : 0.0990905
+	s_CL                     : 0.0938249
+	s_CM                     : 0.0366687
+	s_Bot_Xtr                : 0.00554896
+	s_Top_Xtr                : 0.00387132
+	s_upper_bl_ret_0         : 0.000678958
+	s_lower_bl_ret_0         : 0.000677553
+	s_upper_bl_H_31          : 0.000598187
+	s_upper_bl_H_30          : 0.000578376
+Duration of Epoch: 32 was 916.7941906452179 seconds
+-- 30438.044199705124 seconds since start, for Epoch 32 --
+Epoch: 33 | Train Loss: 0.484868 | Test Loss: 0.489244 | analysis_confidence: 0.131046 | CL: 0.0147546 | ln_CD: 0.0289306 | CM: 0.00219475 | Top_Xtr: 0.00782001 | Bot_Xtr: 0.00899459
+Loss contributors: 
+	s_analysis_confidence    : 0.198904
+	s_ln_CD                  : 0.10251
+	s_CL                     : 0.0945238
+	s_CM                     : 0.0372028
+	s_Bot_Xtr                : 0.005578
+	s_Top_Xtr                : 0.00403117
+	s_upper_bl_ret_0         : 0.000698081
+	s_lower_bl_ret_0         : 0.000685833
+	s_upper_bl_H_31          : 0.000596644
+	s_lower_bl_H_1           : 0.000576862
+Duration of Epoch: 33 was 915.523832321167 seconds
+-- 31353.624349355698 seconds since start, for Epoch 33 --
+Epoch: 34 | Train Loss: 0.484166 | Test Loss: 0.48266 | analysis_confidence: 0.129727 | CL: 0.0146469 | ln_CD: 0.0261156 | CM: 0.00214255 | Top_Xtr: 0.00805371 | Bot_Xtr: 0.00952033
+Loss contributors: 
+	s_analysis_confidence    : 0.198985
+	s_ln_CD                  : 0.0970367
+	s_CL                     : 0.0943684
+	s_CM                     : 0.0361366
+	s_Bot_Xtr                : 0.00574248
+	s_Top_Xtr                : 0.00413315
+	s_upper_bl_ret_0         : 0.000691908
+	s_lower_bl_ret_0         : 0.000680156
+	s_upper_bl_H_31          : 0.000608194
+	s_lower_bl_H_1           : 0.000584098
+Duration of Epoch: 34 was 923.9173929691315 seconds
+-- 32277.58858704567 seconds since start, for Epoch 34 --
+Epoch: 35 | Train Loss: 0.483463 | Test Loss: 0.478415 | analysis_confidence: 0.130596 | CL: 0.0146809 | ln_CD: 0.0273649 | CM: 0.00213525 | Top_Xtr: 0.00753587 | Bot_Xtr: 0.00871996
+Loss contributors: 
+	s_analysis_confidence    : 0.19838
+	s_ln_CD                  : 0.0971245
+	s_CL                     : 0.0927921
+	s_CM                     : 0.035975
+	s_Bot_Xtr                : 0.0053529
+	s_Top_Xtr                : 0.00376294
+	s_upper_bl_ret_0         : 0.000683301
+	s_lower_bl_ret_0         : 0.00066493
+	s_upper_bl_H_31          : 0.000592324
+	s_lower_bl_H_1           : 0.000562992
+Duration of Epoch: 35 was 916.8317828178406 seconds
+-- 33194.474108457565 seconds since start, for Epoch 35 --
+Epoch: 36 | Train Loss: 0.482699 | Test Loss: 0.478828 | analysis_confidence: 0.13107 | CL: 0.0145191 | ln_CD: 0.0265147 | CM: 0.00214126 | Top_Xtr: 0.00762023 | Bot_Xtr: 0.0088861
+Loss contributors: 
+	s_analysis_confidence    : 0.198402
+	s_ln_CD                  : 0.0963596
+	s_CL                     : 0.0932015
+	s_CM                     : 0.0361155
+	s_Bot_Xtr                : 0.00546645
+	s_Top_Xtr                : 0.00393739
+	s_upper_bl_ret_0         : 0.00068287
+	s_lower_bl_ret_0         : 0.000671416
+	s_upper_bl_H_31          : 0.000578012
+	s_lower_bl_H_1           : 0.00057316
+Duration of Epoch: 36 was 921.9730758666992 seconds
+-- 34116.49908494949 seconds since start, for Epoch 36 --
+Epoch: 37 | Train Loss: 0.48196 | Test Loss: 0.489696 | analysis_confidence: 0.130257 | CL: 0.015159 | ln_CD: 0.0280727 | CM: 0.00214354 | Top_Xtr: 0.00787327 | Bot_Xtr: 0.00898325
+Loss contributors: 
+	s_analysis_confidence    : 0.200094
+	s_ln_CD                  : 0.101199
+	s_CL                     : 0.0956953
+	s_CM                     : 0.0361637
+	s_Bot_Xtr                : 0.00568678
+	s_Top_Xtr                : 0.00408337
+	s_upper_bl_ret_0         : 0.000680854
+	s_lower_bl_ret_0         : 0.000666369
+	s_upper_bl_H_31          : 0.000590993
+	s_lower_bl_H_5           : 0.000582022
+Duration of Epoch: 37 was 917.9757897853851 seconds
+-- 35034.52162408829 seconds since start, for Epoch 37 --
+Epoch: 38 | Train Loss: 0.481411 | Test Loss: 0.478452 | analysis_confidence: 0.129508 | CL: 0.0147232 | ln_CD: 0.0263719 | CM: 0.00213021 | Top_Xtr: 0.00785289 | Bot_Xtr: 0.00888213
+Loss contributors: 
+	s_analysis_confidence    : 0.197992
+	s_ln_CD                  : 0.0966147
+	s_CL                     : 0.0934807
+	s_CM                     : 0.0358386
+	s_Bot_Xtr                : 0.00550182
+	s_Top_Xtr                : 0.00392697
+	s_upper_bl_ret_0         : 0.000669155
+	s_lower_bl_ret_0         : 0.000660008
+	s_upper_bl_H_31          : 0.000589103
+	s_lower_bl_H_2           : 0.000569815
+Duration of Epoch: 38 was 911.5603904724121 seconds
+-- 35946.12755250931 seconds since start, for Epoch 38 --
+Epoch: 39 | Train Loss: 0.480852 | Test Loss: 0.472879 | analysis_confidence: 0.129796 | CL: 0.0141947 | ln_CD: 0.0257905 | CM: 0.00215957 | Top_Xtr: 0.00715517 | Bot_Xtr: 0.0082924
+Loss contributors: 
+	s_analysis_confidence    : 0.198399
+	s_ln_CD                  : 0.0940358
+	s_CL                     : 0.0912607
+	s_CM                     : 0.0360049
+	s_Bot_Xtr                : 0.0051013
+	s_Top_Xtr                : 0.00359495
+	s_upper_bl_ret_0         : 0.000683702
+	s_lower_bl_ret_0         : 0.000665036
+	s_lower_bl_H_1           : 0.000577119
+	s_upper_bl_H_31          : 0.000577025
+Duration of Epoch: 39 was 913.0730330944061 seconds
+-- 36859.23524785042 seconds since start, for Epoch 39 --
+Epoch: 40 | Train Loss: 0.480305 | Test Loss: 0.476122 | analysis_confidence: 0.130672 | CL: 0.0142519 | ln_CD: 0.0260167 | CM: 0.00210015 | Top_Xtr: 0.00802508 | Bot_Xtr: 0.009304
+Loss contributors: 
+	s_analysis_confidence    : 0.199071
+	s_ln_CD                  : 0.0951023
+	s_CL                     : 0.0920459
+	s_CM                     : 0.0354247
+	s_Bot_Xtr                : 0.00544996
+	s_Top_Xtr                : 0.00385203
+	s_upper_bl_ret_0         : 0.000684766
+	s_lower_bl_ret_0         : 0.000669756
+	s_upper_bl_H_31          : 0.000583825
+	s_upper_bl_H_30          : 0.000564985
+Duration of Epoch: 40 was 922.8190956115723 seconds
+-- 37782.10257744789 seconds since start, for Epoch 40 --
+Epoch: 41 | Train Loss: 0.479697 | Test Loss: 0.478997 | analysis_confidence: 0.132463 | CL: 0.0143605 | ln_CD: 0.0284414 | CM: 0.00215618 | Top_Xtr: 0.00837396 | Bot_Xtr: 0.00939911
+Loss contributors: 
+	s_analysis_confidence    : 0.198543
+	s_ln_CD                  : 0.0971038
+	s_CL                     : 0.0925579
+	s_CM                     : 0.0362746
+	s_Bot_Xtr                : 0.00549513
+	s_Top_Xtr                : 0.00399158
+	s_upper_bl_ret_0         : 0.000678462
+	s_lower_bl_ret_0         : 0.000662732
+	s_upper_bl_H_31          : 0.000584261
+	s_upper_bl_H_30          : 0.000563879
+Duration of Epoch: 41 was 920.1462380886078 seconds
+-- 38702.295958042145 seconds since start, for Epoch 41 --
+Epoch: 42 | Train Loss: 0.479147 | Test Loss: 0.477265 | analysis_confidence: 0.134008 | CL: 0.0143102 | ln_CD: 0.026547 | CM: 0.00216152 | Top_Xtr: 0.00815389 | Bot_Xtr: 0.00966042
+Loss contributors: 
+	s_analysis_confidence    : 0.199058
+	s_ln_CD                  : 0.0953418
+	s_CL                     : 0.0921336
+	s_CM                     : 0.0361938
+	s_Bot_Xtr                : 0.00568703
+	s_Top_Xtr                : 0.0038828
+	s_upper_bl_ret_0         : 0.000666698
+	s_lower_bl_ret_0         : 0.000657553
+	s_upper_bl_H_31          : 0.000566823
+	s_lower_bl_H_1           : 0.000565428
+Duration of Epoch: 42 was 920.639230966568 seconds
+-- 39622.99235486984 seconds since start, for Epoch 42 --
+Epoch: 43 | Train Loss: 0.478711 | Test Loss: 0.481254 | analysis_confidence: 0.132841 | CL: 0.0145822 | ln_CD: 0.0262716 | CM: 0.00218856 | Top_Xtr: 0.00747148 | Bot_Xtr: 0.00869518
+Loss contributors: 
+	s_analysis_confidence    : 0.198635
+	s_ln_CD                  : 0.0977375
+	s_CL                     : 0.0933515
+	s_CM                     : 0.036543
+	s_Bot_Xtr                : 0.00560067
+	s_Top_Xtr                : 0.00405439
+	s_upper_bl_ret_0         : 0.000668852
+	s_lower_bl_ret_0         : 0.000658754
+	s_upper_bl_H_31          : 0.000574397
+	s_lower_bl_H_1           : 0.000561646
+Duration of Epoch: 43 was 917.5037696361542 seconds
+-- 40540.54585170746 seconds since start, for Epoch 43 --
+Epoch: 44 | Train Loss: 0.478043 | Test Loss: 0.480196 | analysis_confidence: 0.130479 | CL: 0.0146226 | ln_CD: 0.0260597 | CM: 0.00211813 | Top_Xtr: 0.00806708 | Bot_Xtr: 0.00957025
+Loss contributors: 
+	s_analysis_confidence    : 0.19854
+	s_ln_CD                  : 0.0959518
+	s_CL                     : 0.0937197
+	s_CM                     : 0.0359282
+	s_Bot_Xtr                : 0.0062784
+	s_Top_Xtr                : 0.00433697
+	s_upper_bl_ret_0         : 0.000672599
+	s_lower_bl_ret_0         : 0.00065979
+	s_upper_bl_H_31          : 0.000598162
+	s_upper_bl_H_30          : 0.000593269
+Duration of Epoch: 44 was 924.1442377567291 seconds
+-- 41464.74103450775 seconds since start, for Epoch 44 --
+Epoch: 45 | Train Loss: 0.477493 | Test Loss: 0.478826 | analysis_confidence: 0.134733 | CL: 0.0144664 | ln_CD: 0.0268955 | CM: 0.00214985 | Top_Xtr: 0.00790195 | Bot_Xtr: 0.00892217
+Loss contributors: 
+	s_analysis_confidence    : 0.199568
+	s_ln_CD                  : 0.0965241
+	s_CL                     : 0.0930934
+	s_CM                     : 0.0358552
+	s_Bot_Xtr                : 0.00528735
+	s_Top_Xtr                : 0.00383943
+	s_upper_bl_ret_0         : 0.00066881
+	s_lower_bl_ret_0         : 0.000650611
+	s_upper_bl_H_31          : 0.000576991
+	s_lower_bl_H_1           : 0.000563958
+Duration of Epoch: 45 was 916.8540811538696 seconds
+-- 42381.64018392563 seconds since start, for Epoch 45 --
+Epoch: 46 | Train Loss: 0.476976 | Test Loss: 0.484882 | analysis_confidence: 0.130815 | CL: 0.014699 | ln_CD: 0.0273395 | CM: 0.00213166 | Top_Xtr: 0.00766163 | Bot_Xtr: 0.00894001
+Loss contributors: 
+	s_analysis_confidence    : 0.199677
+	s_ln_CD                  : 0.0999579
+	s_CL                     : 0.0947418
+	s_CM                     : 0.0358839
+	s_Bot_Xtr                : 0.00552383
+	s_Top_Xtr                : 0.0037842
+	s_upper_bl_ret_0         : 0.000672377
+	s_lower_bl_ret_0         : 0.000658602
+	s_lower_bl_H_1           : 0.00058366
+	s_upper_bl_H_31          : 0.00058285
+Duration of Epoch: 46 was 920.528146982193 seconds
+-- 43302.21997261047 seconds since start, for Epoch 46 --
+Epoch: 47 | Train Loss: 0.476582 | Test Loss: 0.478145 | analysis_confidence: 0.131702 | CL: 0.0141284 | ln_CD: 0.0279831 | CM: 0.00208824 | Top_Xtr: 0.00792128 | Bot_Xtr: 0.00922324
+Loss contributors: 
+	s_analysis_confidence    : 0.198788
+	s_ln_CD                  : 0.0977555
+	s_CL                     : 0.0913524
+	s_CM                     : 0.035136
+	s_Bot_Xtr                : 0.00595992
+	s_Top_Xtr                : 0.00416974
+	s_upper_bl_ret_0         : 0.000690438
+	s_lower_bl_ret_0         : 0.000681065
+	s_lower_bl_H_1           : 0.000567195
+	s_upper_bl_H_31          : 0.000562698
+Duration of Epoch: 47 was 916.5344064235687 seconds
+-- 44218.79946041107 seconds since start, for Epoch 47 --
+Epoch: 48 | Train Loss: 0.476206 | Test Loss: 0.478871 | analysis_confidence: 0.130723 | CL: 0.0150258 | ln_CD: 0.0262211 | CM: 0.0021226 | Top_Xtr: 0.00774563 | Bot_Xtr: 0.00919515
+Loss contributors: 
+	s_analysis_confidence    : 0.198397
+	s_ln_CD                  : 0.0956717
+	s_CL                     : 0.0945643
+	s_CM                     : 0.0359091
+	s_Bot_Xtr                : 0.00563759
+	s_Top_Xtr                : 0.00378095
+	s_upper_bl_ret_0         : 0.000671055
+	s_lower_bl_ret_0         : 0.000654187
+	s_upper_bl_H_31          : 0.000582779
+	s_lower_bl_H_1           : 0.00056193
+Duration of Epoch: 48 was 924.0445528030396 seconds
+-- 45142.898460149765 seconds since start, for Epoch 48 --
+Epoch: 49 | Train Loss: 0.475702 | Test Loss: 0.472685 | analysis_confidence: 0.130875 | CL: 0.0142584 | ln_CD: 0.0262735 | CM: 0.00206967 | Top_Xtr: 0.00786247 | Bot_Xtr: 0.00904762
+Loss contributors: 
+	s_analysis_confidence    : 0.198755
+	s_ln_CD                  : 0.0944249
+	s_CL                     : 0.090878
+	s_CM                     : 0.0347702
+	s_Bot_Xtr                : 0.00568321
+	s_Top_Xtr                : 0.00418315
+	s_upper_bl_ret_0         : 0.000665107
+	s_lower_bl_ret_0         : 0.000660952
+	s_upper_bl_H_31          : 0.000569685
+	s_upper_bl_H_30          : 0.000549091
+Duration of Epoch: 49 was 915.2563192844391 seconds
+-- 46058.20066857338 seconds since start, for Epoch 49 --
+Epoch: 50 | Train Loss: 0.475451 | Test Loss: 0.47166 | analysis_confidence: 0.127451 | CL: 0.0142594 | ln_CD: 0.0253914 | CM: 0.00210864 | Top_Xtr: 0.00762259 | Bot_Xtr: 0.00874699
+Loss contributors: 
+	s_analysis_confidence    : 0.197423
+	s_ln_CD                  : 0.0932937
+	s_CL                     : 0.0919508
+	s_CM                     : 0.035614
+	s_Bot_Xtr                : 0.00527334
+	s_Top_Xtr                : 0.00371661
+	s_upper_bl_ret_0         : 0.00065766
+	s_lower_bl_ret_0         : 0.000649499
+	s_upper_bl_H_31          : 0.00056387
+	s_lower_bl_H_1           : 0.00055726
+Duration of Epoch: 50 was 926.6756191253662 seconds
+-- 46984.92325973511 seconds since start, for Epoch 50 --
+Epoch: 51 | Train Loss: 0.474892 | Test Loss: 0.472741 | analysis_confidence: 0.131054 | CL: 0.0142575 | ln_CD: 0.0255859 | CM: 0.00208122 | Top_Xtr: 0.00749599 | Bot_Xtr: 0.00910403
+Loss contributors: 
+	s_analysis_confidence    : 0.198037
+	s_ln_CD                  : 0.0944513
+	s_CL                     : 0.091642
+	s_CM                     : 0.0349977
+	s_Bot_Xtr                : 0.00549841
+	s_Top_Xtr                : 0.00378113
+	s_upper_bl_ret_0         : 0.000667375
+	s_lower_bl_ret_0         : 0.000660016
+	s_upper_bl_H_31          : 0.00057661
+	s_lower_bl_H_1           : 0.000567263
+Duration of Epoch: 51 was 927.1065871715546 seconds
+-- 47912.08303523064 seconds since start, for Epoch 51 --
+Epoch: 52 | Train Loss: 0.474642 | Test Loss: 0.469838 | analysis_confidence: 0.130626 | CL: 0.0144555 | ln_CD: 0.0254803 | CM: 0.00210184 | Top_Xtr: 0.00731938 | Bot_Xtr: 0.00848709
+Loss contributors: 
+	s_analysis_confidence    : 0.197791
+	s_ln_CD                  : 0.0928553
+	s_CL                     : 0.0912838
+	s_CM                     : 0.0351415
+	s_Bot_Xtr                : 0.0052304
+	s_Top_Xtr                : 0.003664
+	s_upper_bl_ret_0         : 0.000666635
+	s_lower_bl_ret_0         : 0.000653883
+	s_upper_bl_H_31          : 0.000574906
+	s_upper_bl_H_30          : 0.000552749
+Duration of Epoch: 52 was 925.3264071941376 seconds
+-- 48837.47823834419 seconds since start, for Epoch 52 --
+Epoch: 53 | Train Loss: 0.474383 | Test Loss: 0.478734 | analysis_confidence: 0.130088 | CL: 0.01503 | ln_CD: 0.0257808 | CM: 0.00222899 | Top_Xtr: 0.00816785 | Bot_Xtr: 0.0086412
+Loss contributors: 
+	s_analysis_confidence    : 0.197866
+	s_ln_CD                  : 0.0958404
+	s_CL                     : 0.0940994
+	s_CM                     : 0.0369423
+	s_Bot_Xtr                : 0.00534521
+	s_Top_Xtr                : 0.00384848
+	s_upper_bl_ret_0         : 0.000682594
+	s_lower_bl_ret_0         : 0.00067077
+	s_upper_bl_H_31          : 0.000596289
+	s_upper_bl_H_30          : 0.000588711
+Duration of Epoch: 53 was 923.1466522216797 seconds
+-- 49760.67102980614 seconds since start, for Epoch 53 --
+Epoch: 54 | Train Loss: 0.47391 | Test Loss: 0.468748 | analysis_confidence: 0.131199 | CL: 0.014419 | ln_CD: 0.0247487 | CM: 0.00204099 | Top_Xtr: 0.00783686 | Bot_Xtr: 0.00898937
+Loss contributors: 
+	s_analysis_confidence    : 0.198997
+	s_ln_CD                  : 0.0916691
+	s_CL                     : 0.0912138
+	s_CM                     : 0.0342542
+	s_Bot_Xtr                : 0.00547577
+	s_Top_Xtr                : 0.00383131
+	s_upper_bl_ret_0         : 0.000668477
+	s_lower_bl_ret_0         : 0.000648784
+	s_upper_bl_H_31          : 0.000560673
+	s_lower_bl_H_1           : 0.000551859
+Duration of Epoch: 54 was 928.0566999912262 seconds
+-- 50688.774522066116 seconds since start, for Epoch 54 --
+Epoch: 55 | Train Loss: 0.473256 | Test Loss: 0.478193 | analysis_confidence: 0.133358 | CL: 0.0146019 | ln_CD: 0.0273976 | CM: 0.0021105 | Top_Xtr: 0.00799258 | Bot_Xtr: 0.00890177
+Loss contributors: 
+	s_analysis_confidence    : 0.197801
+	s_ln_CD                  : 0.097231
+	s_CL                     : 0.0933226
+	s_CM                     : 0.0355476
+	s_Bot_Xtr                : 0.00544493
+	s_Top_Xtr                : 0.00410615
+	s_upper_bl_ret_0         : 0.000671173
+	s_lower_bl_ret_0         : 0.00065599
+	s_upper_bl_H_31          : 0.000572612
+	s_lower_bl_H_1           : 0.000557094
+Duration of Epoch: 55 was 923.0106937885284 seconds
+-- 51611.837757110596 seconds since start, for Epoch 55 --
+Epoch: 56 | Train Loss: 0.472834 | Test Loss: 0.474804 | analysis_confidence: 0.129669 | CL: 0.0148775 | ln_CD: 0.0267602 | CM: 0.00214415 | Top_Xtr: 0.00785787 | Bot_Xtr: 0.00907677
+Loss contributors: 
+	s_analysis_confidence    : 0.19772
+	s_ln_CD                  : 0.0948503
+	s_CL                     : 0.0930779
+	s_CM                     : 0.0356839
+	s_Bot_Xtr                : 0.00532986
+	s_Top_Xtr                : 0.00385868
+	s_upper_bl_ret_0         : 0.000661629
+	s_lower_bl_ret_0         : 0.000654132
+	s_upper_bl_H_31          : 0.000579606
+	s_upper_bl_H_30          : 0.000563227
+Duration of Epoch: 56 was 919.0575075149536 seconds
+-- 52530.948472976685 seconds since start, for Epoch 56 --
+Epoch: 57 | Train Loss: 0.472705 | Test Loss: 0.470503 | analysis_confidence: 0.129618 | CL: 0.014376 | ln_CD: 0.0264619 | CM: 0.00206908 | Top_Xtr: 0.00761118 | Bot_Xtr: 0.00878382
+Loss contributors: 
+	s_analysis_confidence    : 0.196924
+	s_ln_CD                  : 0.0943887
+	s_CL                     : 0.0914736
+	s_CM                     : 0.034853
+	s_Bot_Xtr                : 0.0053588
+	s_Top_Xtr                : 0.0037954
+	s_upper_bl_ret_0         : 0.000656969
+	s_lower_bl_ret_0         : 0.000643416
+	s_upper_bl_H_31          : 0.000592436
+	s_upper_bl_H_30          : 0.000570127
+Duration of Epoch: 57 was 919.0146136283875 seconds
+-- 53450.00390577316 seconds since start, for Epoch 57 --
+Epoch: 58 | Train Loss: 0.472496 | Test Loss: 0.479798 | analysis_confidence: 0.130212 | CL: 0.0146079 | ln_CD: 0.0261494 | CM: 0.00213657 | Top_Xtr: 0.00820441 | Bot_Xtr: 0.00962263
+Loss contributors: 
+	s_analysis_confidence    : 0.198687
+	s_ln_CD                  : 0.0972752
+	s_CL                     : 0.0932414
+	s_CM                     : 0.0358693
+	s_Bot_Xtr                : 0.00579793
+	s_Top_Xtr                : 0.00400382
+	s_upper_bl_ret_0         : 0.000659376
+	s_lower_bl_ret_0         : 0.000647404
+	s_upper_bl_H_31          : 0.000569572
+	s_lower_bl_H_1           : 0.000567552
+Duration of Epoch: 58 was 922.5948367118835 seconds
+-- 54372.65191221237 seconds since start, for Epoch 58 --
+Epoch: 59 | Train Loss: 0.471857 | Test Loss: 0.483494 | analysis_confidence: 0.12775 | CL: 0.0145198 | ln_CD: 0.0280057 | CM: 0.00214279 | Top_Xtr: 0.00769264 | Bot_Xtr: 0.00936868
+Loss contributors: 
+	s_analysis_confidence    : 0.200193
+	s_ln_CD                  : 0.0991205
+	s_CL                     : 0.0935521
+	s_CM                     : 0.0361044
+	s_Bot_Xtr                : 0.00574628
+	s_Top_Xtr                : 0.00383749
+	s_upper_bl_ret_0         : 0.0006691
+	s_lower_bl_ret_0         : 0.000658448
+	s_lower_bl_H_1           : 0.000578614
+	s_lower_bl_H_2           : 0.000574389
+Duration of Epoch: 59 was 921.653347492218 seconds
+-- 55294.360758304596 seconds since start, for Epoch 59 --
+Epoch: 60 | Train Loss: 0.471796 | Test Loss: 0.475735 | analysis_confidence: 0.127782 | CL: 0.0141923 | ln_CD: 0.027092 | CM: 0.00211043 | Top_Xtr: 0.00755068 | Bot_Xtr: 0.00881477
+Loss contributors: 
+	s_analysis_confidence    : 0.198185
+	s_ln_CD                  : 0.0976984
+	s_CL                     : 0.0916956
+	s_CM                     : 0.035158
+	s_Bot_Xtr                : 0.00521847
+	s_Top_Xtr                : 0.00371046
+	s_upper_bl_ret_0         : 0.00068226
+	s_lower_bl_ret_0         : 0.000661893
+	s_upper_bl_H_31          : 0.000571293
+	s_lower_bl_H_1           : 0.000548811
+Duration of Epoch: 60 was 927.2188975811005 seconds
+-- 56221.62719082832 seconds since start, for Epoch 60 --
+Epoch: 61 | Train Loss: 0.471306 | Test Loss: 0.471281 | analysis_confidence: 0.128307 | CL: 0.0140417 | ln_CD: 0.0270372 | CM: 0.002091 | Top_Xtr: 0.00693185 | Bot_Xtr: 0.00841007
+Loss contributors: 
+	s_analysis_confidence    : 0.197751
+	s_ln_CD                  : 0.0954568
+	s_CL                     : 0.090471
+	s_CM                     : 0.0351267
+	s_Bot_Xtr                : 0.00517854
+	s_Top_Xtr                : 0.00348509
+	s_upper_bl_ret_0         : 0.000660959
+	s_lower_bl_ret_0         : 0.00065295
+	s_upper_bl_H_31          : 0.000558359
+	s_lower_bl_H_1           : 0.000554642
+Duration of Epoch: 61 was 923.4828221797943 seconds
+-- 57145.16084384918 seconds since start, for Epoch 61 --
+Epoch: 62 | Train Loss: 0.470927 | Test Loss: 0.473135 | analysis_confidence: 0.130368 | CL: 0.0141153 | ln_CD: 0.0276542 | CM: 0.00211911 | Top_Xtr: 0.00722483 | Bot_Xtr: 0.00837732
+Loss contributors: 
+	s_analysis_confidence    : 0.197249
+	s_ln_CD                  : 0.0966938
+	s_CL                     : 0.0912516
+	s_CM                     : 0.035501
+	s_Bot_Xtr                : 0.00524838
+	s_Top_Xtr                : 0.00364982
+	s_upper_bl_ret_0         : 0.000655848
+	s_lower_bl_ret_0         : 0.000647746
+	s_upper_bl_H_31          : 0.000566243
+	s_lower_bl_H_1           : 0.000551326
+Duration of Epoch: 62 was 919.3119368553162 seconds
+-- 58064.53677558899 seconds since start, for Epoch 62 --
+Epoch: 63 | Train Loss: 0.470687 | Test Loss: 0.475261 | analysis_confidence: 0.130381 | CL: 0.0144791 | ln_CD: 0.027419 | CM: 0.00207358 | Top_Xtr: 0.00736216 | Bot_Xtr: 0.00862938
+Loss contributors: 
+	s_analysis_confidence    : 0.19847
+	s_ln_CD                  : 0.0960672
+	s_CL                     : 0.0927039
+	s_CM                     : 0.0349529
+	s_Bot_Xtr                : 0.00524808
+	s_Top_Xtr                : 0.00368457
+	s_upper_bl_ret_0         : 0.000662418
+	s_lower_bl_ret_0         : 0.000648468
+	s_upper_bl_H_31          : 0.000588139
+	s_upper_bl_H_30          : 0.000554
+Duration of Epoch: 63 was 926.7442154884338 seconds
+-- 58991.3274333477 seconds since start, for Epoch 63 --
+Epoch: 64 | Train Loss: 0.4704 | Test Loss: 0.470408 | analysis_confidence: 0.131305 | CL: 0.0142274 | ln_CD: 0.025682 | CM: 0.00209775 | Top_Xtr: 0.00755272 | Bot_Xtr: 0.00874826
+Loss contributors: 
+	s_analysis_confidence    : 0.197349
+	s_ln_CD                  : 0.093287
+	s_CL                     : 0.0914522
+	s_CM                     : 0.0353038
+	s_Bot_Xtr                : 0.00541284
+	s_Top_Xtr                : 0.00380172
+	s_upper_bl_ret_0         : 0.000658011
+	s_lower_bl_ret_0         : 0.000655501
+	s_upper_bl_H_31          : 0.000564553
+	s_upper_bl_H_30          : 0.000544795
+Duration of Epoch: 64 was 919.460568189621 seconds
+-- 59910.833789110184 seconds since start, for Epoch 64 --
+Epoch: 65 | Train Loss: 0.470101 | Test Loss: 0.472057 | analysis_confidence: 0.131915 | CL: 0.0142768 | ln_CD: 0.0258274 | CM: 0.00204227 | Top_Xtr: 0.00705528 | Bot_Xtr: 0.0083327
+Loss contributors: 
+	s_analysis_confidence    : 0.201245
+	s_ln_CD                  : 0.093159
+	s_CL                     : 0.0912043
+	s_CM                     : 0.034598
+	s_Bot_Xtr                : 0.00516686
+	s_Top_Xtr                : 0.00353988
+	s_upper_bl_ret_0         : 0.000660585
+	s_lower_bl_ret_0         : 0.000647048
+	s_upper_bl_H_31          : 0.000550134
+	s_lower_bl_H_1           : 0.000540881
+Duration of Epoch: 65 was 923.4884769916534 seconds
+-- 60834.36975502968 seconds since start, for Epoch 65 --
+Epoch: 66 | Train Loss: 0.469689 | Test Loss: 0.465488 | analysis_confidence: 0.12852 | CL: 0.0140306 | ln_CD: 0.0247759 | CM: 0.00203465 | Top_Xtr: 0.00705422 | Bot_Xtr: 0.00823642
+Loss contributors: 
+	s_analysis_confidence    : 0.198388
+	s_ln_CD                  : 0.0913951
+	s_CL                     : 0.0900288
+	s_CM                     : 0.0342153
+	s_Bot_Xtr                : 0.00512578
+	s_Top_Xtr                : 0.00343407
+	s_upper_bl_ret_0         : 0.000654688
+	s_lower_bl_ret_0         : 0.00064889
+	s_lower_bl_H_1           : 0.000548133
+	s_upper_bl_H_31          : 0.000540391
+Duration of Epoch: 66 was 924.4408764839172 seconds
+-- 61758.87015128136 seconds since start, for Epoch 66 --
+Epoch: 67 | Train Loss: 0.469435 | Test Loss: 0.467182 | analysis_confidence: 0.128174 | CL: 0.0138786 | ln_CD: 0.0254193 | CM: 0.00202985 | Top_Xtr: 0.00743679 | Bot_Xtr: 0.00866445
+Loss contributors: 
+	s_analysis_confidence    : 0.197176
+	s_ln_CD                  : 0.0927433
+	s_CL                     : 0.0906337
+	s_CM                     : 0.0342851
+	s_Bot_Xtr                : 0.00544104
+	s_Top_Xtr                : 0.00382025
+	s_upper_bl_ret_0         : 0.000667238
+	s_lower_bl_ret_0         : 0.000655493
+	s_upper_bl_H_31          : 0.000558514
+	s_upper_bl_H_30          : 0.000545365
+Duration of Epoch: 67 was 920.8380687236786 seconds
+-- 62679.75305771828 seconds since start, for Epoch 67 --
+Epoch: 68 | Train Loss: 0.46925 | Test Loss: 0.465855 | analysis_confidence: 0.132148 | CL: 0.0144505 | ln_CD: 0.0254609 | CM: 0.00201714 | Top_Xtr: 0.00707276 | Bot_Xtr: 0.00841478
+Loss contributors: 
+	s_analysis_confidence    : 0.197138
+	s_ln_CD                  : 0.0922611
+	s_CL                     : 0.0905983
+	s_CM                     : 0.0338755
+	s_Bot_Xtr                : 0.00522318
+	s_Top_Xtr                : 0.00354729
+	s_upper_bl_ret_0         : 0.000670028
+	s_lower_bl_ret_0         : 0.000643408
+	s_upper_bl_H_31          : 0.000553607
+	s_lower_bl_H_1           : 0.000549439
+Duration of Epoch: 68 was 918.8686261177063 seconds
+-- 63598.674629211426 seconds since start, for Epoch 68 --
+Epoch: 69 | Train Loss: 0.469095 | Test Loss: 0.464895 | analysis_confidence: 0.130593 | CL: 0.0140516 | ln_CD: 0.0254305 | CM: 0.00205024 | Top_Xtr: 0.00731773 | Bot_Xtr: 0.00904349
+Loss contributors: 
+	s_analysis_confidence    : 0.196471
+	s_ln_CD                  : 0.0920068
+	s_CL                     : 0.0903928
+	s_CM                     : 0.034286
+	s_Bot_Xtr                : 0.00517307
+	s_Top_Xtr                : 0.00345007
+	s_upper_bl_ret_0         : 0.000653173
+	s_lower_bl_ret_0         : 0.000642162
+	s_lower_bl_H_1           : 0.000552802
+	s_upper_bl_H_31          : 0.000552448
+Duration of Epoch: 69 was 925.1381139755249 seconds
+-- 64523.88082432747 seconds since start, for Epoch 69 --
+Epoch: 70 | Train Loss: 0.468771 | Test Loss: 0.46996 | analysis_confidence: 0.132186 | CL: 0.0145316 | ln_CD: 0.0252177 | CM: 0.00211407 | Top_Xtr: 0.00751209 | Bot_Xtr: 0.00837613
+Loss contributors: 
+	s_analysis_confidence    : 0.197404
+	s_ln_CD                  : 0.0932839
+	s_CL                     : 0.0918137
+	s_CM                     : 0.0352955
+	s_Bot_Xtr                : 0.00516161
+	s_Top_Xtr                : 0.00357777
+	s_upper_bl_ret_0         : 0.000666934
+	s_lower_bl_ret_0         : 0.00065498
+	s_upper_bl_H_31          : 0.000562522
+	s_lower_bl_H_1           : 0.000550297
+Duration of Epoch: 70 was 920.355908870697 seconds
+-- 65444.29413938522 seconds since start, for Epoch 70 --
+Epoch: 71 | Train Loss: 0.468494 | Test Loss: 0.468223 | analysis_confidence: 0.130099 | CL: 0.014309 | ln_CD: 0.0257498 | CM: 0.00207897 | Top_Xtr: 0.00700751 | Bot_Xtr: 0.00838083
+Loss contributors: 
+	s_analysis_confidence    : 0.197844
+	s_ln_CD                  : 0.0937533
+	s_CL                     : 0.0903323
+	s_CM                     : 0.0346442
+	s_Bot_Xtr                : 0.00504536
+	s_Top_Xtr                : 0.00338988
+	s_upper_bl_ret_0         : 0.000666834
+	s_lower_bl_ret_0         : 0.000660653
+	s_upper_bl_H_31          : 0.000578398
+	s_upper_bl_H_30          : 0.000566275
+Duration of Epoch: 71 was 924.0238034725189 seconds
+-- 66368.36410689354 seconds since start, for Epoch 71 --
+Epoch: 72 | Train Loss: 0.468214 | Test Loss: 0.474908 | analysis_confidence: 0.129587 | CL: 0.0144014 | ln_CD: 0.028941 | CM: 0.00213893 | Top_Xtr: 0.00813242 | Bot_Xtr: 0.00927011
+Loss contributors: 
+	s_analysis_confidence    : 0.197466
+	s_ln_CD                  : 0.0982316
+	s_CL                     : 0.0917275
+	s_CM                     : 0.035525
+	s_Bot_Xtr                : 0.00519606
+	s_Top_Xtr                : 0.00366996
+	s_upper_bl_ret_0         : 0.000670163
+	s_lower_bl_ret_0         : 0.00064855
+	s_upper_bl_H_31          : 0.000558984
+	s_lower_bl_H_1           : 0.000546347
+Duration of Epoch: 72 was 924.6195912361145 seconds
+-- 67293.05400276184 seconds since start, for Epoch 72 --
+Epoch: 73 | Train Loss: 0.467603 | Test Loss: 0.466327 | analysis_confidence: 0.128418 | CL: 0.0143397 | ln_CD: 0.0252139 | CM: 0.00206435 | Top_Xtr: 0.00710987 | Bot_Xtr: 0.00844393
+Loss contributors: 
+	s_analysis_confidence    : 0.196972
+	s_ln_CD                  : 0.0922247
+	s_CL                     : 0.0909862
+	s_CM                     : 0.0345734
+	s_Bot_Xtr                : 0.00516058
+	s_Top_Xtr                : 0.00358091
+	s_upper_bl_ret_0         : 0.000664937
+	s_lower_bl_ret_0         : 0.000644067
+	s_upper_bl_H_31          : 0.000558893
+	s_upper_bl_H_30          : 0.000541902
+Duration of Epoch: 73 was 926.2787210941315 seconds
+-- 68219.39537906647 seconds since start, for Epoch 73 --
+Epoch: 74 | Train Loss: 0.467734 | Test Loss: 0.469375 | analysis_confidence: 0.131309 | CL: 0.0139756 | ln_CD: 0.0265678 | CM: 0.00202734 | Top_Xtr: 0.00774633 | Bot_Xtr: 0.00835703
+Loss contributors: 
+	s_analysis_confidence    : 0.197037
+	s_ln_CD                  : 0.096718
+	s_CL                     : 0.0899255
+	s_CM                     : 0.0341282
+	s_Bot_Xtr                : 0.00505243
+	s_Top_Xtr                : 0.00368237
+	s_upper_bl_ret_0         : 0.000659705
+	s_lower_bl_ret_0         : 0.000640209
+	s_upper_bl_H_31          : 0.000552458
+	s_lower_bl_H_1           : 0.00053959
+Duration of Epoch: 74 was 921.0126748085022 seconds
+-- 69140.46486330032 seconds since start, for Epoch 74 --
+Epoch: 75 | Train Loss: 0.467142 | Test Loss: 0.468015 | analysis_confidence: 0.132811 | CL: 0.0138895 | ln_CD: 0.0257593 | CM: 0.00220326 | Top_Xtr: 0.00746713 | Bot_Xtr: 0.00880549
+Loss contributors: 
+	s_analysis_confidence    : 0.199047
+	s_ln_CD                  : 0.0915752
+	s_CL                     : 0.089324
+	s_CM                     : 0.0365808
+	s_Bot_Xtr                : 0.00510121
+	s_Top_Xtr                : 0.00352995
+	s_upper_bl_ret_0         : 0.000657524
+	s_lower_bl_ret_0         : 0.00064606
+	s_lower_bl_H_1           : 0.000547698
+	s_upper_bl_H_31          : 0.000547201
+Duration of Epoch: 75 was 922.6789009571075 seconds
+-- 70063.2090511322 seconds since start, for Epoch 75 --
+Epoch: 76 | Train Loss: 0.46722 | Test Loss: 0.465137 | analysis_confidence: 0.132105 | CL: 0.0139418 | ln_CD: 0.0258186 | CM: 0.00204452 | Top_Xtr: 0.00715977 | Bot_Xtr: 0.00825
+Loss contributors: 
+	s_analysis_confidence    : 0.196601
+	s_ln_CD                  : 0.093667
+	s_CL                     : 0.0894255
+	s_CM                     : 0.0341086
+	s_Bot_Xtr                : 0.00500992
+	s_Top_Xtr                : 0.00355967
+	s_upper_bl_ret_0         : 0.000658602
+	s_lower_bl_ret_0         : 0.00063986
+	s_upper_bl_H_31          : 0.000547295
+	s_upper_bl_H_30          : 0.000540948
+Duration of Epoch: 76 was 916.0280668735504 seconds
+-- 70979.31260418892 seconds since start, for Epoch 76 --
+Epoch: 77 | Train Loss: 0.467059 | Test Loss: 0.467476 | analysis_confidence: 0.128947 | CL: 0.0141058 | ln_CD: 0.0251725 | CM: 0.00207149 | Top_Xtr: 0.00761014 | Bot_Xtr: 0.00860618
+Loss contributors: 
+	s_analysis_confidence    : 0.198839
+	s_ln_CD                  : 0.0922644
+	s_CL                     : 0.0903558
+	s_CM                     : 0.0345566
+	s_Bot_Xtr                : 0.005214
+	s_Top_Xtr                : 0.00372018
+	s_upper_bl_ret_0         : 0.000670193
+	s_lower_bl_ret_0         : 0.000655134
+	s_upper_bl_H_31          : 0.00055349
+	s_lower_bl_H_1           : 0.000551394
+Duration of Epoch: 77 was 924.232980966568 seconds
+-- 71903.61760139465 seconds since start, for Epoch 77 --
+Epoch: 78 | Train Loss: 0.466849 | Test Loss: 0.470083 | analysis_confidence: 0.128815 | CL: 0.0145613 | ln_CD: 0.0249333 | CM: 0.00210913 | Top_Xtr: 0.00703115 | Bot_Xtr: 0.00825266
+Loss contributors: 
+	s_analysis_confidence    : 0.197523
+	s_ln_CD                  : 0.0930922
+	s_CL                     : 0.0923481
+	s_CM                     : 0.0353339
+	s_Bot_Xtr                : 0.00508891
+	s_Top_Xtr                : 0.0035156
+	s_upper_bl_ret_0         : 0.000668424
+	s_lower_bl_ret_0         : 0.000645656
+	s_lower_bl_H_1           : 0.000556563
+	s_upper_bl_H_31          : 0.000549142
+Duration of Epoch: 78 was 920.6235013008118 seconds
+-- 72824.28872609138 seconds since start, for Epoch 78 --
+Epoch: 79 | Train Loss: 0.466344 | Test Loss: 0.464242 | analysis_confidence: 0.130792 | CL: 0.014667 | ln_CD: 0.0250708 | CM: 0.00207014 | Top_Xtr: 0.00682629 | Bot_Xtr: 0.00808012
+Loss contributors: 
+	s_analysis_confidence    : 0.197297
+	s_CL                     : 0.0916801
+	s_ln_CD                  : 0.0900659
+	s_CM                     : 0.0343902
+	s_Bot_Xtr                : 0.00484142
+	s_Top_Xtr                : 0.00327039
+	s_upper_bl_ret_0         : 0.000658315
+	s_lower_bl_ret_0         : 0.000641533
+	s_upper_bl_H_31          : 0.000558929
+	s_lower_bl_H_1           : 0.000546973
+Duration of Epoch: 79 was 930.2842206954956 seconds
+-- 73754.63271594048 seconds since start, for Epoch 79 --
+Epoch: 80 | Train Loss: 0.465984 | Test Loss: 0.472583 | analysis_confidence: 0.129298 | CL: 0.0143945 | ln_CD: 0.0259527 | CM: 0.00203364 | Top_Xtr: 0.007869 | Bot_Xtr: 0.00920574
+Loss contributors: 
+	s_analysis_confidence    : 0.198006
+	s_ln_CD                  : 0.0952793
+	s_CL                     : 0.0916959
+	s_CM                     : 0.0344822
+	s_Bot_Xtr                : 0.00546183
+	s_Top_Xtr                : 0.00374525
+	s_upper_bl_ret_0         : 0.000672405
+	s_lower_bl_ret_0         : 0.000657054
+	s_upper_bl_H_31          : 0.000558677
+	s_lower_bl_H_1           : 0.000555889
+Duration of Epoch: 80 was 919.5248868465424 seconds
+-- 74674.21595740318 seconds since start, for Epoch 80 --
+Epoch: 81 | Train Loss: 0.466222 | Test Loss: 0.466484 | analysis_confidence: 0.13067 | CL: 0.0138674 | ln_CD: 0.0265776 | CM: 0.00207884 | Top_Xtr: 0.00742102 | Bot_Xtr: 0.00853765
+Loss contributors: 
+	s_analysis_confidence    : 0.196325
+	s_ln_CD                  : 0.09414
+	s_CL                     : 0.0897674
+	s_CM                     : 0.0348106
+	s_Bot_Xtr                : 0.00509541
+	s_Top_Xtr                : 0.00351352
+	s_lower_bl_ret_0         : 0.000662173
+	s_upper_bl_ret_0         : 0.000661686
+	s_upper_bl_H_31          : 0.000544216
+	s_lower_bl_H_1           : 0.000541919
+Duration of Epoch: 81 was 925.1660346984863 seconds
+-- 75599.43840074539 seconds since start, for Epoch 81 --
+Epoch: 82 | Train Loss: 0.465818 | Test Loss: 0.467302 | analysis_confidence: 0.129195 | CL: 0.0142346 | ln_CD: 0.0255184 | CM: 0.00204419 | Top_Xtr: 0.00734051 | Bot_Xtr: 0.00865024
+Loss contributors: 
+	s_analysis_confidence    : 0.197297
+	s_ln_CD                  : 0.0933776
+	s_CL                     : 0.0913593
+	s_CM                     : 0.0341561
+	s_Bot_Xtr                : 0.00495569
+	s_Top_Xtr                : 0.003493
+	s_upper_bl_ret_0         : 0.000654014
+	s_lower_bl_ret_0         : 0.00064524
+	s_upper_bl_H_31          : 0.000552631
+	s_lower_bl_H_0           : 0.000543104
+Duration of Epoch: 82 was 920.5896952152252 seconds
+-- 76520.07729434967 seconds since start, for Epoch 82 --
+Epoch: 83 | Train Loss: 0.465326 | Test Loss: 0.461944 | analysis_confidence: 0.131636 | CL: 0.0140613 | ln_CD: 0.0257975 | CM: 0.00203522 | Top_Xtr: 0.00705698 | Bot_Xtr: 0.00809808
+Loss contributors: 
+	s_analysis_confidence    : 0.197055
+	s_ln_CD                  : 0.091026
+	s_CL                     : 0.089244
+	s_CM                     : 0.0339997
+	s_Bot_Xtr                : 0.0047826
+	s_Top_Xtr                : 0.00335429
+	s_upper_bl_ret_0         : 0.000671826
+	s_lower_bl_ret_0         : 0.000646739
+	s_upper_bl_H_31          : 0.000552765
+	s_upper_bl_H_30          : 0.00053812
+Duration of Epoch: 83 was 920.8427021503448 seconds
+-- 77440.9840786457 seconds since start, for Epoch 83 --
+Epoch: 84 | Train Loss: 0.46519 | Test Loss: 0.468415 | analysis_confidence: 0.130106 | CL: 0.0145758 | ln_CD: 0.0264059 | CM: 0.00206976 | Top_Xtr: 0.00751122 | Bot_Xtr: 0.00839795
+Loss contributors: 
+	s_analysis_confidence    : 0.195984
+	s_ln_CD                  : 0.0941647
+	s_CL                     : 0.0917153
+	s_CM                     : 0.0345491
+	s_Bot_Xtr                : 0.00504994
+	s_Top_Xtr                : 0.00350232
+	s_upper_bl_ret_0         : 0.000669305
+	s_lower_bl_ret_0         : 0.00065762
+	s_upper_bl_H_31          : 0.0005574
+	s_upper_bl_H_30          : 0.000545991
+Duration of Epoch: 84 was 926.5689558982849 seconds
+-- 78367.61048841476 seconds since start, for Epoch 84 --
+Epoch: 85 | Train Loss: 0.465208 | Test Loss: 0.460787 | analysis_confidence: 0.129022 | CL: 0.0138391 | ln_CD: 0.0239187 | CM: 0.00206665 | Top_Xtr: 0.00746606 | Bot_Xtr: 0.0084881
+Loss contributors: 
+	s_analysis_confidence    : 0.197061
+	s_CL                     : 0.0891971
+	s_ln_CD                  : 0.0888294
+	s_CM                     : 0.0345501
+	s_Bot_Xtr                : 0.00511515
+	s_Top_Xtr                : 0.00383361
+	s_upper_bl_ret_0         : 0.000657534
+	s_lower_bl_ret_0         : 0.000645003
+	s_upper_bl_H_31          : 0.00054398
+	s_lower_bl_H_1           : 0.000537399
+Duration of Epoch: 85 was 925.4090723991394 seconds
+-- 79293.06402277946 seconds since start, for Epoch 85 --
+Epoch: 86 | Train Loss: 0.464862 | Test Loss: 0.458655 | analysis_confidence: 0.128851 | CL: 0.0140377 | ln_CD: 0.0243671 | CM: 0.00200502 | Top_Xtr: 0.00680037 | Bot_Xtr: 0.00792931
+Loss contributors: 
+	s_analysis_confidence    : 0.196226
+	s_CL                     : 0.0893723
+	s_ln_CD                  : 0.0892935
+	s_CM                     : 0.0336442
+	s_Bot_Xtr                : 0.00488028
+	s_Top_Xtr                : 0.00339452
+	s_lower_bl_ret_0         : 0.00065111
+	s_upper_bl_ret_0         : 0.000650068
+	s_upper_bl_H_31          : 0.00054623
+	s_lower_bl_H_1           : 0.000534172
+Duration of Epoch: 86 was 925.2451839447021 seconds
+-- 80218.36742162704 seconds since start, for Epoch 86 --
+Epoch: 87 | Train Loss: 0.464802 | Test Loss: 0.460515 | analysis_confidence: 0.132304 | CL: 0.013828 | ln_CD: 0.0245814 | CM: 0.0020217 | Top_Xtr: 0.00702205 | Bot_Xtr: 0.00819313
+Loss contributors: 
+	s_analysis_confidence    : 0.197074
+	s_ln_CD                  : 0.0905506
+	s_CL                     : 0.0886896
+	s_CM                     : 0.0338725
+	s_Bot_Xtr                : 0.00498918
+	s_Top_Xtr                : 0.0035306
+	s_upper_bl_ret_0         : 0.000652051
+	s_lower_bl_ret_0         : 0.000648721
+	s_upper_bl_H_31          : 0.000551915
+	s_lower_bl_H_1           : 0.000537229
+Duration of Epoch: 87 was 924.1533658504486 seconds
+-- 81142.56222629547 seconds since start, for Epoch 87 --
+Epoch: 88 | Train Loss: 0.464613 | Test Loss: 0.467693 | analysis_confidence: 0.129799 | CL: 0.0142112 | ln_CD: 0.0263821 | CM: 0.00202385 | Top_Xtr: 0.00749292 | Bot_Xtr: 0.00849452
+Loss contributors: 
+	s_analysis_confidence    : 0.197063
+	s_ln_CD                  : 0.0946056
+	s_CL                     : 0.090362
+	s_CM                     : 0.0340183
+	s_Bot_Xtr                : 0.00524073
+	s_Top_Xtr                : 0.00385178
+	s_upper_bl_ret_0         : 0.000658274
+	s_lower_bl_ret_0         : 0.000648254
+	s_upper_bl_H_31          : 0.000544317
+	s_lower_bl_H_1           : 0.000538573
+Duration of Epoch: 88 was 924.2229466438293 seconds
+-- 82066.8513700962 seconds since start, for Epoch 88 --
+Epoch: 89 | Train Loss: 0.464551 | Test Loss: 0.469266 | analysis_confidence: 0.12961 | CL: 0.0142364 | ln_CD: 0.0276028 | CM: 0.00220192 | Top_Xtr: 0.00699089 | Bot_Xtr: 0.00814461
+Loss contributors: 
+	s_analysis_confidence    : 0.197848
+	s_ln_CD                  : 0.0942573
+	s_CL                     : 0.0902849
+	s_CM                     : 0.0362793
+	s_Bot_Xtr                : 0.00493385
+	s_Top_Xtr                : 0.00344113
+	s_upper_bl_ret_0         : 0.000659072
+	s_lower_bl_ret_0         : 0.000647916
+	s_upper_bl_H_31          : 0.000572123
+	s_upper_bl_H_30          : 0.000557838
+Duration of Epoch: 89 was 923.0430083274841 seconds
+-- 82989.9554028511 seconds since start, for Epoch 89 --
+Epoch: 90 | Train Loss: 0.464139 | Test Loss: 0.475646 | analysis_confidence: 0.131756 | CL: 0.014378 | ln_CD: 0.0268148 | CM: 0.00214402 | Top_Xtr: 0.0073286 | Bot_Xtr: 0.00917986
+Loss contributors: 
+	s_analysis_confidence    : 0.197879
+	s_ln_CD                  : 0.0965738
+	s_CL                     : 0.0922991
+	s_CM                     : 0.0357884
+	s_Bot_Xtr                : 0.0054888
+	s_Top_Xtr                : 0.0036073
+	s_upper_bl_ret_0         : 0.000685179
+	s_lower_bl_ret_0         : 0.000664783
+	s_lower_bl_H_1           : 0.000575922
+	s_upper_bl_H_31          : 0.000564227
+Duration of Epoch: 90 was 919.7984812259674 seconds
+-- 83909.80258440971 seconds since start, for Epoch 90 --
+Epoch: 91 | Train Loss: 0.464096 | Test Loss: 0.462413 | analysis_confidence: 0.128046 | CL: 0.0139368 | ln_CD: 0.024269 | CM: 0.00202908 | Top_Xtr: 0.00790696 | Bot_Xtr: 0.00880236
+Loss contributors: 
+	s_analysis_confidence    : 0.19723
+	s_ln_CD                  : 0.0898852
+	s_CL                     : 0.0896595
+	s_CM                     : 0.0340486
+	s_Bot_Xtr                : 0.00529033
+	s_Top_Xtr                : 0.00375481
+	s_upper_bl_ret_0         : 0.000665909
+	s_lower_bl_ret_0         : 0.000649372
+	s_upper_bl_H_31          : 0.000535983
+	s_lower_bl_H_1           : 0.000530271
+Duration of Epoch: 91 was 925.7238380908966 seconds
+-- 84835.57522726059 seconds since start, for Epoch 91 --
+Epoch: 92 | Train Loss: 0.463667 | Test Loss: 0.463439 | analysis_confidence: 0.129053 | CL: 0.014227 | ln_CD: 0.0254691 | CM: 0.00202367 | Top_Xtr: 0.00725744 | Bot_Xtr: 0.00838295
+Loss contributors: 
+	s_analysis_confidence    : 0.196412
+	s_ln_CD                  : 0.0915342
+	s_CL                     : 0.0901794
+	s_CM                     : 0.0341888
+	s_Bot_Xtr                : 0.005032
+	s_Top_Xtr                : 0.00353135
+	s_upper_bl_ret_0         : 0.000677928
+	s_lower_bl_ret_0         : 0.000660304
+	s_upper_bl_H_31          : 0.000555615
+	s_upper_bl_H_30          : 0.000543156
+Duration of Epoch: 92 was 918.7800424098969 seconds
+-- 85754.40055561066 seconds since start, for Epoch 92 --
+Epoch: 93 | Train Loss: 0.463678 | Test Loss: 0.464523 | analysis_confidence: 0.132126 | CL: 0.0139745 | ln_CD: 0.0253511 | CM: 0.00204992 | Top_Xtr: 0.00752281 | Bot_Xtr: 0.00897995
+Loss contributors: 
+	s_analysis_confidence    : 0.196623
+	s_ln_CD                  : 0.0924266
+	s_CL                     : 0.0895813
+	s_CM                     : 0.0342747
+	s_Bot_Xtr                : 0.00534866
+	s_Top_Xtr                : 0.00355724
+	s_upper_bl_ret_0         : 0.000659809
+	s_lower_bl_ret_0         : 0.000656401
+	s_upper_bl_H_31          : 0.000540435
+	s_upper_bl_H_30          : 0.00053924
+Duration of Epoch: 93 was 923.8389084339142 seconds
+-- 86678.28337574005 seconds since start, for Epoch 93 --
+Epoch: 94 | Train Loss: 0.463634 | Test Loss: 0.462564 | analysis_confidence: 0.128699 | CL: 0.01386 | ln_CD: 0.0245394 | CM: 0.00203235 | Top_Xtr: 0.00779262 | Bot_Xtr: 0.00874719
+Loss contributors: 
+	s_analysis_confidence    : 0.198213
+	s_ln_CD                  : 0.0895928
+	s_CL                     : 0.0895782
+	s_CM                     : 0.03402
+	s_Bot_Xtr                : 0.00512274
+	s_Top_Xtr                : 0.00360649
+	s_upper_bl_ret_0         : 0.000648564
+	s_lower_bl_ret_0         : 0.000641681
+	s_upper_bl_H_31          : 0.000557506
+	s_upper_bl_H_30          : 0.000543347
+Duration of Epoch: 94 was 920.1390385627747 seconds
+-- 87598.47594094276 seconds since start, for Epoch 94 --
+Epoch: 95 | Train Loss: 0.463597 | Test Loss: 0.464307 | analysis_confidence: 0.129798 | CL: 0.0139603 | ln_CD: 0.0252377 | CM: 0.00202148 | Top_Xtr: 0.00720573 | Bot_Xtr: 0.00861956
+Loss contributors: 
+	s_analysis_confidence    : 0.197618
+	s_ln_CD                  : 0.0913255
+	s_CL                     : 0.090113
+	s_CM                     : 0.0340298
+	s_Bot_Xtr                : 0.00517115
+	s_Top_Xtr                : 0.00361167
+	s_upper_bl_ret_0         : 0.000656517
+	s_lower_bl_ret_0         : 0.000643283
+	s_upper_bl_H_31          : 0.000551534
+	s_lower_bl_H_1           : 0.000549028
+Duration of Epoch: 95 was 931.2558727264404 seconds
+-- 88529.77360105515 seconds since start, for Epoch 95 --
+Epoch: 96 | Train Loss: 0.46306 | Test Loss: 0.462315 | analysis_confidence: 0.130915 | CL: 0.0139952 | ln_CD: 0.0249684 | CM: 0.00199426 | Top_Xtr: 0.00704685 | Bot_Xtr: 0.0081574
+Loss contributors: 
+	s_analysis_confidence    : 0.196103
+	s_ln_CD                  : 0.0915107
+	s_CL                     : 0.0901018
+	s_CM                     : 0.0338286
+	s_Bot_Xtr                : 0.00494842
+	s_Top_Xtr                : 0.00345255
+	s_upper_bl_ret_0         : 0.000662765
+	s_lower_bl_ret_0         : 0.000652325
+	s_upper_bl_H_31          : 0.000554762
+	s_upper_bl_H_30          : 0.00053362
+Duration of Epoch: 96 was 918.2838962078094 seconds
+-- 89448.10572528839 seconds since start, for Epoch 96 --
+Epoch: 97 | Train Loss: 0.46309 | Test Loss: 0.465016 | analysis_confidence: 0.131199 | CL: 0.014309 | ln_CD: 0.0245176 | CM: 0.00224481 | Top_Xtr: 0.0068882 | Bot_Xtr: 0.0080448
+Loss contributors: 
+	s_analysis_confidence    : 0.1963
+	s_CL                     : 0.0910054
+	s_ln_CD                  : 0.0908283
+	s_CM                     : 0.0367185
+	s_Bot_Xtr                : 0.00491064
+	s_Top_Xtr                : 0.00340697
+	s_upper_bl_ret_0         : 0.000660045
+	s_lower_bl_ret_0         : 0.000639595
+	s_upper_bl_H_31          : 0.000554743
+	s_lower_bl_H_1           : 0.000540457
+Duration of Epoch: 97 was 918.0256259441376 seconds
+-- 90366.17430734634 seconds since start, for Epoch 97 --
+Epoch: 98 | Train Loss: 0.462842 | Test Loss: 0.465943 | analysis_confidence: 0.130008 | CL: 0.0140985 | ln_CD: 0.0254287 | CM: 0.00205652 | Top_Xtr: 0.00730768 | Bot_Xtr: 0.00821864
+Loss contributors: 
+	s_analysis_confidence    : 0.19772
+	s_ln_CD                  : 0.0925209
+	s_CL                     : 0.090391
+	s_CM                     : 0.0344164
+	s_Bot_Xtr                : 0.00492236
+	s_Top_Xtr                : 0.00345489
+	s_upper_bl_ret_0         : 0.000662845
+	s_lower_bl_ret_0         : 0.000648882
+	s_upper_bl_H_31          : 0.000559801
+	s_lower_bl_H_1           : 0.000540525
+Duration of Epoch: 98 was 922.9860496520996 seconds
+-- 91289.2201256752 seconds since start, for Epoch 98 --
+Epoch: 99 | Train Loss: 0.462533 | Test Loss: 0.464259 | analysis_confidence: 0.130218 | CL: 0.0139376 | ln_CD: 0.0250461 | CM: 0.00206887 | Top_Xtr: 0.00703612 | Bot_Xtr: 0.00802549
+Loss contributors: 
+	s_analysis_confidence    : 0.196487
+	s_ln_CD                  : 0.0922596
+	s_CL                     : 0.0900546
+	s_CM                     : 0.0346616
+	s_Bot_Xtr                : 0.00494301
+	s_Top_Xtr                : 0.00351679
+	s_upper_bl_ret_0         : 0.000708563
+	s_lower_bl_ret_0         : 0.000671091
+	s_upper_bl_H_31          : 0.000551465
+	s_upper_bl_H_30          : 0.000539234
+Duration of Epoch: 99 was 916.4311697483063 seconds
+-- 92205.70307278633 seconds since start, for Epoch 99 --
+Epoch: 100 | Train Loss: 0.462545 | Test Loss: 0.460874 | analysis_confidence: 0.128973 | CL: 0.0140527 | ln_CD: 0.0254162 | CM: 0.00197148 | Top_Xtr: 0.00723592 | Bot_Xtr: 0.00820534
+Loss contributors: 
+	s_analysis_confidence    : 0.196222
+	s_ln_CD                  : 0.0917902
+	s_CL                     : 0.0893073
+	s_CM                     : 0.0331255
+	s_Bot_Xtr                : 0.00493784
+	s_Top_Xtr                : 0.00348805
+	s_upper_bl_ret_0         : 0.000652935
+	s_lower_bl_ret_0         : 0.000641751
+	s_upper_bl_H_31          : 0.000536555
+	s_lower_bl_H_1           : 0.000529596
+Duration of Epoch: 100 was 920.335186958313 seconds
+-- 93126.07567667961 seconds since start, for Epoch 100 --
+Epoch: 101 | Train Loss: 0.462221 | Test Loss: 0.465415 | analysis_confidence: 0.131295 | CL: 0.0139484 | ln_CD: 0.0255831 | CM: 0.00202852 | Top_Xtr: 0.00766806 | Bot_Xtr: 0.00876209
+Loss contributors: 
+	s_analysis_confidence    : 0.197715
+	s_ln_CD                  : 0.0938204
+	s_CL                     : 0.089112
+	s_CM                     : 0.0338573
+	s_Bot_Xtr                : 0.00524471
+	s_Top_Xtr                : 0.00372103
+	s_upper_bl_ret_0         : 0.000658408
+	s_lower_bl_ret_0         : 0.000650578
+	s_lower_bl_H_1           : 0.000537379
+	s_upper_bl_H_31          : 0.000537292
+Duration of Epoch: 101 was 928.0130121707916 seconds
+-- 94054.14157223701 seconds since start, for Epoch 101 --
+Epoch: 102 | Train Loss: 0.462079 | Test Loss: 0.464419 | analysis_confidence: 0.130572 | CL: 0.0142161 | ln_CD: 0.0252343 | CM: 0.00211936 | Top_Xtr: 0.00703672 | Bot_Xtr: 0.00816906
+Loss contributors: 
+	s_analysis_confidence    : 0.197223
+	s_CL                     : 0.0906837
+	s_ln_CD                  : 0.0904918
+	s_CM                     : 0.035269
+	s_Bot_Xtr                : 0.00488928
+	s_Top_Xtr                : 0.00347188
+	s_upper_bl_ret_0         : 0.000652427
+	s_lower_bl_ret_0         : 0.000639497
+	s_upper_bl_H_31          : 0.000545493
+	s_upper_bl_H_30          : 0.000536317
+Duration of Epoch: 102 was 931.0797255039215 seconds
+-- 94985.26784062386 seconds since start, for Epoch 102 --
+Epoch: 103 | Train Loss: 0.462108 | Test Loss: 0.469599 | analysis_confidence: 0.128681 | CL: 0.014138 | ln_CD: 0.0255991 | CM: 0.00204598 | Top_Xtr: 0.008487 | Bot_Xtr: 0.00965592
+Loss contributors: 
+	s_analysis_confidence    : 0.197548
+	s_ln_CD                  : 0.094119
+	s_CL                     : 0.0904923
+	s_CM                     : 0.0341516
+	s_Bot_Xtr                : 0.00579583
+	s_Top_Xtr                : 0.00428408
+	s_upper_bl_ret_0         : 0.000656017
+	s_lower_bl_ret_0         : 0.000640952
+	s_upper_bl_H_31          : 0.000544477
+	s_upper_bl_H_30          : 0.000534079
+Duration of Epoch: 103 was 923.0359220504761 seconds
+-- 95908.35637021065 seconds since start, for Epoch 103 --
+Epoch: 104 | Train Loss: 0.461776 | Test Loss: 0.463685 | analysis_confidence: 0.13006 | CL: 0.0140389 | ln_CD: 0.0248962 | CM: 0.00203999 | Top_Xtr: 0.00682533 | Bot_Xtr: 0.00813647
+Loss contributors: 
+	s_analysis_confidence    : 0.196447
+	s_ln_CD                  : 0.0924411
+	s_CL                     : 0.0902169
+	s_CM                     : 0.0343078
+	s_Bot_Xtr                : 0.00490679
+	s_Top_Xtr                : 0.00337367
+	s_upper_bl_ret_0         : 0.000654736
+	s_lower_bl_ret_0         : 0.000636976
+	s_upper_bl_H_31          : 0.000543008
+	s_lower_bl_H_1           : 0.000535856
+Duration of Epoch: 104 was 922.9049241542816 seconds
+-- 96831.31140851974 seconds since start, for Epoch 104 --
+Epoch: 105 | Train Loss: 0.461459 | Test Loss: 0.461066 | analysis_confidence: 0.12749 | CL: 0.0140762 | ln_CD: 0.0244942 | CM: 0.00204587 | Top_Xtr: 0.0070925 | Bot_Xtr: 0.00839627
+Loss contributors: 
+	s_analysis_confidence    : 0.196047
+	s_CL                     : 0.0902656
+	s_ln_CD                  : 0.090099
+	s_CM                     : 0.0341692
+	s_Bot_Xtr                : 0.00486833
+	s_Top_Xtr                : 0.0032972
+	s_upper_bl_ret_0         : 0.000649791
+	s_lower_bl_ret_0         : 0.000637964
+	s_upper_bl_H_31          : 0.000564217
+	s_upper_bl_H_30          : 0.000546347
+Duration of Epoch: 105 was 923.3763999938965 seconds
+-- 97754.74838042259 seconds since start, for Epoch 105 --
+Epoch: 106 | Train Loss: 0.461589 | Test Loss: 0.465794 | analysis_confidence: 0.130221 | CL: 0.0139652 | ln_CD: 0.0249474 | CM: 0.00207457 | Top_Xtr: 0.00742925 | Bot_Xtr: 0.00897282
+Loss contributors: 
+	s_analysis_confidence    : 0.197263
+	s_ln_CD                  : 0.0923396
+	s_CL                     : 0.0899073
+	s_CM                     : 0.034846
+	s_Bot_Xtr                : 0.00542581
+	s_Top_Xtr                : 0.003552
+	s_upper_bl_ret_0         : 0.000653793
+	s_lower_bl_ret_0         : 0.000643704
+	s_lower_bl_H_1           : 0.00055702
+	s_upper_bl_H_31          : 0.000542356
+Duration of Epoch: 106 was 922.3951506614685 seconds
+-- 98677.18737578392 seconds since start, for Epoch 106 --
+Epoch: 107 | Train Loss: 0.461746 | Test Loss: 0.461011 | analysis_confidence: 0.131141 | CL: 0.0141679 | ln_CD: 0.0244293 | CM: 0.00209053 | Top_Xtr: 0.00733066 | Bot_Xtr: 0.00854472
+Loss contributors: 
+	s_analysis_confidence    : 0.196024
+	s_CL                     : 0.0905511
+	s_ln_CD                  : 0.0892553
+	s_CM                     : 0.0349586
+	s_Bot_Xtr                : 0.00490248
+	s_Top_Xtr                : 0.00342594
+	s_upper_bl_ret_0         : 0.000657932
+	s_lower_bl_ret_0         : 0.000634032
+	s_upper_bl_H_31          : 0.000536635
+	s_lower_bl_H_1           : 0.000529995
+Duration of Epoch: 107 was 920.1728868484497 seconds
+-- 99597.40630531311 seconds since start, for Epoch 107 --
+Epoch: 108 | Train Loss: 0.461249 | Test Loss: 0.458291 | analysis_confidence: 0.130968 | CL: 0.0137609 | ln_CD: 0.0247308 | CM: 0.00200744 | Top_Xtr: 0.00688289 | Bot_Xtr: 0.00816174
+Loss contributors: 
+	s_analysis_confidence    : 0.197195
+	s_ln_CD                  : 0.0893429
+	s_CL                     : 0.0883641
+	s_CM                     : 0.0336373
+	s_Bot_Xtr                : 0.00490203
+	s_Top_Xtr                : 0.00330102
+	s_upper_bl_ret_0         : 0.000656354
+	s_lower_bl_ret_0         : 0.000629825
+	s_upper_bl_H_31          : 0.000545856
+	s_upper_bl_H_30          : 0.000537567
+Duration of Epoch: 108 was 917.7590224742889 seconds
+-- 100515.22754907608 seconds since start, for Epoch 108 --
+Epoch: 109 | Train Loss: 0.461517 | Test Loss: 0.466579 | analysis_confidence: 0.129501 | CL: 0.0142681 | ln_CD: 0.0255436 | CM: 0.00204915 | Top_Xtr: 0.00715661 | Bot_Xtr: 0.00835452
+Loss contributors: 
+	s_analysis_confidence    : 0.198042
+	s_ln_CD                  : 0.0929553
+	s_CL                     : 0.0904747
+	s_CM                     : 0.0340886
+	s_Bot_Xtr                : 0.00509292
+	s_Top_Xtr                : 0.00357026
+	s_upper_bl_ret_0         : 0.000665064
+	s_lower_bl_ret_0         : 0.000645336
+	s_upper_bl_H_31          : 0.000550989
+	s_upper_bl_H_30          : 0.000540611
+Duration of Epoch: 109 was 926.1526453495026 seconds
+-- 101441.44090604782 seconds since start, for Epoch 109 --
+^CTraceback (most recent call last):
+  File "/home/faiza/Documents/NeuralFoil/training/train.py", line 317, in <module>
+    loss = loss_function(y_pred=net(x), y_data=y_data)
+  File "/home/faiza/Documents/NeuralFoil/venv/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1553, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/home/faiza/Documents/NeuralFoil/venv/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1562, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/home/faiza/Documents/NeuralFoil/venv/lib/python3.10/site-packages/torch/_dynamo/eval_frame.py", line 433, in _fn
+    return fn(*args, **kwargs)
+  File "/home/faiza/Documents/NeuralFoil/venv/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1553, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/home/faiza/Documents/NeuralFoil/venv/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1562, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/home/faiza/Documents/NeuralFoil/training/train.py", line 63, in forward
+    def forward(self, x: torch.Tensor):
+  File "/home/faiza/Documents/NeuralFoil/venv/lib/python3.10/site-packages/torch/_dynamo/eval_frame.py", line 600, in _fn
+    return fn(*args, **kwargs)
+  File "/home/faiza/Documents/NeuralFoil/venv/lib/python3.10/site-packages/torch/_functorch/aot_autograd.py", line 987, in forward
+    return compiled_fn(full_args)
+  File "/home/faiza/Documents/NeuralFoil/venv/lib/python3.10/site-packages/torch/_functorch/_aot_autograd/runtime_wrappers.py", line 204, in runtime_wrapper
+    all_outs = call_func_at_runtime_with_args(
+  File "/home/faiza/Documents/NeuralFoil/venv/lib/python3.10/site-packages/torch/_functorch/_aot_autograd/utils.py", line 120, in call_func_at_runtime_with_args
+    out = normalize_as_list(f(args))
+  File "/home/faiza/Documents/NeuralFoil/venv/lib/python3.10/site-packages/torch/_functorch/_aot_autograd/utils.py", line 94, in g
+    return f(*args)
+  File "/home/faiza/Documents/NeuralFoil/venv/lib/python3.10/site-packages/torch/autograd/function.py", line 574, in apply
+    return super().apply(*args, **kwargs)  # type: ignore[misc]
+  File "/home/faiza/Documents/NeuralFoil/venv/lib/python3.10/site-packages/torch/_functorch/_aot_autograd/runtime_wrappers.py", line 1451, in forward
+    fw_outs = call_func_at_runtime_with_args(
+  File "/home/faiza/Documents/NeuralFoil/venv/lib/python3.10/site-packages/torch/_functorch/_aot_autograd/utils.py", line 120, in call_func_at_runtime_with_args
+    out = normalize_as_list(f(args))
+  File "/home/faiza/Documents/NeuralFoil/venv/lib/python3.10/site-packages/torch/_functorch/_aot_autograd/runtime_wrappers.py", line 451, in wrapper
+    return compiled_fn(runtime_args)
+  File "/home/faiza/Documents/NeuralFoil/venv/lib/python3.10/site-packages/torch/_inductor/codecache.py", line 1131, in __call__
+    return self.current_callable(inputs)
+  File "/home/faiza/Documents/NeuralFoil/venv/lib/python3.10/site-packages/torch/_inductor/compile_fx.py", line 944, in run
+    return model(new_inputs)
+  File "/tmp/torchinductor_faiza/bo/cbo2e6utjvaya2bty43gegsyr3kwr7sguulieiybcpuvocdo42u7.py", line 653, in call
+    triton_poi_fused_copy_mul_sub_3.run(buf20, primals_18, primals_15, buf15, buf34, triton_poi_fused_copy_mul_sub_3_xnumel, grid=grid(triton_poi_fused_copy_mul_sub_3_xnumel), stream=stream0)
+  File "/home/faiza/Documents/NeuralFoil/venv/lib/python3.10/site-packages/torch/_inductor/runtime/triton_heuristics.py", line 868, in run
+    return launcher(
+  File "<string>", line 13, in launcher
+  File "/home/faiza/Documents/NeuralFoil/venv/lib/python3.10/site-packages/triton/backends/nvidia/driver.py", line 365, in __call__
+    self.launch(*args, **kwargs)
+KeyboardInterrupt
+
+[?2004h(venv) ]0;faiza@birdlab-arl: ~/Documents/NeuralFoil[01;32mfaiza@birdlab-arl[00m:[01;34m~/Documents/NeuralFoil[00m$ exit
+[?2004lexit
+
+Script done on 2026-04-17 16:36:44-07:00 [COMMAND_EXIT_CODE="130"]

@@ -1,0 +1,2310 @@
+Script started on 2026-04-15 17:04:20-07:00 [TERM="xterm-256color" TTY="/dev/pts/2" COLUMNS="226" LINES="35"]
+[?2004h]0;faiza@birdlab-arl: ~/Documents/NeuralFoil[01;32mfaiza@birdlab-arl[00m:[01;34m~/Documents/NeuralFoil[00m$ exitpython training/train.pysource venv/bin/activate
+[?2004l[?2004h(venv) ]0;faiza@birdlab-arl: ~/Documents/NeuralFoil[01;32mfaiza@birdlab-arl[00m:[01;34m~/Documents/NeuralFoil[00m$ source venv/bin/activateexit[Kpython training/train.pysource venv/bin/activatepython training/train.py
+[?2004lUsing device: cuda
+Deleting old derivatives in derivatives_batches...
+Reading /home/faiza/Documents/Gen2TrainingAirfoils/data_xfoil_comp3e.csv...
+	2187653 rows
+Reading /home/faiza/Documents/Gen2TrainingAirfoils/data_xfoil_comp3b.csv...
+	151906 rows
+Reading /home/faiza/Documents/Gen2TrainingAirfoils/data_xfoil_gen2_K1.csv...
+	1203 rows
+Reading /home/faiza/Documents/Gen2TrainingAirfoils/data_xfoil_comp1b.csv...
+	165535 rows
+Reading /home/faiza/Documents/Gen2TrainingAirfoils/data_xfoil_gen2_K2.csv...
+	2344196 rows
+Reading /home/faiza/Documents/Gen2TrainingAirfoils/data_xfoil_gen2_K3.csv...
+	1239797 rows
+Reading /home/faiza/Documents/Gen2TrainingAirfoils/data_xfoil_gen2_K6.csv...
+	6534163 rows
+Reading /home/faiza/Documents/Gen2TrainingAirfoils/data_xfoil_comp1e.csv...
+	186283 rows
+Reading /home/faiza/Documents/Gen2TrainingAirfoils/data_xfoil_comp3.csv...
+	301034 rows
+Reading /home/faiza/Documents/Gen2TrainingAirfoils/data_xfoil_comp1.csv...
+	209005 rows
+Reading /home/faiza/Documents/Gen2TrainingAirfoils/data_xfoil_comp1d.csv...
+	1159664 rows
+Reading /home/faiza/Documents/Gen2TrainingAirfoils/data_xfoil_gen2_K5.csv...
+	1735481 rows
+Reading /home/faiza/Documents/Gen2TrainingAirfoils/data_xfoil_comp1c.csv...
+	1791317 rows
+Reading /home/faiza/Documents/Gen2TrainingAirfoils/data_xfoil_gen2_K4.csv...
+	2738238 rows
+Reading /home/faiza/Documents/Gen2TrainingAirfoils/data_xfoil_comp3c.csv...
+	1311441 rows
+Reading /home/faiza/Documents/Gen2TrainingAirfoils/data_xfoil_comp3d.csv...
+	449444 rows
+Nullifying 0 rows with CD <= 0...
+Nullifying 5921 rows with nonpositive boundary layer thetas...
+Nullifying 1 rows with H < 1 (non-physical BL)...
+Nullifying 0 rows with non-physical edge velocities...
+Nullifying 229 rows with non-physical transition locations...
+Dataset:
+shape: (22_506_360, 222)
+┌────────────────┬────────────────┬────────────────┬────────────────┬───┬─────────────────────┬─────────────────────┬─────────────────────┬─────────────────────┐
+│ kulfan_upper_0 ┆ kulfan_upper_1 ┆ kulfan_upper_2 ┆ kulfan_upper_3 ┆ … ┆ lower_bl_ue/vinf_28 ┆ lower_bl_ue/vinf_29 ┆ lower_bl_ue/vinf_30 ┆ lower_bl_ue/vinf_31 │
+│ ---            ┆ ---            ┆ ---            ┆ ---            ┆   ┆ ---                 ┆ ---                 ┆ ---                 ┆ ---                 │
+│ f32            ┆ f32            ┆ f32            ┆ f32            ┆   ┆ f32                 ┆ f32                 ┆ f32                 ┆ f32                 │
+╞════════════════╪════════════════╪════════════════╪════════════════╪═══╪═════════════════════╪═════════════════════╪═════════════════════╪═════════════════════╡
+│ 0.213851       ┆ 0.296635       ┆ 0.479535       ┆ 0.474042       ┆ … ┆ -1.194428           ┆ -1.193814           ┆ -1.193133           ┆ -1.192336           │
+│ 0.213851       ┆ 0.296635       ┆ 0.479535       ┆ 0.474042       ┆ … ┆ -1.172788           ┆ -1.172011           ┆ -1.171099           ┆ -1.170002           │
+│ 0.213851       ┆ 0.296635       ┆ 0.479535       ┆ 0.474042       ┆ … ┆ -1.156238           ┆ -1.15489            ┆ -1.153343           ┆ -1.151452           │
+│ 0.213851       ┆ 0.296635       ┆ 0.479535       ┆ 0.474042       ┆ … ┆ -1.149135           ┆ -1.146455           ┆ -1.14345            ┆ -1.139882           │
+│ 0.213851       ┆ 0.296635       ┆ 0.479535       ┆ 0.474042       ┆ … ┆ -1.126875           ┆ -1.122241           ┆ -1.118442           ┆ -1.123533           │
+│ …              ┆ …              ┆ …              ┆ …              ┆ … ┆ …                   ┆ …                   ┆ …                   ┆ …                   │
+│ 0.253225       ┆ 0.247037       ┆ 0.175044       ┆ 0.230349       ┆ … ┆ -0.940495           ┆ -0.943572           ┆ -0.944839           ┆ -0.932447           │
+│ 0.253225       ┆ 0.247037       ┆ 0.175044       ┆ 0.230349       ┆ … ┆ -0.968138           ┆ -0.983459           ┆ -1.00131            ┆ -1.012413           │
+│ 0.253225       ┆ 0.247037       ┆ 0.175044       ┆ 0.230349       ┆ … ┆ -1.048352           ┆ -1.073317           ┆ -1.102965           ┆ -1.128218           │
+│ 0.201772       ┆ 0.388362       ┆ 0.14599        ┆ 0.308504       ┆ … ┆ -1.059382           ┆ -1.018705           ┆ -0.971745           ┆ -0.924764           │
+│ 0.201772       ┆ 0.388362       ┆ 0.14599        ┆ 0.308504       ┆ … ┆ -1.065438           ┆ -1.028754           ┆ -0.981216           ┆ -0.926123           │
+└────────────────┴────────────────┴────────────────┴────────────────┴───┴─────────────────────┴─────────────────────┴─────────────────────┴─────────────────────┘
+At calculation now
+Processed batch 0-50000 / 22506360
+Processed batch 50000-100000 / 22506360
+Processed batch 100000-150000 / 22506360
+Processed batch 150000-200000 / 22506360
+Processed batch 200000-250000 / 22506360
+Processed batch 250000-300000 / 22506360
+Processed batch 300000-350000 / 22506360
+Processed batch 350000-400000 / 22506360
+Processed batch 400000-450000 / 22506360
+Processed batch 450000-500000 / 22506360
+Processed batch 500000-550000 / 22506360
+Processed batch 550000-600000 / 22506360
+Processed batch 600000-650000 / 22506360
+Processed batch 650000-700000 / 22506360
+Processed batch 700000-750000 / 22506360
+Processed batch 750000-800000 / 22506360
+Processed batch 800000-850000 / 22506360
+Processed batch 850000-900000 / 22506360
+Processed batch 900000-950000 / 22506360
+Processed batch 950000-1000000 / 22506360
+Processed batch 1000000-1050000 / 22506360
+Processed batch 1050000-1100000 / 22506360
+Processed batch 1100000-1150000 / 22506360
+Processed batch 1150000-1200000 / 22506360
+Processed batch 1200000-1250000 / 22506360
+Processed batch 1250000-1300000 / 22506360
+Processed batch 1300000-1350000 / 22506360
+Processed batch 1350000-1400000 / 22506360
+Processed batch 1400000-1450000 / 22506360
+Processed batch 1450000-1500000 / 22506360
+Processed batch 1500000-1550000 / 22506360
+Processed batch 1550000-1600000 / 22506360
+Processed batch 1600000-1650000 / 22506360
+Processed batch 1650000-1700000 / 22506360
+Processed batch 1700000-1750000 / 22506360
+Processed batch 1750000-1800000 / 22506360
+Processed batch 1800000-1850000 / 22506360
+Processed batch 1850000-1900000 / 22506360
+Processed batch 1900000-1950000 / 22506360
+Processed batch 1950000-2000000 / 22506360
+Processed batch 2000000-2050000 / 22506360
+Processed batch 2050000-2100000 / 22506360
+Processed batch 2100000-2150000 / 22506360
+Processed batch 2150000-2200000 / 22506360
+Processed batch 2200000-2250000 / 22506360
+Processed batch 2250000-2300000 / 22506360
+Processed batch 2300000-2350000 / 22506360
+Processed batch 2350000-2400000 / 22506360
+Processed batch 2400000-2450000 / 22506360
+Processed batch 2450000-2500000 / 22506360
+Processed batch 2500000-2550000 / 22506360
+Processed batch 2550000-2600000 / 22506360
+Processed batch 2600000-2650000 / 22506360
+Processed batch 2650000-2700000 / 22506360
+Processed batch 2700000-2750000 / 22506360
+Processed batch 2750000-2800000 / 22506360
+Processed batch 2800000-2850000 / 22506360
+Processed batch 2850000-2900000 / 22506360
+Processed batch 2900000-2950000 / 22506360
+Processed batch 2950000-3000000 / 22506360
+Processed batch 3000000-3050000 / 22506360
+Processed batch 3050000-3100000 / 22506360
+Processed batch 3100000-3150000 / 22506360
+Processed batch 3150000-3200000 / 22506360
+Processed batch 3200000-3250000 / 22506360
+Processed batch 3250000-3300000 / 22506360
+Processed batch 3300000-3350000 / 22506360
+Processed batch 3350000-3400000 / 22506360
+Processed batch 3400000-3450000 / 22506360
+Processed batch 3450000-3500000 / 22506360
+Processed batch 3500000-3550000 / 22506360
+Processed batch 3550000-3600000 / 22506360
+Processed batch 3600000-3650000 / 22506360
+Processed batch 3650000-3700000 / 22506360
+Processed batch 3700000-3750000 / 22506360
+Processed batch 3750000-3800000 / 22506360
+Processed batch 3800000-3850000 / 22506360
+Processed batch 3850000-3900000 / 22506360
+Processed batch 3900000-3950000 / 22506360
+Processed batch 3950000-4000000 / 22506360
+Processed batch 4000000-4050000 / 22506360
+Processed batch 4050000-4100000 / 22506360
+Processed batch 4100000-4150000 / 22506360
+Processed batch 4150000-4200000 / 22506360
+Processed batch 4200000-4250000 / 22506360
+Processed batch 4250000-4300000 / 22506360
+Processed batch 4300000-4350000 / 22506360
+Processed batch 4350000-4400000 / 22506360
+Processed batch 4400000-4450000 / 22506360
+Processed batch 4450000-4500000 / 22506360
+Processed batch 4500000-4550000 / 22506360
+Processed batch 4550000-4600000 / 22506360
+Processed batch 4600000-4650000 / 22506360
+Processed batch 4650000-4700000 / 22506360
+Processed batch 4700000-4750000 / 22506360
+Processed batch 4750000-4800000 / 22506360
+Processed batch 4800000-4850000 / 22506360
+Processed batch 4850000-4900000 / 22506360
+Processed batch 4900000-4950000 / 22506360
+Processed batch 4950000-5000000 / 22506360
+Processed batch 5000000-5050000 / 22506360
+Processed batch 5050000-5100000 / 22506360
+Processed batch 5100000-5150000 / 22506360
+Processed batch 5150000-5200000 / 22506360
+Processed batch 5200000-5250000 / 22506360
+Processed batch 5250000-5300000 / 22506360
+Processed batch 5300000-5350000 / 22506360
+Processed batch 5350000-5400000 / 22506360
+Processed batch 5400000-5450000 / 22506360
+Processed batch 5450000-5500000 / 22506360
+Processed batch 5500000-5550000 / 22506360
+Processed batch 5550000-5600000 / 22506360
+Processed batch 5600000-5650000 / 22506360
+Processed batch 5650000-5700000 / 22506360
+Processed batch 5700000-5750000 / 22506360
+Processed batch 5750000-5800000 / 22506360
+Processed batch 5800000-5850000 / 22506360
+Processed batch 5850000-5900000 / 22506360
+Processed batch 5900000-5950000 / 22506360
+Processed batch 5950000-6000000 / 22506360
+Processed batch 6000000-6050000 / 22506360
+Processed batch 6050000-6100000 / 22506360
+Processed batch 6100000-6150000 / 22506360
+Processed batch 6150000-6200000 / 22506360
+Processed batch 6200000-6250000 / 22506360
+Processed batch 6250000-6300000 / 22506360
+Processed batch 6300000-6350000 / 22506360
+Processed batch 6350000-6400000 / 22506360
+Processed batch 6400000-6450000 / 22506360
+Processed batch 6450000-6500000 / 22506360
+Processed batch 6500000-6550000 / 22506360
+Processed batch 6550000-6600000 / 22506360
+Processed batch 6600000-6650000 / 22506360
+Processed batch 6650000-6700000 / 22506360
+Processed batch 6700000-6750000 / 22506360
+Processed batch 6750000-6800000 / 22506360
+Processed batch 6800000-6850000 / 22506360
+Processed batch 6850000-6900000 / 22506360
+Processed batch 6900000-6950000 / 22506360
+Processed batch 6950000-7000000 / 22506360
+Processed batch 7000000-7050000 / 22506360
+Processed batch 7050000-7100000 / 22506360
+Processed batch 7100000-7150000 / 22506360
+Processed batch 7150000-7200000 / 22506360
+Processed batch 7200000-7250000 / 22506360
+Processed batch 7250000-7300000 / 22506360
+Processed batch 7300000-7350000 / 22506360
+Processed batch 7350000-7400000 / 22506360
+Processed batch 7400000-7450000 / 22506360
+Processed batch 7450000-7500000 / 22506360
+Processed batch 7500000-7550000 / 22506360
+Processed batch 7550000-7600000 / 22506360
+Processed batch 7600000-7650000 / 22506360
+Processed batch 7650000-7700000 / 22506360
+Processed batch 7700000-7750000 / 22506360
+Processed batch 7750000-7800000 / 22506360
+Processed batch 7800000-7850000 / 22506360
+Processed batch 7850000-7900000 / 22506360
+Processed batch 7900000-7950000 / 22506360
+Processed batch 7950000-8000000 / 22506360
+Processed batch 8000000-8050000 / 22506360
+Processed batch 8050000-8100000 / 22506360
+Processed batch 8100000-8150000 / 22506360
+Processed batch 8150000-8200000 / 22506360
+Processed batch 8200000-8250000 / 22506360
+Processed batch 8250000-8300000 / 22506360
+Processed batch 8300000-8350000 / 22506360
+Processed batch 8350000-8400000 / 22506360
+Processed batch 8400000-8450000 / 22506360
+Processed batch 8450000-8500000 / 22506360
+Processed batch 8500000-8550000 / 22506360
+Processed batch 8550000-8600000 / 22506360
+Processed batch 8600000-8650000 / 22506360
+Processed batch 8650000-8700000 / 22506360
+Processed batch 8700000-8750000 / 22506360
+Processed batch 8750000-8800000 / 22506360
+Processed batch 8800000-8850000 / 22506360
+Processed batch 8850000-8900000 / 22506360
+Processed batch 8900000-8950000 / 22506360
+Processed batch 8950000-9000000 / 22506360
+Processed batch 9000000-9050000 / 22506360
+Processed batch 9050000-9100000 / 22506360
+Processed batch 9100000-9150000 / 22506360
+Processed batch 9150000-9200000 / 22506360
+Processed batch 9200000-9250000 / 22506360
+Processed batch 9250000-9300000 / 22506360
+Processed batch 9300000-9350000 / 22506360
+Processed batch 9350000-9400000 / 22506360
+Processed batch 9400000-9450000 / 22506360
+Processed batch 9450000-9500000 / 22506360
+Processed batch 9500000-9550000 / 22506360
+Processed batch 9550000-9600000 / 22506360
+Processed batch 9600000-9650000 / 22506360
+Processed batch 9650000-9700000 / 22506360
+Processed batch 9700000-9750000 / 22506360
+Processed batch 9750000-9800000 / 22506360
+Processed batch 9800000-9850000 / 22506360
+Processed batch 9850000-9900000 / 22506360
+Processed batch 9900000-9950000 / 22506360
+Processed batch 9950000-10000000 / 22506360
+Processed batch 10000000-10050000 / 22506360
+Processed batch 10050000-10100000 / 22506360
+Processed batch 10100000-10150000 / 22506360
+Processed batch 10150000-10200000 / 22506360
+Processed batch 10200000-10250000 / 22506360
+Processed batch 10250000-10300000 / 22506360
+Processed batch 10300000-10350000 / 22506360
+Processed batch 10350000-10400000 / 22506360
+Processed batch 10400000-10450000 / 22506360
+Processed batch 10450000-10500000 / 22506360
+Processed batch 10500000-10550000 / 22506360
+Processed batch 10550000-10600000 / 22506360
+Processed batch 10600000-10650000 / 22506360
+Processed batch 10650000-10700000 / 22506360
+Processed batch 10700000-10750000 / 22506360
+Processed batch 10750000-10800000 / 22506360
+Processed batch 10800000-10850000 / 22506360
+Processed batch 10850000-10900000 / 22506360
+Processed batch 10900000-10950000 / 22506360
+Processed batch 10950000-11000000 / 22506360
+Processed batch 11000000-11050000 / 22506360
+Processed batch 11050000-11100000 / 22506360
+Processed batch 11100000-11150000 / 22506360
+Processed batch 11150000-11200000 / 22506360
+Processed batch 11200000-11250000 / 22506360
+Processed batch 11250000-11300000 / 22506360
+Processed batch 11300000-11350000 / 22506360
+Processed batch 11350000-11400000 / 22506360
+Processed batch 11400000-11450000 / 22506360
+Processed batch 11450000-11500000 / 22506360
+Processed batch 11500000-11550000 / 22506360
+Processed batch 11550000-11600000 / 22506360
+Processed batch 11600000-11650000 / 22506360
+Processed batch 11650000-11700000 / 22506360
+Processed batch 11700000-11750000 / 22506360
+Processed batch 11750000-11800000 / 22506360
+Processed batch 11800000-11850000 / 22506360
+Processed batch 11850000-11900000 / 22506360
+Processed batch 11900000-11950000 / 22506360
+Processed batch 11950000-12000000 / 22506360
+Processed batch 12000000-12050000 / 22506360
+Processed batch 12050000-12100000 / 22506360
+Processed batch 12100000-12150000 / 22506360
+Processed batch 12150000-12200000 / 22506360
+Processed batch 12200000-12250000 / 22506360
+Processed batch 12250000-12300000 / 22506360
+Processed batch 12300000-12350000 / 22506360
+Processed batch 12350000-12400000 / 22506360
+Processed batch 12400000-12450000 / 22506360
+Processed batch 12450000-12500000 / 22506360
+Processed batch 12500000-12550000 / 22506360
+Processed batch 12550000-12600000 / 22506360
+Processed batch 12600000-12650000 / 22506360
+Processed batch 12650000-12700000 / 22506360
+Processed batch 12700000-12750000 / 22506360
+Processed batch 12750000-12800000 / 22506360
+Processed batch 12800000-12850000 / 22506360
+Processed batch 12850000-12900000 / 22506360
+Processed batch 12900000-12950000 / 22506360
+Processed batch 12950000-13000000 / 22506360
+Processed batch 13000000-13050000 / 22506360
+Processed batch 13050000-13100000 / 22506360
+Processed batch 13100000-13150000 / 22506360
+Processed batch 13150000-13200000 / 22506360
+Processed batch 13200000-13250000 / 22506360
+Processed batch 13250000-13300000 / 22506360
+Processed batch 13300000-13350000 / 22506360
+Processed batch 13350000-13400000 / 22506360
+Processed batch 13400000-13450000 / 22506360
+Processed batch 13450000-13500000 / 22506360
+Processed batch 13500000-13550000 / 22506360
+Processed batch 13550000-13600000 / 22506360
+Processed batch 13600000-13650000 / 22506360
+Processed batch 13650000-13700000 / 22506360
+Processed batch 13700000-13750000 / 22506360
+Processed batch 13750000-13800000 / 22506360
+Processed batch 13800000-13850000 / 22506360
+Processed batch 13850000-13900000 / 22506360
+Processed batch 13900000-13950000 / 22506360
+Processed batch 13950000-14000000 / 22506360
+Processed batch 14000000-14050000 / 22506360
+Processed batch 14050000-14100000 / 22506360
+Processed batch 14100000-14150000 / 22506360
+Processed batch 14150000-14200000 / 22506360
+Processed batch 14200000-14250000 / 22506360
+Processed batch 14250000-14300000 / 22506360
+Processed batch 14300000-14350000 / 22506360
+Processed batch 14350000-14400000 / 22506360
+Processed batch 14400000-14450000 / 22506360
+Processed batch 14450000-14500000 / 22506360
+Processed batch 14500000-14550000 / 22506360
+Processed batch 14550000-14600000 / 22506360
+Processed batch 14600000-14650000 / 22506360
+Processed batch 14650000-14700000 / 22506360
+Processed batch 14700000-14750000 / 22506360
+Processed batch 14750000-14800000 / 22506360
+Processed batch 14800000-14850000 / 22506360
+Processed batch 14850000-14900000 / 22506360
+Processed batch 14900000-14950000 / 22506360
+Processed batch 14950000-15000000 / 22506360
+Processed batch 15000000-15050000 / 22506360
+Processed batch 15050000-15100000 / 22506360
+Processed batch 15100000-15150000 / 22506360
+Processed batch 15150000-15200000 / 22506360
+Processed batch 15200000-15250000 / 22506360
+Processed batch 15250000-15300000 / 22506360
+Processed batch 15300000-15350000 / 22506360
+Processed batch 15350000-15400000 / 22506360
+Processed batch 15400000-15450000 / 22506360
+Processed batch 15450000-15500000 / 22506360
+Processed batch 15500000-15550000 / 22506360
+Processed batch 15550000-15600000 / 22506360
+Processed batch 15600000-15650000 / 22506360
+Processed batch 15650000-15700000 / 22506360
+Processed batch 15700000-15750000 / 22506360
+Processed batch 15750000-15800000 / 22506360
+Processed batch 15800000-15850000 / 22506360
+Processed batch 15850000-15900000 / 22506360
+Processed batch 15900000-15950000 / 22506360
+Processed batch 15950000-16000000 / 22506360
+Processed batch 16000000-16050000 / 22506360
+Processed batch 16050000-16100000 / 22506360
+Processed batch 16100000-16150000 / 22506360
+Processed batch 16150000-16200000 / 22506360
+Processed batch 16200000-16250000 / 22506360
+Processed batch 16250000-16300000 / 22506360
+Processed batch 16300000-16350000 / 22506360
+Processed batch 16350000-16400000 / 22506360
+Processed batch 16400000-16450000 / 22506360
+Processed batch 16450000-16500000 / 22506360
+Processed batch 16500000-16550000 / 22506360
+Processed batch 16550000-16600000 / 22506360
+Processed batch 16600000-16650000 / 22506360
+Processed batch 16650000-16700000 / 22506360
+Processed batch 16700000-16750000 / 22506360
+Processed batch 16750000-16800000 / 22506360
+Processed batch 16800000-16850000 / 22506360
+Processed batch 16850000-16900000 / 22506360
+Processed batch 16900000-16950000 / 22506360
+Processed batch 16950000-17000000 / 22506360
+Processed batch 17000000-17050000 / 22506360
+Processed batch 17050000-17100000 / 22506360
+Processed batch 17100000-17150000 / 22506360
+Processed batch 17150000-17200000 / 22506360
+Processed batch 17200000-17250000 / 22506360
+Processed batch 17250000-17300000 / 22506360
+Processed batch 17300000-17350000 / 22506360
+Processed batch 17350000-17400000 / 22506360
+Processed batch 17400000-17450000 / 22506360
+Processed batch 17450000-17500000 / 22506360
+Processed batch 17500000-17550000 / 22506360
+Processed batch 17550000-17600000 / 22506360
+Processed batch 17600000-17650000 / 22506360
+Processed batch 17650000-17700000 / 22506360
+Processed batch 17700000-17750000 / 22506360
+Processed batch 17750000-17800000 / 22506360
+Processed batch 17800000-17850000 / 22506360
+Processed batch 17850000-17900000 / 22506360
+Processed batch 17900000-17950000 / 22506360
+Processed batch 17950000-18000000 / 22506360
+Processed batch 18000000-18050000 / 22506360
+Processed batch 18050000-18100000 / 22506360
+Processed batch 18100000-18150000 / 22506360
+Processed batch 18150000-18200000 / 22506360
+Processed batch 18200000-18250000 / 22506360
+Processed batch 18250000-18300000 / 22506360
+Processed batch 18300000-18350000 / 22506360
+Processed batch 18350000-18400000 / 22506360
+Processed batch 18400000-18450000 / 22506360
+Processed batch 18450000-18500000 / 22506360
+Processed batch 18500000-18550000 / 22506360
+Processed batch 18550000-18600000 / 22506360
+Processed batch 18600000-18650000 / 22506360
+Processed batch 18650000-18700000 / 22506360
+Processed batch 18700000-18750000 / 22506360
+Processed batch 18750000-18800000 / 22506360
+Processed batch 18800000-18850000 / 22506360
+Processed batch 18850000-18900000 / 22506360
+Processed batch 18900000-18950000 / 22506360
+Processed batch 18950000-19000000 / 22506360
+Processed batch 19000000-19050000 / 22506360
+Processed batch 19050000-19100000 / 22506360
+Processed batch 19100000-19150000 / 22506360
+Processed batch 19150000-19200000 / 22506360
+Processed batch 19200000-19250000 / 22506360
+Processed batch 19250000-19300000 / 22506360
+Processed batch 19300000-19350000 / 22506360
+Processed batch 19350000-19400000 / 22506360
+Processed batch 19400000-19450000 / 22506360
+Processed batch 19450000-19500000 / 22506360
+Processed batch 19500000-19550000 / 22506360
+Processed batch 19550000-19600000 / 22506360
+Processed batch 19600000-19650000 / 22506360
+Processed batch 19650000-19700000 / 22506360
+Processed batch 19700000-19750000 / 22506360
+Processed batch 19750000-19800000 / 22506360
+Processed batch 19800000-19850000 / 22506360
+Processed batch 19850000-19900000 / 22506360
+Processed batch 19900000-19950000 / 22506360
+Processed batch 19950000-20000000 / 22506360
+Processed batch 20000000-20050000 / 22506360
+Processed batch 20050000-20100000 / 22506360
+Processed batch 20100000-20150000 / 22506360
+Processed batch 20150000-20200000 / 22506360
+Processed batch 20200000-20250000 / 22506360
+Processed batch 20250000-20300000 / 22506360
+Processed batch 20300000-20350000 / 22506360
+Processed batch 20350000-20400000 / 22506360
+Processed batch 20400000-20450000 / 22506360
+Processed batch 20450000-20500000 / 22506360
+Processed batch 20500000-20550000 / 22506360
+Processed batch 20550000-20600000 / 22506360
+Processed batch 20600000-20650000 / 22506360
+Processed batch 20650000-20700000 / 22506360
+Processed batch 20700000-20750000 / 22506360
+Processed batch 20750000-20800000 / 22506360
+Processed batch 20800000-20850000 / 22506360
+Processed batch 20850000-20900000 / 22506360
+Processed batch 20900000-20950000 / 22506360
+Processed batch 20950000-21000000 / 22506360
+Processed batch 21000000-21050000 / 22506360
+Processed batch 21050000-21100000 / 22506360
+Processed batch 21100000-21150000 / 22506360
+Processed batch 21150000-21200000 / 22506360
+Processed batch 21200000-21250000 / 22506360
+Processed batch 21250000-21300000 / 22506360
+Processed batch 21300000-21350000 / 22506360
+Processed batch 21350000-21400000 / 22506360
+Processed batch 21400000-21450000 / 22506360
+Processed batch 21450000-21500000 / 22506360
+Processed batch 21500000-21550000 / 22506360
+Processed batch 21550000-21600000 / 22506360
+Processed batch 21600000-21650000 / 22506360
+Processed batch 21650000-21700000 / 22506360
+Processed batch 21700000-21750000 / 22506360
+Processed batch 21750000-21800000 / 22506360
+Processed batch 21800000-21850000 / 22506360
+Processed batch 21850000-21900000 / 22506360
+Processed batch 21900000-21950000 / 22506360
+Processed batch 21950000-22000000 / 22506360
+Processed batch 22000000-22050000 / 22506360
+Processed batch 22050000-22100000 / 22506360
+Processed batch 22100000-22150000 / 22506360
+Processed batch 22150000-22200000 / 22506360
+Processed batch 22200000-22250000 / 22506360
+Processed batch 22250000-22300000 / 22506360
+Processed batch 22300000-22350000 / 22506360
+Processed batch 22350000-22400000 / 22506360
+Processed batch 22400000-22450000 / 22506360
+Processed batch 22450000-22500000 / 22506360
+Processed batch 22500000-22506360 / 22506360
+Computed and loaded derivatives shape: (22506360, 24)
+shape: (22_506_360, 24)
+┌─────────────────────┬─────────────────────┬─────────────────────┬─────────────────────┬───┬──────────────────────┬──────────────────────┬──────────────────────┬──────────────────────┐
+│ s_upper_first_der_0 ┆ s_upper_first_der_1 ┆ s_upper_first_der_2 ┆ s_upper_first_der_3 ┆ … ┆ s_lower_second_der_2 ┆ s_lower_second_der_3 ┆ s_lower_second_der_4 ┆ s_lower_second_der_5 │
+│ ---                 ┆ ---                 ┆ ---                 ┆ ---                 ┆   ┆ ---                  ┆ ---                  ┆ ---                  ┆ ---                  │
+│ f32                 ┆ f32                 ┆ f32                 ┆ f32                 ┆   ┆ f32                  ┆ f32                  ┆ f32                  ┆ f32                  │
+╞═════════════════════╪═════════════════════╪═════════════════════╪═════════════════════╪═══╪══════════════════════╪══════════════════════╪══════════════════════╪══════════════════════╡
+│ 0.198335            ┆ 0.066196            ┆ -0.035885           ┆ -0.13141            ┆ … ┆ 0.264619             ┆ -0.081193            ┆ -0.324382            ┆ -0.210052            │
+│ 0.125249            ┆ -0.072208           ┆ -0.136651           ┆ -0.122617           ┆ … ┆ 0.088476             ┆ -0.162807            ┆ 0.229901             ┆ 1.346411             │
+│ 0.07111             ┆ -0.046609           ┆ -0.048086           ┆ -0.032414           ┆ … ┆ 0.160309             ┆ 0.196097             ┆ 0.162517             ┆ 0.748417             │
+│ 0.249189            ┆ 0.060671            ┆ -0.056629           ┆ -0.148289           ┆ … ┆ 0.523047             ┆ 0.210201             ┆ -0.112632            ┆ -0.751377            │
+│ 0.215158            ┆ 0.074315            ┆ -0.022225           ┆ -0.094566           ┆ … ┆ -0.16435             ┆ -0.14511             ┆ -0.062018            ┆ -0.004797            │
+│ …                   ┆ …                   ┆ …                   ┆ …                   ┆ … ┆ …                    ┆ …                    ┆ …                    ┆ …                    │
+│ 0.352399            ┆ 0.059614            ┆ -0.140265           ┆ -0.236047           ┆ … ┆ 0.760238             ┆ 0.330984             ┆ -0.543602            ┆ -0.509943            │
+│ 0.142109            ┆ -0.012077           ┆ -0.057115           ┆ -0.131074           ┆ … ┆ 0.11325              ┆ -0.110729            ┆ -0.133299            ┆ 0.654087             │
+│ 0.177451            ┆ 0.095089            ┆ 0.020312            ┆ -0.076074           ┆ … ┆ -0.00174             ┆ -0.332212            ┆ 0.064134             ┆ -0.38018             │
+│ 0.192884            ┆ -0.005314           ┆ -0.097306           ┆ -0.120621           ┆ … ┆ -0.402769            ┆ -0.0505              ┆ 0.019916             ┆ -0.549398            │
+│ 0.144652            ┆ 0.059436            ┆ 0.005352            ┆ -0.020051           ┆ … ┆ 0.480331             ┆ 0.31826              ┆ -0.366172            ┆ -0.720224            │
+└─────────────────────┴─────────────────────┴─────────────────────┴─────────────────────┴───┴──────────────────────┴──────────────────────┴──────────────────────┴──────────────────────┘
+Made scaled dataset
+Calculated and saved input distribution information without derivatives.
+found insertion index
+cut dataframe at insertion index
+stacked inputs using pl.concat
+/home/faiza/Documents/NeuralFoil/venv/lib/python3.10/site-packages/polars/series/series.py:1561: RuntimeWarning: divide by zero encountered in log
+  lambda out: ufunc(*args, out=out, dtype=dtype_char, **kwargs),
+Cleared df, derivatives_df, before, and after from memory.
+Splitting data between test and train sets has been completed
+The input training data is shaped as shape: (9, 50)
+┌────────────┬──────────────────┬──────────────────┬──────────────────┬───┬─────────────┬─────────────┬─────────────┬─────────────┐
+│ statistic  ┆ s_kulfan_upper_0 ┆ s_kulfan_upper_1 ┆ s_kulfan_upper_2 ┆ … ┆ s_Re        ┆ s_n_crit    ┆ s_xtr_upper ┆ s_xtr_lower │
+│ ---        ┆ ---              ┆ ---              ┆ ---              ┆   ┆ ---         ┆ ---         ┆ ---         ┆ ---         │
+│ str        ┆ f64              ┆ f64              ┆ f64              ┆   ┆ f64         ┆ f64         ┆ f64         ┆ f64         │
+╞════════════╪══════════════════╪══════════════════╪══════════════════╪═══╪═════════════╪═════════════╪═════════════╪═════════════╡
+│ count      ┆ 2.1381042e7      ┆ 2.1381042e7      ┆ 2.1381042e7      ┆ … ┆ 2.1381042e7 ┆ 2.1381042e7 ┆ 2.1381042e7 ┆ 2.1381042e7 │
+│ null_count ┆ 0.0              ┆ 0.0              ┆ 0.0              ┆ … ┆ 0.0         ┆ 0.0         ┆ 0.0         ┆ 0.0         │
+│ mean       ┆ 0.16878          ┆ 0.203309         ┆ 0.258006         ┆ … ┆ 0.039448    ┆ 0.0011      ┆ 0.90001     ┆ 0.899715    │
+│ std        ┆ 0.117169         ┆ 0.243623         ┆ 0.306081         ┆ … ┆ 0.984912    ┆ 1.154936    ┆ 0.237976    ┆ 0.238408    │
+│ min        ┆ -0.777743        ┆ -3.512043        ┆ -4.826776        ┆ … ┆ -5.021853   ┆ -2.0        ┆ 0.000001    ┆ 0.000001    │
+│ 25%        ┆ 0.090993         ┆ 0.05416          ┆ 0.076216         ┆ … ┆ -0.622267   ┆ -0.998878   ┆ 1.0         ┆ 1.0         │
+│ 50%        ┆ 0.163522         ┆ 0.197699         ┆ 0.251593         ┆ … ┆ 0.043357    ┆ 0.002143    ┆ 1.0         ┆ 1.0         │
+│ 75%        ┆ 0.240077         ┆ 0.347682         ┆ 0.434375         ┆ … ┆ 0.708691    ┆ 1.001044    ┆ 1.0         ┆ 1.0         │
+│ max        ┆ 1.409122         ┆ 4.508533         ┆ 6.261123         ┆ … ┆ 4.934646    ┆ 2.0         ┆ 1.0         ┆ 1.0         │
+└────────────┴──────────────────┴──────────────────┴──────────────────┴───┴─────────────┴─────────────┴─────────────┴─────────────┘ 
+The output training data is shaped as shape: (9, 199)
+┌────────────┬───────────────────────┬─────────────┬─────────────┬───┬───────────────────────┬───────────────────────┬───────────────────────┬───────────────────────┐
+│ statistic  ┆ s_analysis_confidence ┆ s_CL        ┆ s_ln_CD     ┆ … ┆ s_lower_bl_ue/vinf_28 ┆ s_lower_bl_ue/vinf_29 ┆ s_lower_bl_ue/vinf_30 ┆ s_lower_bl_ue/vinf_31 │
+│ ---        ┆ ---                   ┆ ---         ┆ ---         ┆   ┆ ---                   ┆ ---                   ┆ ---                   ┆ ---                   │
+│ str        ┆ f64                   ┆ f64         ┆ f64         ┆   ┆ f64                   ┆ f64                   ┆ f64                   ┆ f64                   │
+╞════════════╪═══════════════════════╪═════════════╪═════════════╪═══╪═══════════════════════╪═══════════════════════╪═══════════════════════╪═══════════════════════╡
+│ count      ┆ 2.1381042e7           ┆ 1.2304497e7 ┆ 1.2304497e7 ┆ … ┆ 1.2304497e7           ┆ 1.2304497e7           ┆ 1.2304497e7           ┆ 1.2304497e7           │
+│ null_count ┆ 0.0                   ┆ 9.076545e6  ┆ 9.076545e6  ┆ … ┆ 9.076545e6            ┆ 9.076545e6            ┆ 9.076545e6            ┆ 9.076545e6            │
+│ mean       ┆ 0.575486              ┆ 0.607132    ┆ 0.341986    ┆ … ┆ -0.999898             ┆ -1.000527             ┆ -1.002941             ┆ -1.008055             │
+│ std        ┆ 0.494269              ┆ 1.623266    ┆ 0.624894    ┆ … ┆ 0.119513              ┆ 0.119578              ┆ 0.120163              ┆ 0.119591              │
+│ min        ┆ 0.0                   ┆ -14.5694    ┆ -1.63941    ┆ … ┆ -2.642103             ┆ -2.632642             ┆ -2.941834             ┆ -2.632471             │
+│ 25%        ┆ 0.0                   ┆ -0.6082     ┆ -0.230102   ┆ … ┆ -1.089606             ┆ -1.091936             ┆ -1.096933             ┆ -1.105003             │
+│ 50%        ┆ 1.0                   ┆ 0.512       ┆ 0.309008    ┆ … ┆ -0.995871             ┆ -0.995298             ┆ -0.99613              ┆ -0.995504             │
+│ 75%        ┆ 1.0                   ┆ 1.7932      ┆ 0.941158    ┆ … ┆ -0.914794             ┆ -0.914033             ┆ -0.913431             ┆ -0.912672             │
+│ max        ┆ 1.0                   ┆ 6.8782      ┆ 4.364104    ┆ … ┆ 0.743489              ┆ 1.03891               ┆ 1.359499              ┆ 1.706279              │
+└────────────┴───────────────────────┴─────────────┴─────────────┴───┴───────────────────────┴───────────────────────┴───────────────────────┴───────────────────────┘ 
+The input test data is shaped as shape: (9, 50)
+┌────────────┬──────────────────┬──────────────────┬──────────────────┬───┬────────────┬────────────┬─────────────┬─────────────┐
+│ statistic  ┆ s_kulfan_upper_0 ┆ s_kulfan_upper_1 ┆ s_kulfan_upper_2 ┆ … ┆ s_Re       ┆ s_n_crit   ┆ s_xtr_upper ┆ s_xtr_lower │
+│ ---        ┆ ---              ┆ ---              ┆ ---              ┆   ┆ ---        ┆ ---        ┆ ---         ┆ ---         │
+│ str        ┆ f64              ┆ f64              ┆ f64              ┆   ┆ f64        ┆ f64        ┆ f64         ┆ f64         │
+╞════════════╪══════════════════╪══════════════════╪══════════════════╪═══╪════════════╪════════════╪═════════════╪═════════════╡
+│ count      ┆ 1.125318e6       ┆ 1.125318e6       ┆ 1.125318e6       ┆ … ┆ 1.125318e6 ┆ 1.125318e6 ┆ 1.125318e6  ┆ 1.125318e6  │
+│ null_count ┆ 0.0              ┆ 0.0              ┆ 0.0              ┆ … ┆ 0.0        ┆ 0.0        ┆ 0.0         ┆ 0.0         │
+│ mean       ┆ 0.168908         ┆ 0.20349          ┆ 0.257942         ┆ … ┆ 0.039245   ┆ 0.000916   ┆ 0.900442    ┆ 0.899836    │
+│ std        ┆ 0.117164         ┆ 0.243116         ┆ 0.30609          ┆ … ┆ 0.984897   ┆ 1.154598   ┆ 0.237335    ┆ 0.238246    │
+│ min        ┆ -0.630615        ┆ -2.735741        ┆ -3.603876        ┆ … ┆ -4.798998  ┆ -1.999991  ┆ 0.000002    ┆ 0.000001    │
+│ 25%        ┆ 0.091093         ┆ 0.054405         ┆ 0.076078         ┆ … ┆ -0.623428  ┆ -0.998517  ┆ 1.0         ┆ 1.0         │
+│ 50%        ┆ 0.163715         ┆ 0.197999         ┆ 0.251962         ┆ … ┆ 0.042739   ┆ 0.002488   ┆ 1.0         ┆ 1.0         │
+│ 75%        ┆ 0.240078         ┆ 0.347743         ┆ 0.43411          ┆ … ┆ 0.707172   ┆ 0.999916   ┆ 1.0         ┆ 1.0         │
+│ max        ┆ 1.408089         ┆ 3.350594         ┆ 4.479575         ┆ … ┆ 4.656488   ┆ 1.999997   ┆ 1.0         ┆ 1.0         │
+└────────────┴──────────────────┴──────────────────┴──────────────────┴───┴────────────┴────────────┴─────────────┴─────────────┘ 
+The output test data is shaped as shape: (9, 199)
+┌────────────┬───────────────────────┬──────────┬───────────┬───┬───────────────────────┬───────────────────────┬───────────────────────┬───────────────────────┐
+│ statistic  ┆ s_analysis_confidence ┆ s_CL     ┆ s_ln_CD   ┆ … ┆ s_lower_bl_ue/vinf_28 ┆ s_lower_bl_ue/vinf_29 ┆ s_lower_bl_ue/vinf_30 ┆ s_lower_bl_ue/vinf_31 │
+│ ---        ┆ ---                   ┆ ---      ┆ ---       ┆   ┆ ---                   ┆ ---                   ┆ ---                   ┆ ---                   │
+│ str        ┆ f64                   ┆ f64      ┆ f64       ┆   ┆ f64                   ┆ f64                   ┆ f64                   ┆ f64                   │
+╞════════════╪═══════════════════════╪══════════╪═══════════╪═══╪═══════════════════════╪═══════════════════════╪═══════════════════════╪═══════════════════════╡
+│ count      ┆ 1.125318e6            ┆ 647609.0 ┆ 647609.0  ┆ … ┆ 647609.0              ┆ 647609.0              ┆ 647609.0              ┆ 647609.0              │
+│ null_count ┆ 0.0                   ┆ 477709.0 ┆ 477709.0  ┆ … ┆ 477709.0              ┆ 477709.0              ┆ 477709.0              ┆ 477709.0              │
+│ mean       ┆ 0.57549               ┆ 0.601653 ┆ 0.341435  ┆ … ┆ -0.999823             ┆ -1.000408             ┆ -1.002785             ┆ -1.00788              │
+│ std        ┆ 0.494269              ┆ 1.625185 ┆ 0.624616  ┆ … ┆ 0.119657              ┆ 0.119719              ┆ 0.120313              ┆ 0.119707              │
+│ min        ┆ 0.0                   ┆ -5.3332  ┆ -1.541054 ┆ … ┆ -1.673368             ┆ -1.672757             ┆ -1.686384             ┆ -1.714363             │
+│ 25%        ┆ 0.0                   ┆ -0.6136  ┆ -0.230535 ┆ … ┆ -1.089796             ┆ -1.092061             ┆ -1.097062             ┆ -1.10494              │
+│ 50%        ┆ 1.0                   ┆ 0.5006   ┆ 0.30945   ┆ … ┆ -0.995761             ┆ -0.995104             ┆ -0.995977             ┆ -0.995287             │
+│ 75%        ┆ 1.0                   ┆ 1.7898   ┆ 0.941033  ┆ … ┆ -0.914737             ┆ -0.913785             ┆ -0.913249             ┆ -0.912541             │
+│ max        ┆ 1.0                   ┆ 6.4714   ┆ 3.043363  ┆ … ┆ -0.364124             ┆ -0.335131             ┆ -0.371171             ┆ -0.492429             │
+└────────────┴───────────────────────┴──────────┴───────────┴───┴───────────────────────┴───────────────────────┴───────────────────────┴───────────────────────┘ 
+Scanning memory for large Polars DataFrames and NumPy arrays...
+Polars DataFrame 'df_inputs_scaled': 22,506,360 rows x 49 cols ~ 8822.5 MB
+Polars DataFrame 'df_outputs_scaled': 22,506,360 rows x 198 cols ~ 35650.1 MB
+Polars DataFrame 'df_train_inputs_scaled': 21,381,042 rows x 49 cols ~ 8381.4 MB
+Polars DataFrame 'df_train_outputs_scaled': 21,381,042 rows x 198 cols ~ 33867.6 MB
+Polars DataFrame 'df_test_inputs_scaled': 1,125,318 rows x 49 cols ~ 441.1 MB
+Polars DataFrame 'df_test_outputs_scaled': 1,125,318 rows x 198 cols ~ 1782.5 MB
+Consider deleting unneeded objects with `del var_name` + `gc.collect()` to free RAM.
+Deleted df_inputs_scaled and df_outputs_scaled from RAM
+Total RAM: 134.72 GB
+Available RAM: 81.31 GB
+Used RAM: 77.93 GB
+RAM usage: 39.6%
+----------- 173.30505847930908 seconds -------
+Cache file:  /home/faiza/Documents/NeuralFoil/training/nn-avian-gen2-256-matmul.pth
+cuda
+/home/faiza/Documents/NeuralFoil/training/train.py:174: FutureWarning: You are using `torch.load` with `weights_only=False` (the current default value), which uses the default pickle module implicitly. It is possible to construct malicious pickle data which will execute arbitrary code during unpickling (See https://github.com/pytorch/pytorch/blob/main/SECURITY.md#untrusted-models for more details). In a future release, the default value for `weights_only` will be flipped to `True`. This limits the functions that could be executed during unpickling. Arbitrary objects will no longer be allowed to be loaded via this mode unless they are explicitly allowlisted by the user via `torch.serialization.add_safe_globals`. We recommend you start setting `weights_only=True` for any use case where you don't have full control of the loaded file. Please open an issue on GitHub for any issues related to this experimental feature.
+  checkpoint = torch.load(cache_file)
+Traceback (most recent call last):
+  File "/home/faiza/Documents/NeuralFoil/training/train.py", line 175, in <module>
+    net.load_state_dict(checkpoint["model_state_dict"])
+  File "/home/faiza/Documents/NeuralFoil/venv/lib/python3.10/site-packages/torch/nn/modules/module.py", line 2215, in load_state_dict
+    raise RuntimeError('Error(s) in loading state_dict for {}:\n\t{}'.format(
+RuntimeError: Error(s) in loading state_dict for OptimizedModule:
+	Missing key(s) in state_dict: "_orig_mod.net.0.weight", "_orig_mod.net.0.bias", "_orig_mod.net.2.weight", "_orig_mod.net.2.bias", "_orig_mod.net.4.weight", "_orig_mod.net.4.bias", "_orig_mod.net.6.weight", "_orig_mod.net.6.bias", "_orig_mod.net.8.weight", "_orig_mod.net.8.bias", "_orig_mod.net.10.weight", "_orig_mod.net.10.bias", "_orig_mod.net.12.weight", "_orig_mod.net.12.bias". 
+	Unexpected key(s) in state_dict: "net.0.weight", "net.0.bias", "net.2.weight", "net.2.bias", "net.4.weight", "net.4.bias", "net.6.weight", "net.6.bias", "net.8.weight", "net.8.bias", "net.10.weight", "net.10.bias", "net.12.weight", "net.12.bias". 
+[?2004h(venv) ]0;faiza@birdlab-arl: ~/Documents/NeuralFoil[01;32mfaiza@birdlab-arl[00m:[01;34m~/Documents/NeuralFoil[00m$ [K(venv) ]0;faiza@birdlab-arl: ~/Documents/NeuralFoil[01;32mfaiza@birdlab-arl[00m:[01;34m~/Documents/NeuralFoil[00m$ [K(venv) ]0;faiza@birdlab-arl: ~/Documents/NeuralFoil[01;32mfaiza@birdlab-arl[00m:[01;34m~/Documents/NeuralFoil[00m$ python training/train.py
+[?2004lUsing device: cuda
+Deleting old derivatives in derivatives_batches...
+Reading /home/faiza/Documents/Gen2TrainingAirfoils/data_xfoil_comp3e.csv...
+	2187653 rows
+Reading /home/faiza/Documents/Gen2TrainingAirfoils/data_xfoil_comp3b.csv...
+	151906 rows
+Reading /home/faiza/Documents/Gen2TrainingAirfoils/data_xfoil_gen2_K1.csv...
+	1203 rows
+Reading /home/faiza/Documents/Gen2TrainingAirfoils/data_xfoil_comp1b.csv...
+	165535 rows
+Reading /home/faiza/Documents/Gen2TrainingAirfoils/data_xfoil_gen2_K2.csv...
+	2344196 rows
+Reading /home/faiza/Documents/Gen2TrainingAirfoils/data_xfoil_gen2_K3.csv...
+	1239797 rows
+Reading /home/faiza/Documents/Gen2TrainingAirfoils/data_xfoil_gen2_K6.csv...
+	6534163 rows
+Reading /home/faiza/Documents/Gen2TrainingAirfoils/data_xfoil_comp1e.csv...
+	186283 rows
+Reading /home/faiza/Documents/Gen2TrainingAirfoils/data_xfoil_comp3.csv...
+	301034 rows
+Reading /home/faiza/Documents/Gen2TrainingAirfoils/data_xfoil_comp1.csv...
+	209005 rows
+Reading /home/faiza/Documents/Gen2TrainingAirfoils/data_xfoil_comp1d.csv...
+	1159664 rows
+Reading /home/faiza/Documents/Gen2TrainingAirfoils/data_xfoil_gen2_K5.csv...
+	1735481 rows
+Reading /home/faiza/Documents/Gen2TrainingAirfoils/data_xfoil_comp1c.csv...
+	1791317 rows
+Reading /home/faiza/Documents/Gen2TrainingAirfoils/data_xfoil_gen2_K4.csv...
+	2738238 rows
+Reading /home/faiza/Documents/Gen2TrainingAirfoils/data_xfoil_comp3c.csv...
+	1311441 rows
+Reading /home/faiza/Documents/Gen2TrainingAirfoils/data_xfoil_comp3d.csv...
+	449444 rows
+Nullifying 0 rows with CD <= 0...
+Nullifying 5921 rows with nonpositive boundary layer thetas...
+Nullifying 1 rows with H < 1 (non-physical BL)...
+Nullifying 0 rows with non-physical edge velocities...
+Nullifying 229 rows with non-physical transition locations...
+Dataset:
+shape: (22_506_360, 222)
+┌────────────────┬────────────────┬────────────────┬────────────────┬───┬─────────────────────┬─────────────────────┬─────────────────────┬─────────────────────┐
+│ kulfan_upper_0 ┆ kulfan_upper_1 ┆ kulfan_upper_2 ┆ kulfan_upper_3 ┆ … ┆ lower_bl_ue/vinf_28 ┆ lower_bl_ue/vinf_29 ┆ lower_bl_ue/vinf_30 ┆ lower_bl_ue/vinf_31 │
+│ ---            ┆ ---            ┆ ---            ┆ ---            ┆   ┆ ---                 ┆ ---                 ┆ ---                 ┆ ---                 │
+│ f32            ┆ f32            ┆ f32            ┆ f32            ┆   ┆ f32                 ┆ f32                 ┆ f32                 ┆ f32                 │
+╞════════════════╪════════════════╪════════════════╪════════════════╪═══╪═════════════════════╪═════════════════════╪═════════════════════╪═════════════════════╡
+│ 0.213851       ┆ 0.296635       ┆ 0.479535       ┆ 0.474042       ┆ … ┆ -1.194428           ┆ -1.193814           ┆ -1.193133           ┆ -1.192336           │
+│ 0.213851       ┆ 0.296635       ┆ 0.479535       ┆ 0.474042       ┆ … ┆ -1.172788           ┆ -1.172011           ┆ -1.171099           ┆ -1.170002           │
+│ 0.213851       ┆ 0.296635       ┆ 0.479535       ┆ 0.474042       ┆ … ┆ -1.156238           ┆ -1.15489            ┆ -1.153343           ┆ -1.151452           │
+│ 0.213851       ┆ 0.296635       ┆ 0.479535       ┆ 0.474042       ┆ … ┆ -1.149135           ┆ -1.146455           ┆ -1.14345            ┆ -1.139882           │
+│ 0.213851       ┆ 0.296635       ┆ 0.479535       ┆ 0.474042       ┆ … ┆ -1.126875           ┆ -1.122241           ┆ -1.118442           ┆ -1.123533           │
+│ …              ┆ …              ┆ …              ┆ …              ┆ … ┆ …                   ┆ …                   ┆ …                   ┆ …                   │
+│ 0.253225       ┆ 0.247037       ┆ 0.175044       ┆ 0.230349       ┆ … ┆ -0.940495           ┆ -0.943572           ┆ -0.944839           ┆ -0.932447           │
+│ 0.253225       ┆ 0.247037       ┆ 0.175044       ┆ 0.230349       ┆ … ┆ -0.968138           ┆ -0.983459           ┆ -1.00131            ┆ -1.012413           │
+│ 0.253225       ┆ 0.247037       ┆ 0.175044       ┆ 0.230349       ┆ … ┆ -1.048352           ┆ -1.073317           ┆ -1.102965           ┆ -1.128218           │
+│ 0.201772       ┆ 0.388362       ┆ 0.14599        ┆ 0.308504       ┆ … ┆ -1.059382           ┆ -1.018705           ┆ -0.971745           ┆ -0.924764           │
+│ 0.201772       ┆ 0.388362       ┆ 0.14599        ┆ 0.308504       ┆ … ┆ -1.065438           ┆ -1.028754           ┆ -0.981216           ┆ -0.926123           │
+└────────────────┴────────────────┴────────────────┴────────────────┴───┴─────────────────────┴─────────────────────┴─────────────────────┴─────────────────────┘
+At calculation now
+Processed batch 0-50000 / 22506360
+Processed batch 50000-100000 / 22506360
+Processed batch 100000-150000 / 22506360
+Processed batch 150000-200000 / 22506360
+Processed batch 200000-250000 / 22506360
+Processed batch 250000-300000 / 22506360
+Processed batch 300000-350000 / 22506360
+Processed batch 350000-400000 / 22506360
+Processed batch 400000-450000 / 22506360
+Processed batch 450000-500000 / 22506360
+Processed batch 500000-550000 / 22506360
+Processed batch 550000-600000 / 22506360
+Processed batch 600000-650000 / 22506360
+Processed batch 650000-700000 / 22506360
+Processed batch 700000-750000 / 22506360
+Processed batch 750000-800000 / 22506360
+Processed batch 800000-850000 / 22506360
+Processed batch 850000-900000 / 22506360
+Processed batch 900000-950000 / 22506360
+Processed batch 950000-1000000 / 22506360
+Processed batch 1000000-1050000 / 22506360
+Processed batch 1050000-1100000 / 22506360
+Processed batch 1100000-1150000 / 22506360
+Processed batch 1150000-1200000 / 22506360
+Processed batch 1200000-1250000 / 22506360
+Processed batch 1250000-1300000 / 22506360
+Processed batch 1300000-1350000 / 22506360
+Processed batch 1350000-1400000 / 22506360
+Processed batch 1400000-1450000 / 22506360
+Processed batch 1450000-1500000 / 22506360
+Processed batch 1500000-1550000 / 22506360
+Processed batch 1550000-1600000 / 22506360
+Processed batch 1600000-1650000 / 22506360
+Processed batch 1650000-1700000 / 22506360
+Processed batch 1700000-1750000 / 22506360
+Processed batch 1750000-1800000 / 22506360
+Processed batch 1800000-1850000 / 22506360
+Processed batch 1850000-1900000 / 22506360
+Processed batch 1900000-1950000 / 22506360
+Processed batch 1950000-2000000 / 22506360
+Processed batch 2000000-2050000 / 22506360
+Processed batch 2050000-2100000 / 22506360
+Processed batch 2100000-2150000 / 22506360
+Processed batch 2150000-2200000 / 22506360
+Processed batch 2200000-2250000 / 22506360
+Processed batch 2250000-2300000 / 22506360
+Processed batch 2300000-2350000 / 22506360
+Processed batch 2350000-2400000 / 22506360
+Processed batch 2400000-2450000 / 22506360
+Processed batch 2450000-2500000 / 22506360
+Processed batch 2500000-2550000 / 22506360
+Processed batch 2550000-2600000 / 22506360
+Processed batch 2600000-2650000 / 22506360
+Processed batch 2650000-2700000 / 22506360
+Processed batch 2700000-2750000 / 22506360
+Processed batch 2750000-2800000 / 22506360
+Processed batch 2800000-2850000 / 22506360
+Processed batch 2850000-2900000 / 22506360
+Processed batch 2900000-2950000 / 22506360
+Processed batch 2950000-3000000 / 22506360
+Processed batch 3000000-3050000 / 22506360
+Processed batch 3050000-3100000 / 22506360
+Processed batch 3100000-3150000 / 22506360
+Processed batch 3150000-3200000 / 22506360
+Processed batch 3200000-3250000 / 22506360
+Processed batch 3250000-3300000 / 22506360
+Processed batch 3300000-3350000 / 22506360
+Processed batch 3350000-3400000 / 22506360
+Processed batch 3400000-3450000 / 22506360
+Processed batch 3450000-3500000 / 22506360
+Processed batch 3500000-3550000 / 22506360
+Processed batch 3550000-3600000 / 22506360
+Processed batch 3600000-3650000 / 22506360
+Processed batch 3650000-3700000 / 22506360
+Processed batch 3700000-3750000 / 22506360
+Processed batch 3750000-3800000 / 22506360
+Processed batch 3800000-3850000 / 22506360
+Processed batch 3850000-3900000 / 22506360
+Processed batch 3900000-3950000 / 22506360
+Processed batch 3950000-4000000 / 22506360
+Processed batch 4000000-4050000 / 22506360
+Processed batch 4050000-4100000 / 22506360
+Processed batch 4100000-4150000 / 22506360
+Processed batch 4150000-4200000 / 22506360
+Processed batch 4200000-4250000 / 22506360
+Processed batch 4250000-4300000 / 22506360
+Processed batch 4300000-4350000 / 22506360
+Processed batch 4350000-4400000 / 22506360
+Processed batch 4400000-4450000 / 22506360
+Processed batch 4450000-4500000 / 22506360
+Processed batch 4500000-4550000 / 22506360
+Processed batch 4550000-4600000 / 22506360
+Processed batch 4600000-4650000 / 22506360
+Processed batch 4650000-4700000 / 22506360
+Processed batch 4700000-4750000 / 22506360
+Processed batch 4750000-4800000 / 22506360
+Processed batch 4800000-4850000 / 22506360
+Processed batch 4850000-4900000 / 22506360
+Processed batch 4900000-4950000 / 22506360
+Processed batch 4950000-5000000 / 22506360
+Processed batch 5000000-5050000 / 22506360
+Processed batch 5050000-5100000 / 22506360
+Processed batch 5100000-5150000 / 22506360
+Processed batch 5150000-5200000 / 22506360
+Processed batch 5200000-5250000 / 22506360
+Processed batch 5250000-5300000 / 22506360
+Processed batch 5300000-5350000 / 22506360
+Processed batch 5350000-5400000 / 22506360
+Processed batch 5400000-5450000 / 22506360
+Processed batch 5450000-5500000 / 22506360
+Processed batch 5500000-5550000 / 22506360
+Processed batch 5550000-5600000 / 22506360
+Processed batch 5600000-5650000 / 22506360
+Processed batch 5650000-5700000 / 22506360
+Processed batch 5700000-5750000 / 22506360
+Processed batch 5750000-5800000 / 22506360
+Processed batch 5800000-5850000 / 22506360
+Processed batch 5850000-5900000 / 22506360
+Processed batch 5900000-5950000 / 22506360
+Processed batch 5950000-6000000 / 22506360
+Processed batch 6000000-6050000 / 22506360
+Processed batch 6050000-6100000 / 22506360
+Processed batch 6100000-6150000 / 22506360
+Processed batch 6150000-6200000 / 22506360
+Processed batch 6200000-6250000 / 22506360
+Processed batch 6250000-6300000 / 22506360
+Processed batch 6300000-6350000 / 22506360
+Processed batch 6350000-6400000 / 22506360
+Processed batch 6400000-6450000 / 22506360
+Processed batch 6450000-6500000 / 22506360
+Processed batch 6500000-6550000 / 22506360
+Processed batch 6550000-6600000 / 22506360
+Processed batch 6600000-6650000 / 22506360
+Processed batch 6650000-6700000 / 22506360
+Processed batch 6700000-6750000 / 22506360
+Processed batch 6750000-6800000 / 22506360
+Processed batch 6800000-6850000 / 22506360
+Processed batch 6850000-6900000 / 22506360
+Processed batch 6900000-6950000 / 22506360
+Processed batch 6950000-7000000 / 22506360
+Processed batch 7000000-7050000 / 22506360
+Processed batch 7050000-7100000 / 22506360
+Processed batch 7100000-7150000 / 22506360
+Processed batch 7150000-7200000 / 22506360
+Processed batch 7200000-7250000 / 22506360
+Processed batch 7250000-7300000 / 22506360
+Processed batch 7300000-7350000 / 22506360
+Processed batch 7350000-7400000 / 22506360
+Processed batch 7400000-7450000 / 22506360
+Processed batch 7450000-7500000 / 22506360
+Processed batch 7500000-7550000 / 22506360
+Processed batch 7550000-7600000 / 22506360
+Processed batch 7600000-7650000 / 22506360
+Processed batch 7650000-7700000 / 22506360
+Processed batch 7700000-7750000 / 22506360
+Processed batch 7750000-7800000 / 22506360
+Processed batch 7800000-7850000 / 22506360
+Processed batch 7850000-7900000 / 22506360
+Processed batch 7900000-7950000 / 22506360
+Processed batch 7950000-8000000 / 22506360
+Processed batch 8000000-8050000 / 22506360
+Processed batch 8050000-8100000 / 22506360
+Processed batch 8100000-8150000 / 22506360
+Processed batch 8150000-8200000 / 22506360
+Processed batch 8200000-8250000 / 22506360
+Processed batch 8250000-8300000 / 22506360
+Processed batch 8300000-8350000 / 22506360
+Processed batch 8350000-8400000 / 22506360
+Processed batch 8400000-8450000 / 22506360
+Processed batch 8450000-8500000 / 22506360
+Processed batch 8500000-8550000 / 22506360
+Processed batch 8550000-8600000 / 22506360
+Processed batch 8600000-8650000 / 22506360
+Processed batch 8650000-8700000 / 22506360
+Processed batch 8700000-8750000 / 22506360
+Processed batch 8750000-8800000 / 22506360
+Processed batch 8800000-8850000 / 22506360
+Processed batch 8850000-8900000 / 22506360
+Processed batch 8900000-8950000 / 22506360
+Processed batch 8950000-9000000 / 22506360
+Processed batch 9000000-9050000 / 22506360
+Processed batch 9050000-9100000 / 22506360
+Processed batch 9100000-9150000 / 22506360
+Processed batch 9150000-9200000 / 22506360
+Processed batch 9200000-9250000 / 22506360
+Processed batch 9250000-9300000 / 22506360
+Processed batch 9300000-9350000 / 22506360
+Processed batch 9350000-9400000 / 22506360
+Processed batch 9400000-9450000 / 22506360
+Processed batch 9450000-9500000 / 22506360
+Processed batch 9500000-9550000 / 22506360
+Processed batch 9550000-9600000 / 22506360
+Processed batch 9600000-9650000 / 22506360
+Processed batch 9650000-9700000 / 22506360
+Processed batch 9700000-9750000 / 22506360
+Processed batch 9750000-9800000 / 22506360
+Processed batch 9800000-9850000 / 22506360
+Processed batch 9850000-9900000 / 22506360
+Processed batch 9900000-9950000 / 22506360
+Processed batch 9950000-10000000 / 22506360
+Processed batch 10000000-10050000 / 22506360
+Processed batch 10050000-10100000 / 22506360
+Processed batch 10100000-10150000 / 22506360
+Processed batch 10150000-10200000 / 22506360
+Processed batch 10200000-10250000 / 22506360
+Processed batch 10250000-10300000 / 22506360
+Processed batch 10300000-10350000 / 22506360
+Processed batch 10350000-10400000 / 22506360
+Processed batch 10400000-10450000 / 22506360
+Processed batch 10450000-10500000 / 22506360
+Processed batch 10500000-10550000 / 22506360
+Processed batch 10550000-10600000 / 22506360
+Processed batch 10600000-10650000 / 22506360
+Processed batch 10650000-10700000 / 22506360
+Processed batch 10700000-10750000 / 22506360
+Processed batch 10750000-10800000 / 22506360
+Processed batch 10800000-10850000 / 22506360
+Processed batch 10850000-10900000 / 22506360
+Processed batch 10900000-10950000 / 22506360
+Processed batch 10950000-11000000 / 22506360
+Processed batch 11000000-11050000 / 22506360
+Processed batch 11050000-11100000 / 22506360
+Processed batch 11100000-11150000 / 22506360
+Processed batch 11150000-11200000 / 22506360
+Processed batch 11200000-11250000 / 22506360
+Processed batch 11250000-11300000 / 22506360
+Processed batch 11300000-11350000 / 22506360
+Processed batch 11350000-11400000 / 22506360
+Processed batch 11400000-11450000 / 22506360
+Processed batch 11450000-11500000 / 22506360
+Processed batch 11500000-11550000 / 22506360
+Processed batch 11550000-11600000 / 22506360
+Processed batch 11600000-11650000 / 22506360
+Processed batch 11650000-11700000 / 22506360
+Processed batch 11700000-11750000 / 22506360
+Processed batch 11750000-11800000 / 22506360
+Processed batch 11800000-11850000 / 22506360
+Processed batch 11850000-11900000 / 22506360
+Processed batch 11900000-11950000 / 22506360
+Processed batch 11950000-12000000 / 22506360
+Processed batch 12000000-12050000 / 22506360
+Processed batch 12050000-12100000 / 22506360
+Processed batch 12100000-12150000 / 22506360
+Processed batch 12150000-12200000 / 22506360
+Processed batch 12200000-12250000 / 22506360
+Processed batch 12250000-12300000 / 22506360
+Processed batch 12300000-12350000 / 22506360
+Processed batch 12350000-12400000 / 22506360
+Processed batch 12400000-12450000 / 22506360
+Processed batch 12450000-12500000 / 22506360
+Processed batch 12500000-12550000 / 22506360
+Processed batch 12550000-12600000 / 22506360
+Processed batch 12600000-12650000 / 22506360
+Processed batch 12650000-12700000 / 22506360
+Processed batch 12700000-12750000 / 22506360
+Processed batch 12750000-12800000 / 22506360
+Processed batch 12800000-12850000 / 22506360
+Processed batch 12850000-12900000 / 22506360
+Processed batch 12900000-12950000 / 22506360
+Processed batch 12950000-13000000 / 22506360
+Processed batch 13000000-13050000 / 22506360
+Processed batch 13050000-13100000 / 22506360
+Processed batch 13100000-13150000 / 22506360
+Processed batch 13150000-13200000 / 22506360
+Processed batch 13200000-13250000 / 22506360
+Processed batch 13250000-13300000 / 22506360
+Processed batch 13300000-13350000 / 22506360
+Processed batch 13350000-13400000 / 22506360
+Processed batch 13400000-13450000 / 22506360
+Processed batch 13450000-13500000 / 22506360
+Processed batch 13500000-13550000 / 22506360
+Processed batch 13550000-13600000 / 22506360
+Processed batch 13600000-13650000 / 22506360
+Processed batch 13650000-13700000 / 22506360
+Processed batch 13700000-13750000 / 22506360
+Processed batch 13750000-13800000 / 22506360
+Processed batch 13800000-13850000 / 22506360
+Processed batch 13850000-13900000 / 22506360
+Processed batch 13900000-13950000 / 22506360
+Processed batch 13950000-14000000 / 22506360
+Processed batch 14000000-14050000 / 22506360
+Processed batch 14050000-14100000 / 22506360
+Processed batch 14100000-14150000 / 22506360
+Processed batch 14150000-14200000 / 22506360
+Processed batch 14200000-14250000 / 22506360
+Processed batch 14250000-14300000 / 22506360
+Processed batch 14300000-14350000 / 22506360
+Processed batch 14350000-14400000 / 22506360
+Processed batch 14400000-14450000 / 22506360
+Processed batch 14450000-14500000 / 22506360
+Processed batch 14500000-14550000 / 22506360
+Processed batch 14550000-14600000 / 22506360
+Processed batch 14600000-14650000 / 22506360
+Processed batch 14650000-14700000 / 22506360
+Processed batch 14700000-14750000 / 22506360
+Processed batch 14750000-14800000 / 22506360
+Processed batch 14800000-14850000 / 22506360
+Processed batch 14850000-14900000 / 22506360
+Processed batch 14900000-14950000 / 22506360
+Processed batch 14950000-15000000 / 22506360
+Processed batch 15000000-15050000 / 22506360
+Processed batch 15050000-15100000 / 22506360
+Processed batch 15100000-15150000 / 22506360
+Processed batch 15150000-15200000 / 22506360
+Processed batch 15200000-15250000 / 22506360
+Processed batch 15250000-15300000 / 22506360
+Processed batch 15300000-15350000 / 22506360
+Processed batch 15350000-15400000 / 22506360
+Processed batch 15400000-15450000 / 22506360
+Processed batch 15450000-15500000 / 22506360
+Processed batch 15500000-15550000 / 22506360
+Processed batch 15550000-15600000 / 22506360
+Processed batch 15600000-15650000 / 22506360
+Processed batch 15650000-15700000 / 22506360
+Processed batch 15700000-15750000 / 22506360
+Processed batch 15750000-15800000 / 22506360
+Processed batch 15800000-15850000 / 22506360
+Processed batch 15850000-15900000 / 22506360
+Processed batch 15900000-15950000 / 22506360
+Processed batch 15950000-16000000 / 22506360
+Processed batch 16000000-16050000 / 22506360
+Processed batch 16050000-16100000 / 22506360
+Processed batch 16100000-16150000 / 22506360
+Processed batch 16150000-16200000 / 22506360
+Processed batch 16200000-16250000 / 22506360
+Processed batch 16250000-16300000 / 22506360
+Processed batch 16300000-16350000 / 22506360
+Processed batch 16350000-16400000 / 22506360
+Processed batch 16400000-16450000 / 22506360
+Processed batch 16450000-16500000 / 22506360
+Processed batch 16500000-16550000 / 22506360
+Processed batch 16550000-16600000 / 22506360
+Processed batch 16600000-16650000 / 22506360
+Processed batch 16650000-16700000 / 22506360
+Processed batch 16700000-16750000 / 22506360
+Processed batch 16750000-16800000 / 22506360
+Processed batch 16800000-16850000 / 22506360
+Processed batch 16850000-16900000 / 22506360
+Processed batch 16900000-16950000 / 22506360
+Processed batch 16950000-17000000 / 22506360
+Processed batch 17000000-17050000 / 22506360
+Processed batch 17050000-17100000 / 22506360
+Processed batch 17100000-17150000 / 22506360
+Processed batch 17150000-17200000 / 22506360
+Processed batch 17200000-17250000 / 22506360
+Processed batch 17250000-17300000 / 22506360
+Processed batch 17300000-17350000 / 22506360
+Processed batch 17350000-17400000 / 22506360
+Processed batch 17400000-17450000 / 22506360
+Processed batch 17450000-17500000 / 22506360
+Processed batch 17500000-17550000 / 22506360
+Processed batch 17550000-17600000 / 22506360
+Processed batch 17600000-17650000 / 22506360
+Processed batch 17650000-17700000 / 22506360
+Processed batch 17700000-17750000 / 22506360
+Processed batch 17750000-17800000 / 22506360
+Processed batch 17800000-17850000 / 22506360
+Processed batch 17850000-17900000 / 22506360
+Processed batch 17900000-17950000 / 22506360
+Processed batch 17950000-18000000 / 22506360
+Processed batch 18000000-18050000 / 22506360
+Processed batch 18050000-18100000 / 22506360
+Processed batch 18100000-18150000 / 22506360
+Processed batch 18150000-18200000 / 22506360
+Processed batch 18200000-18250000 / 22506360
+Processed batch 18250000-18300000 / 22506360
+Processed batch 18300000-18350000 / 22506360
+Processed batch 18350000-18400000 / 22506360
+Processed batch 18400000-18450000 / 22506360
+Processed batch 18450000-18500000 / 22506360
+Processed batch 18500000-18550000 / 22506360
+Processed batch 18550000-18600000 / 22506360
+Processed batch 18600000-18650000 / 22506360
+Processed batch 18650000-18700000 / 22506360
+Processed batch 18700000-18750000 / 22506360
+Processed batch 18750000-18800000 / 22506360
+Processed batch 18800000-18850000 / 22506360
+Processed batch 18850000-18900000 / 22506360
+Processed batch 18900000-18950000 / 22506360
+Processed batch 18950000-19000000 / 22506360
+Processed batch 19000000-19050000 / 22506360
+Processed batch 19050000-19100000 / 22506360
+Processed batch 19100000-19150000 / 22506360
+Processed batch 19150000-19200000 / 22506360
+Processed batch 19200000-19250000 / 22506360
+Processed batch 19250000-19300000 / 22506360
+Processed batch 19300000-19350000 / 22506360
+Processed batch 19350000-19400000 / 22506360
+Processed batch 19400000-19450000 / 22506360
+Processed batch 19450000-19500000 / 22506360
+Processed batch 19500000-19550000 / 22506360
+Processed batch 19550000-19600000 / 22506360
+Processed batch 19600000-19650000 / 22506360
+Processed batch 19650000-19700000 / 22506360
+Processed batch 19700000-19750000 / 22506360
+Processed batch 19750000-19800000 / 22506360
+Processed batch 19800000-19850000 / 22506360
+Processed batch 19850000-19900000 / 22506360
+Processed batch 19900000-19950000 / 22506360
+Processed batch 19950000-20000000 / 22506360
+Processed batch 20000000-20050000 / 22506360
+Processed batch 20050000-20100000 / 22506360
+Processed batch 20100000-20150000 / 22506360
+Processed batch 20150000-20200000 / 22506360
+Processed batch 20200000-20250000 / 22506360
+Processed batch 20250000-20300000 / 22506360
+Processed batch 20300000-20350000 / 22506360
+Processed batch 20350000-20400000 / 22506360
+Processed batch 20400000-20450000 / 22506360
+Processed batch 20450000-20500000 / 22506360
+Processed batch 20500000-20550000 / 22506360
+Processed batch 20550000-20600000 / 22506360
+Processed batch 20600000-20650000 / 22506360
+Processed batch 20650000-20700000 / 22506360
+Processed batch 20700000-20750000 / 22506360
+Processed batch 20750000-20800000 / 22506360
+Processed batch 20800000-20850000 / 22506360
+Processed batch 20850000-20900000 / 22506360
+Processed batch 20900000-20950000 / 22506360
+Processed batch 20950000-21000000 / 22506360
+Processed batch 21000000-21050000 / 22506360
+Processed batch 21050000-21100000 / 22506360
+Processed batch 21100000-21150000 / 22506360
+Processed batch 21150000-21200000 / 22506360
+Processed batch 21200000-21250000 / 22506360
+Processed batch 21250000-21300000 / 22506360
+Processed batch 21300000-21350000 / 22506360
+Processed batch 21350000-21400000 / 22506360
+Processed batch 21400000-21450000 / 22506360
+Processed batch 21450000-21500000 / 22506360
+Processed batch 21500000-21550000 / 22506360
+Processed batch 21550000-21600000 / 22506360
+Processed batch 21600000-21650000 / 22506360
+Processed batch 21650000-21700000 / 22506360
+Processed batch 21700000-21750000 / 22506360
+Processed batch 21750000-21800000 / 22506360
+Processed batch 21800000-21850000 / 22506360
+Processed batch 21850000-21900000 / 22506360
+Processed batch 21900000-21950000 / 22506360
+Processed batch 21950000-22000000 / 22506360
+Processed batch 22000000-22050000 / 22506360
+Processed batch 22050000-22100000 / 22506360
+Processed batch 22100000-22150000 / 22506360
+Processed batch 22150000-22200000 / 22506360
+Processed batch 22200000-22250000 / 22506360
+Processed batch 22250000-22300000 / 22506360
+Processed batch 22300000-22350000 / 22506360
+Processed batch 22350000-22400000 / 22506360
+Processed batch 22400000-22450000 / 22506360
+Processed batch 22450000-22500000 / 22506360
+Processed batch 22500000-22506360 / 22506360
+Computed and loaded derivatives shape: (22506360, 24)
+shape: (22_506_360, 24)
+┌─────────────────────┬─────────────────────┬─────────────────────┬─────────────────────┬───┬──────────────────────┬──────────────────────┬──────────────────────┬──────────────────────┐
+│ s_upper_first_der_0 ┆ s_upper_first_der_1 ┆ s_upper_first_der_2 ┆ s_upper_first_der_3 ┆ … ┆ s_lower_second_der_2 ┆ s_lower_second_der_3 ┆ s_lower_second_der_4 ┆ s_lower_second_der_5 │
+│ ---                 ┆ ---                 ┆ ---                 ┆ ---                 ┆   ┆ ---                  ┆ ---                  ┆ ---                  ┆ ---                  │
+│ f32                 ┆ f32                 ┆ f32                 ┆ f32                 ┆   ┆ f32                  ┆ f32                  ┆ f32                  ┆ f32                  │
+╞═════════════════════╪═════════════════════╪═════════════════════╪═════════════════════╪═══╪══════════════════════╪══════════════════════╪══════════════════════╪══════════════════════╡
+│ 0.198335            ┆ 0.066196            ┆ -0.035885           ┆ -0.13141            ┆ … ┆ 0.264619             ┆ -0.081193            ┆ -0.324382            ┆ -0.210052            │
+│ 0.125249            ┆ -0.072208           ┆ -0.136651           ┆ -0.122617           ┆ … ┆ 0.088476             ┆ -0.162807            ┆ 0.229901             ┆ 1.346411             │
+│ 0.07111             ┆ -0.046609           ┆ -0.048086           ┆ -0.032414           ┆ … ┆ 0.160309             ┆ 0.196097             ┆ 0.162517             ┆ 0.748417             │
+│ 0.249189            ┆ 0.060671            ┆ -0.056629           ┆ -0.148289           ┆ … ┆ 0.523047             ┆ 0.210201             ┆ -0.112632            ┆ -0.751377            │
+│ 0.215158            ┆ 0.074315            ┆ -0.022225           ┆ -0.094566           ┆ … ┆ -0.16435             ┆ -0.14511             ┆ -0.062018            ┆ -0.004797            │
+│ …                   ┆ …                   ┆ …                   ┆ …                   ┆ … ┆ …                    ┆ …                    ┆ …                    ┆ …                    │
+│ 0.352399            ┆ 0.059614            ┆ -0.140265           ┆ -0.236047           ┆ … ┆ 0.760238             ┆ 0.330984             ┆ -0.543602            ┆ -0.509943            │
+│ 0.142109            ┆ -0.012077           ┆ -0.057115           ┆ -0.131074           ┆ … ┆ 0.11325              ┆ -0.110729            ┆ -0.133299            ┆ 0.654087             │
+│ 0.177451            ┆ 0.095089            ┆ 0.020312            ┆ -0.076074           ┆ … ┆ -0.00174             ┆ -0.332212            ┆ 0.064134             ┆ -0.38018             │
+│ 0.192884            ┆ -0.005314           ┆ -0.097306           ┆ -0.120621           ┆ … ┆ -0.402769            ┆ -0.0505              ┆ 0.019916             ┆ -0.549398            │
+│ 0.144652            ┆ 0.059436            ┆ 0.005352            ┆ -0.020051           ┆ … ┆ 0.480331             ┆ 0.31826              ┆ -0.366172            ┆ -0.720224            │
+└─────────────────────┴─────────────────────┴─────────────────────┴─────────────────────┴───┴──────────────────────┴──────────────────────┴──────────────────────┴──────────────────────┘
+Made scaled dataset
+Calculated and saved input distribution information without derivatives.
+found insertion index
+cut dataframe at insertion index
+stacked inputs using pl.concat
+/home/faiza/Documents/NeuralFoil/venv/lib/python3.10/site-packages/polars/series/series.py:1561: RuntimeWarning: divide by zero encountered in log
+  lambda out: ufunc(*args, out=out, dtype=dtype_char, **kwargs),
+Cleared df, derivatives_df, before, and after from memory.
+Splitting data between test and train sets has been completed
+The input training data is shaped as shape: (9, 50)
+┌────────────┬──────────────────┬──────────────────┬──────────────────┬───┬─────────────┬─────────────┬─────────────┬─────────────┐
+│ statistic  ┆ s_kulfan_upper_0 ┆ s_kulfan_upper_1 ┆ s_kulfan_upper_2 ┆ … ┆ s_Re        ┆ s_n_crit    ┆ s_xtr_upper ┆ s_xtr_lower │
+│ ---        ┆ ---              ┆ ---              ┆ ---              ┆   ┆ ---         ┆ ---         ┆ ---         ┆ ---         │
+│ str        ┆ f64              ┆ f64              ┆ f64              ┆   ┆ f64         ┆ f64         ┆ f64         ┆ f64         │
+╞════════════╪══════════════════╪══════════════════╪══════════════════╪═══╪═════════════╪═════════════╪═════════════╪═════════════╡
+│ count      ┆ 2.1381042e7      ┆ 2.1381042e7      ┆ 2.1381042e7      ┆ … ┆ 2.1381042e7 ┆ 2.1381042e7 ┆ 2.1381042e7 ┆ 2.1381042e7 │
+│ null_count ┆ 0.0              ┆ 0.0              ┆ 0.0              ┆ … ┆ 0.0         ┆ 0.0         ┆ 0.0         ┆ 0.0         │
+│ mean       ┆ 0.16878          ┆ 0.203309         ┆ 0.258006         ┆ … ┆ 0.039448    ┆ 0.0011      ┆ 0.90001     ┆ 0.899715    │
+│ std        ┆ 0.117169         ┆ 0.243623         ┆ 0.306081         ┆ … ┆ 0.984912    ┆ 1.154936    ┆ 0.237976    ┆ 0.238408    │
+│ min        ┆ -0.777743        ┆ -3.512043        ┆ -4.826776        ┆ … ┆ -5.021853   ┆ -2.0        ┆ 0.000001    ┆ 0.000001    │
+│ 25%        ┆ 0.090993         ┆ 0.05416          ┆ 0.076216         ┆ … ┆ -0.622267   ┆ -0.998878   ┆ 1.0         ┆ 1.0         │
+│ 50%        ┆ 0.163522         ┆ 0.197699         ┆ 0.251593         ┆ … ┆ 0.043357    ┆ 0.002143    ┆ 1.0         ┆ 1.0         │
+│ 75%        ┆ 0.240077         ┆ 0.347682         ┆ 0.434375         ┆ … ┆ 0.708691    ┆ 1.001044    ┆ 1.0         ┆ 1.0         │
+│ max        ┆ 1.409122         ┆ 4.508533         ┆ 6.261123         ┆ … ┆ 4.934646    ┆ 2.0         ┆ 1.0         ┆ 1.0         │
+└────────────┴──────────────────┴──────────────────┴──────────────────┴───┴─────────────┴─────────────┴─────────────┴─────────────┘ 
+The output training data is shaped as shape: (9, 199)
+┌────────────┬───────────────────────┬─────────────┬─────────────┬───┬───────────────────────┬───────────────────────┬───────────────────────┬───────────────────────┐
+│ statistic  ┆ s_analysis_confidence ┆ s_CL        ┆ s_ln_CD     ┆ … ┆ s_lower_bl_ue/vinf_28 ┆ s_lower_bl_ue/vinf_29 ┆ s_lower_bl_ue/vinf_30 ┆ s_lower_bl_ue/vinf_31 │
+│ ---        ┆ ---                   ┆ ---         ┆ ---         ┆   ┆ ---                   ┆ ---                   ┆ ---                   ┆ ---                   │
+│ str        ┆ f64                   ┆ f64         ┆ f64         ┆   ┆ f64                   ┆ f64                   ┆ f64                   ┆ f64                   │
+╞════════════╪═══════════════════════╪═════════════╪═════════════╪═══╪═══════════════════════╪═══════════════════════╪═══════════════════════╪═══════════════════════╡
+│ count      ┆ 2.1381042e7           ┆ 1.2304497e7 ┆ 1.2304497e7 ┆ … ┆ 1.2304497e7           ┆ 1.2304497e7           ┆ 1.2304497e7           ┆ 1.2304497e7           │
+│ null_count ┆ 0.0                   ┆ 9.076545e6  ┆ 9.076545e6  ┆ … ┆ 9.076545e6            ┆ 9.076545e6            ┆ 9.076545e6            ┆ 9.076545e6            │
+│ mean       ┆ 0.575486              ┆ 0.607132    ┆ 0.341986    ┆ … ┆ -0.999898             ┆ -1.000527             ┆ -1.002941             ┆ -1.008055             │
+│ std        ┆ 0.494269              ┆ 1.623266    ┆ 0.624894    ┆ … ┆ 0.119513              ┆ 0.119578              ┆ 0.120163              ┆ 0.119591              │
+│ min        ┆ 0.0                   ┆ -14.5694    ┆ -1.63941    ┆ … ┆ -2.642103             ┆ -2.632642             ┆ -2.941834             ┆ -2.632471             │
+│ 25%        ┆ 0.0                   ┆ -0.6082     ┆ -0.230102   ┆ … ┆ -1.089606             ┆ -1.091936             ┆ -1.096933             ┆ -1.105003             │
+│ 50%        ┆ 1.0                   ┆ 0.512       ┆ 0.309008    ┆ … ┆ -0.995871             ┆ -0.995298             ┆ -0.99613              ┆ -0.995504             │
+│ 75%        ┆ 1.0                   ┆ 1.7932      ┆ 0.941158    ┆ … ┆ -0.914794             ┆ -0.914033             ┆ -0.913431             ┆ -0.912672             │
+│ max        ┆ 1.0                   ┆ 6.8782      ┆ 4.364104    ┆ … ┆ 0.743489              ┆ 1.03891               ┆ 1.359499              ┆ 1.706279              │
+└────────────┴───────────────────────┴─────────────┴─────────────┴───┴───────────────────────┴───────────────────────┴───────────────────────┴───────────────────────┘ 
+The input test data is shaped as shape: (9, 50)
+┌────────────┬──────────────────┬──────────────────┬──────────────────┬───┬────────────┬────────────┬─────────────┬─────────────┐
+│ statistic  ┆ s_kulfan_upper_0 ┆ s_kulfan_upper_1 ┆ s_kulfan_upper_2 ┆ … ┆ s_Re       ┆ s_n_crit   ┆ s_xtr_upper ┆ s_xtr_lower │
+│ ---        ┆ ---              ┆ ---              ┆ ---              ┆   ┆ ---        ┆ ---        ┆ ---         ┆ ---         │
+│ str        ┆ f64              ┆ f64              ┆ f64              ┆   ┆ f64        ┆ f64        ┆ f64         ┆ f64         │
+╞════════════╪══════════════════╪══════════════════╪══════════════════╪═══╪════════════╪════════════╪═════════════╪═════════════╡
+│ count      ┆ 1.125318e6       ┆ 1.125318e6       ┆ 1.125318e6       ┆ … ┆ 1.125318e6 ┆ 1.125318e6 ┆ 1.125318e6  ┆ 1.125318e6  │
+│ null_count ┆ 0.0              ┆ 0.0              ┆ 0.0              ┆ … ┆ 0.0        ┆ 0.0        ┆ 0.0         ┆ 0.0         │
+│ mean       ┆ 0.168908         ┆ 0.20349          ┆ 0.257942         ┆ … ┆ 0.039245   ┆ 0.000916   ┆ 0.900442    ┆ 0.899836    │
+│ std        ┆ 0.117164         ┆ 0.243116         ┆ 0.30609          ┆ … ┆ 0.984897   ┆ 1.154598   ┆ 0.237335    ┆ 0.238246    │
+│ min        ┆ -0.630615        ┆ -2.735741        ┆ -3.603876        ┆ … ┆ -4.798998  ┆ -1.999991  ┆ 0.000002    ┆ 0.000001    │
+│ 25%        ┆ 0.091093         ┆ 0.054405         ┆ 0.076078         ┆ … ┆ -0.623428  ┆ -0.998517  ┆ 1.0         ┆ 1.0         │
+│ 50%        ┆ 0.163715         ┆ 0.197999         ┆ 0.251962         ┆ … ┆ 0.042739   ┆ 0.002488   ┆ 1.0         ┆ 1.0         │
+│ 75%        ┆ 0.240078         ┆ 0.347743         ┆ 0.43411          ┆ … ┆ 0.707172   ┆ 0.999916   ┆ 1.0         ┆ 1.0         │
+│ max        ┆ 1.408089         ┆ 3.350594         ┆ 4.479575         ┆ … ┆ 4.656488   ┆ 1.999997   ┆ 1.0         ┆ 1.0         │
+└────────────┴──────────────────┴──────────────────┴──────────────────┴───┴────────────┴────────────┴─────────────┴─────────────┘ 
+The output test data is shaped as shape: (9, 199)
+┌────────────┬───────────────────────┬──────────┬───────────┬───┬───────────────────────┬───────────────────────┬───────────────────────┬───────────────────────┐
+│ statistic  ┆ s_analysis_confidence ┆ s_CL     ┆ s_ln_CD   ┆ … ┆ s_lower_bl_ue/vinf_28 ┆ s_lower_bl_ue/vinf_29 ┆ s_lower_bl_ue/vinf_30 ┆ s_lower_bl_ue/vinf_31 │
+│ ---        ┆ ---                   ┆ ---      ┆ ---       ┆   ┆ ---                   ┆ ---                   ┆ ---                   ┆ ---                   │
+│ str        ┆ f64                   ┆ f64      ┆ f64       ┆   ┆ f64                   ┆ f64                   ┆ f64                   ┆ f64                   │
+╞════════════╪═══════════════════════╪══════════╪═══════════╪═══╪═══════════════════════╪═══════════════════════╪═══════════════════════╪═══════════════════════╡
+│ count      ┆ 1.125318e6            ┆ 647609.0 ┆ 647609.0  ┆ … ┆ 647609.0              ┆ 647609.0              ┆ 647609.0              ┆ 647609.0              │
+│ null_count ┆ 0.0                   ┆ 477709.0 ┆ 477709.0  ┆ … ┆ 477709.0              ┆ 477709.0              ┆ 477709.0              ┆ 477709.0              │
+│ mean       ┆ 0.57549               ┆ 0.601653 ┆ 0.341435  ┆ … ┆ -0.999823             ┆ -1.000408             ┆ -1.002785             ┆ -1.00788              │
+│ std        ┆ 0.494269              ┆ 1.625185 ┆ 0.624616  ┆ … ┆ 0.119657              ┆ 0.119719              ┆ 0.120313              ┆ 0.119707              │
+│ min        ┆ 0.0                   ┆ -5.3332  ┆ -1.541054 ┆ … ┆ -1.673368             ┆ -1.672757             ┆ -1.686384             ┆ -1.714363             │
+│ 25%        ┆ 0.0                   ┆ -0.6136  ┆ -0.230535 ┆ … ┆ -1.089796             ┆ -1.092061             ┆ -1.097062             ┆ -1.10494              │
+│ 50%        ┆ 1.0                   ┆ 0.5006   ┆ 0.30945   ┆ … ┆ -0.995761             ┆ -0.995104             ┆ -0.995977             ┆ -0.995287             │
+│ 75%        ┆ 1.0                   ┆ 1.7898   ┆ 0.941033  ┆ … ┆ -0.914737             ┆ -0.913785             ┆ -0.913249             ┆ -0.912541             │
+│ max        ┆ 1.0                   ┆ 6.4714   ┆ 3.043363  ┆ … ┆ -0.364124             ┆ -0.335131             ┆ -0.371171             ┆ -0.492429             │
+└────────────┴───────────────────────┴──────────┴───────────┴───┴───────────────────────┴───────────────────────┴───────────────────────┴───────────────────────┘ 
+Scanning memory for large Polars DataFrames and NumPy arrays...
+Polars DataFrame 'df_inputs_scaled': 22,506,360 rows x 49 cols ~ 8822.5 MB
+Polars DataFrame 'df_outputs_scaled': 22,506,360 rows x 198 cols ~ 35650.1 MB
+Polars DataFrame 'df_train_inputs_scaled': 21,381,042 rows x 49 cols ~ 8381.4 MB
+Polars DataFrame 'df_train_outputs_scaled': 21,381,042 rows x 198 cols ~ 33867.6 MB
+Polars DataFrame 'df_test_inputs_scaled': 1,125,318 rows x 49 cols ~ 441.1 MB
+Polars DataFrame 'df_test_outputs_scaled': 1,125,318 rows x 198 cols ~ 1782.5 MB
+Consider deleting unneeded objects with `del var_name` + `gc.collect()` to free RAM.
+Deleted df_inputs_scaled and df_outputs_scaled from RAM
+Total RAM: 134.72 GB
+Available RAM: 80.86 GB
+Used RAM: 77.97 GB
+RAM usage: 40.0%
+----------- 164.98490929603577 seconds -------
+Cache file:  /home/faiza/Documents/NeuralFoil/training/nn-avian-gen2-256-matmul.pth
+cuda
+/home/faiza/Documents/NeuralFoil/training/train.py:172: FutureWarning: You are using `torch.load` with `weights_only=False` (the current default value), which uses the default pickle module implicitly. It is possible to construct malicious pickle data which will execute arbitrary code during unpickling (See https://github.com/pytorch/pytorch/blob/main/SECURITY.md#untrusted-models for more details). In a future release, the default value for `weights_only` will be flipped to `True`. This limits the functions that could be executed during unpickling. Arbitrary objects will no longer be allowed to be loaded via this mode unless they are explicitly allowlisted by the user via `torch.serialization.add_safe_globals`. We recommend you start setting `weights_only=True` for any use case where you don't have full control of the loaded file. Please open an issue on GitHub for any issues related to this experimental feature.
+  checkpoint = torch.load(cache_file)
+Model found, resuming training.
+Preparing data...
+Test inputs done
+Test outputs done
+Train inputs done
+Train outputs done
+Training...
+Epoch: 0 | Train Loss: 0.50241 | Test Loss: 0.502432 | analysis_confidence: 0.135784 | CL: 0.0155025 | ln_CD: 0.0282107 | CM: 0.00226182 | Top_Xtr: 0.0086264 | Bot_Xtr: 0.00959872
+Loss contributors: 
+	s_analysis_confidence    : 0.201788
+	s_ln_CD                  : 0.102497
+	s_CL                     : 0.09905
+	s_CM                     : 0.0385662
+	s_Bot_Xtr                : 0.00598375
+	s_Top_Xtr                : 0.00432753
+	s_upper_bl_ret_0         : 0.000744394
+	s_lower_bl_ret_0         : 0.000727161
+	s_lower_bl_H_1           : 0.000661768
+	s_upper_bl_H_31          : 0.000647218
+Duration of Epoch: 0 was 930.5740385055542 seconds
+-- 935.5608706474304 seconds since start, for Epoch 0 --
+Epoch: 1 | Train Loss: 0.500663 | Test Loss: 0.498024 | analysis_confidence: 0.132912 | CL: 0.0151498 | ln_CD: 0.0274283 | CM: 0.00222533 | Top_Xtr: 0.00894834 | Bot_Xtr: 0.0103468
+Loss contributors: 
+	s_analysis_confidence    : 0.20095
+	s_ln_CD                  : 0.101025
+	s_CL                     : 0.0968537
+	s_CM                     : 0.0378453
+	s_Bot_Xtr                : 0.00672653
+	s_Top_Xtr                : 0.00493675
+	s_upper_bl_ret_0         : 0.000733561
+	s_lower_bl_ret_0         : 0.000729357
+	s_lower_bl_H_1           : 0.000635723
+	s_upper_bl_H_31          : 0.000634913
+Duration of Epoch: 1 was 885.0717062950134 seconds
+-- 1820.7077457904816 seconds since start, for Epoch 1 --
+Epoch: 2 | Train Loss: 0.499099 | Test Loss: 0.494888 | analysis_confidence: 0.134455 | CL: 0.0150084 | ln_CD: 0.0271659 | CM: 0.00224079 | Top_Xtr: 0.00862087 | Bot_Xtr: 0.0100121
+Loss contributors: 
+	s_analysis_confidence    : 0.200416
+	s_ln_CD                  : 0.1005
+	s_CL                     : 0.0961915
+	s_CM                     : 0.0379413
+	s_Bot_Xtr                : 0.00618311
+	s_Top_Xtr                : 0.00443093
+	s_upper_bl_ret_0         : 0.000727435
+	s_lower_bl_ret_0         : 0.000715589
+	s_lower_bl_H_1           : 0.000638376
+	s_upper_bl_H_31          : 0.000631227
+Duration of Epoch: 2 was 923.5929408073425 seconds
+-- 2744.3698959350586 seconds since start, for Epoch 2 --
+Epoch: 3 | Train Loss: 0.497512 | Test Loss: 0.495285 | analysis_confidence: 0.134067 | CL: 0.0149892 | ln_CD: 0.027996 | CM: 0.00223707 | Top_Xtr: 0.00814939 | Bot_Xtr: 0.00939544
+Loss contributors: 
+	s_analysis_confidence    : 0.20122
+	s_ln_CD                  : 0.101435
+	s_CL                     : 0.0967014
+	s_CM                     : 0.0378175
+	s_Bot_Xtr                : 0.00583452
+	s_Top_Xtr                : 0.00417404
+	s_upper_bl_ret_0         : 0.000726562
+	s_lower_bl_ret_0         : 0.000712554
+	s_lower_bl_H_1           : 0.000621268
+	s_upper_bl_H_31          : 0.000609593
+Duration of Epoch: 3 was 885.0304183959961 seconds
+-- 3629.4768126010895 seconds since start, for Epoch 3 --
+Epoch: 4 | Train Loss: 0.496105 | Test Loss: 0.502324 | analysis_confidence: 0.130327 | CL: 0.0157061 | ln_CD: 0.0280699 | CM: 0.0022711 | Top_Xtr: 0.00848397 | Bot_Xtr: 0.0100095
+Loss contributors: 
+	s_analysis_confidence    : 0.201493
+	s_ln_CD                  : 0.102636
+	s_CL                     : 0.0989906
+	s_CM                     : 0.0385206
+	s_Bot_Xtr                : 0.00613254
+	s_Top_Xtr                : 0.00431002
+	s_upper_bl_ret_0         : 0.000735157
+	s_lower_bl_ret_0         : 0.000729826
+	s_upper_bl_H_31          : 0.000666836
+	s_upper_bl_H_30          : 0.000637994
+Duration of Epoch: 4 was 897.7571852207184 seconds
+-- 4527.2929973602295 seconds since start, for Epoch 4 --
+Epoch: 5 | Train Loss: 0.4946 | Test Loss: 0.503587 | analysis_confidence: 0.129745 | CL: 0.0160955 | ln_CD: 0.0268816 | CM: 0.00248274 | Top_Xtr: 0.00925799 | Bot_Xtr: 0.0102652
+Loss contributors: 
+	s_analysis_confidence    : 0.202561
+	s_CL                     : 0.0997653
+	s_ln_CD                  : 0.0993543
+	s_CM                     : 0.0416598
+	s_Bot_Xtr                : 0.00664835
+	s_Top_Xtr                : 0.00512606
+	s_upper_bl_ret_0         : 0.000739768
+	s_lower_bl_ret_0         : 0.000707391
+	s_upper_bl_H_31          : 0.000619563
+	s_lower_bl_H_1           : 0.000605721
+Duration of Epoch: 5 was 899.8766806125641 seconds
+-- 5427.229447126389 seconds since start, for Epoch 5 --
+Epoch: 6 | Train Loss: 0.493418 | Test Loss: 0.494071 | analysis_confidence: 0.132719 | CL: 0.0150553 | ln_CD: 0.0274904 | CM: 0.00222034 | Top_Xtr: 0.0088251 | Bot_Xtr: 0.01025
+Loss contributors: 
+	s_analysis_confidence    : 0.199722
+	s_ln_CD                  : 0.100017
+	s_CL                     : 0.0964155
+	s_CM                     : 0.037575
+	s_Bot_Xtr                : 0.00656632
+	s_Top_Xtr                : 0.00492447
+	s_upper_bl_ret_0         : 0.000701617
+	s_lower_bl_ret_0         : 0.000683069
+	s_upper_bl_H_31          : 0.000625538
+	s_lower_bl_H_1           : 0.000606069
+Duration of Epoch: 6 was 905.883303642273 seconds
+-- 6333.163696050644 seconds since start, for Epoch 6 --
+Epoch: 7 | Train Loss: 0.492396 | Test Loss: 0.494233 | analysis_confidence: 0.129973 | CL: 0.015421 | ln_CD: 0.0267863 | CM: 0.00224668 | Top_Xtr: 0.00836698 | Bot_Xtr: 0.0099327
+Loss contributors: 
+	s_analysis_confidence    : 0.200188
+	s_ln_CD                  : 0.0994041
+	s_CL                     : 0.0975828
+	s_CM                     : 0.0380021
+	s_Bot_Xtr                : 0.00651327
+	s_Top_Xtr                : 0.0045942
+	s_upper_bl_ret_0         : 0.000714055
+	s_lower_bl_ret_0         : 0.000690591
+	s_upper_bl_H_31          : 0.000624396
+	s_lower_bl_H_1           : 0.000602155
+Duration of Epoch: 7 was 894.8504428863525 seconds
+-- 7228.066222906113 seconds since start, for Epoch 7 --
+Epoch: 8 | Train Loss: 0.491139 | Test Loss: 0.486367 | analysis_confidence: 0.133463 | CL: 0.0148082 | ln_CD: 0.02614 | CM: 0.00213573 | Top_Xtr: 0.00813702 | Bot_Xtr: 0.00944738
+Loss contributors: 
+	s_analysis_confidence    : 0.199403
+	s_ln_CD                  : 0.0974392
+	s_CL                     : 0.0952981
+	s_CM                     : 0.0362998
+	s_Bot_Xtr                : 0.00583286
+	s_Top_Xtr                : 0.00412058
+	s_upper_bl_ret_0         : 0.000698169
+	s_lower_bl_ret_0         : 0.000678363
+	s_lower_bl_H_1           : 0.000620579
+	s_lower_bl_H_0           : 0.000618152
+Duration of Epoch: 8 was 892.7969982624054 seconds
+-- 8120.944913864136 seconds since start, for Epoch 8 --
+Epoch: 9 | Train Loss: 0.490112 | Test Loss: 0.48581 | analysis_confidence: 0.128705 | CL: 0.0149193 | ln_CD: 0.0260431 | CM: 0.00216293 | Top_Xtr: 0.00779831 | Bot_Xtr: 0.00924782
+Loss contributors: 
+	s_analysis_confidence    : 0.199861
+	s_ln_CD                  : 0.0968234
+	s_CL                     : 0.0951609
+	s_CM                     : 0.0367793
+	s_Bot_Xtr                : 0.00568106
+	s_Top_Xtr                : 0.00403432
+	s_upper_bl_ret_0         : 0.000691072
+	s_lower_bl_ret_0         : 0.000668554
+	s_upper_bl_H_31          : 0.000627941
+	s_upper_bl_H_30          : 0.000600396
+Duration of Epoch: 9 was 899.0525929927826 seconds
+-- 9020.062656879425 seconds since start, for Epoch 9 --
+Epoch: 10 | Train Loss: 0.489128 | Test Loss: 0.489002 | analysis_confidence: 0.130192 | CL: 0.0148829 | ln_CD: 0.0276122 | CM: 0.00227803 | Top_Xtr: 0.00830624 | Bot_Xtr: 0.00933823
+Loss contributors: 
+	s_analysis_confidence    : 0.199999
+	s_ln_CD                  : 0.0991765
+	s_CL                     : 0.0947891
+	s_CM                     : 0.0382429
+	s_Bot_Xtr                : 0.00584758
+	s_Top_Xtr                : 0.00418928
+	s_upper_bl_ret_0         : 0.000708852
+	s_lower_bl_ret_0         : 0.000669144
+	s_upper_bl_H_31          : 0.00060764
+	s_lower_bl_H_31          : 0.000601769
+Duration of Epoch: 10 was 922.2193946838379 seconds
+-- 9942.354580879211 seconds since start, for Epoch 10 --
+Epoch: 11 | Train Loss: 0.488133 | Test Loss: 0.484706 | analysis_confidence: 0.134053 | CL: 0.0147434 | ln_CD: 0.0263782 | CM: 0.00211432 | Top_Xtr: 0.00793722 | Bot_Xtr: 0.00932274
+Loss contributors: 
+	s_analysis_confidence    : 0.200296
+	s_ln_CD                  : 0.0973878
+	s_CL                     : 0.0939209
+	s_CM                     : 0.035771
+	s_Bot_Xtr                : 0.00590767
+	s_Top_Xtr                : 0.00404192
+	s_upper_bl_ret_0         : 0.000705632
+	s_lower_bl_ret_0         : 0.000680686
+	s_lower_bl_H_1           : 0.000605948
+	s_upper_bl_H_31          : 0.00060124
+Duration of Epoch: 11 was 904.4718301296234 seconds
+-- 10846.90020108223 seconds since start, for Epoch 11 --
+Epoch: 12 | Train Loss: 0.487203 | Test Loss: 0.49312 | analysis_confidence: 0.12991 | CL: 0.0150035 | ln_CD: 0.0266819 | CM: 0.00218279 | Top_Xtr: 0.00770408 | Bot_Xtr: 0.0091811
+Loss contributors: 
+	s_analysis_confidence    : 0.200177
+	s_ln_CD                  : 0.101533
+	s_CL                     : 0.0968147
+	s_CM                     : 0.037029
+	s_Bot_Xtr                : 0.00577331
+	s_Top_Xtr                : 0.00393258
+	s_upper_bl_ret_0         : 0.000707765
+	s_lower_bl_ret_0         : 0.000678858
+	s_lower_bl_H_1           : 0.000623632
+	s_lower_bl_H_0           : 0.000615134
+Duration of Epoch: 12 was 901.7790632247925 seconds
+-- 11748.748436689377 seconds since start, for Epoch 12 --
+Epoch: 13 | Train Loss: 0.486462 | Test Loss: 0.485266 | analysis_confidence: 0.131485 | CL: 0.0147124 | ln_CD: 0.0275025 | CM: 0.00218362 | Top_Xtr: 0.00777227 | Bot_Xtr: 0.00911982
+Loss contributors: 
+	s_analysis_confidence    : 0.198842
+	s_ln_CD                  : 0.0988276
+	s_CL                     : 0.0942933
+	s_CM                     : 0.036806
+	s_Bot_Xtr                : 0.00555257
+	s_Top_Xtr                : 0.00388563
+	s_upper_bl_ret_0         : 0.000691436
+	s_lower_bl_ret_0         : 0.000667683
+	s_upper_bl_H_31          : 0.000654306
+	s_upper_bl_H_30          : 0.000617738
+Duration of Epoch: 13 was 902.1300480365753 seconds
+-- 12650.948697566986 seconds since start, for Epoch 13 --
+Epoch: 14 | Train Loss: 0.485585 | Test Loss: 0.489367 | analysis_confidence: 0.129468 | CL: 0.014712 | ln_CD: 0.0297501 | CM: 0.00224969 | Top_Xtr: 0.00749598 | Bot_Xtr: 0.00865413
+Loss contributors: 
+	s_analysis_confidence    : 0.199442
+	s_ln_CD                  : 0.102585
+	s_CL                     : 0.0945203
+	s_CM                     : 0.0375509
+	s_Bot_Xtr                : 0.00542936
+	s_Top_Xtr                : 0.00377149
+	s_upper_bl_ret_0         : 0.000690375
+	s_lower_bl_ret_0         : 0.000657517
+	s_upper_bl_H_31          : 0.000598249
+	s_lower_bl_H_1           : 0.000580882
+Duration of Epoch: 14 was 906.6146183013916 seconds
+-- 13557.634109973907 seconds since start, for Epoch 14 --
+Epoch: 15 | Train Loss: 0.484917 | Test Loss: 0.482308 | analysis_confidence: 0.130991 | CL: 0.0144192 | ln_CD: 0.0256319 | CM: 0.00215783 | Top_Xtr: 0.00841445 | Bot_Xtr: 0.00974791
+Loss contributors: 
+	s_analysis_confidence    : 0.200889
+	s_ln_CD                  : 0.0945466
+	s_CL                     : 0.0932107
+	s_CM                     : 0.0361644
+	s_Bot_Xtr                : 0.00622974
+	s_Top_Xtr                : 0.00441028
+	s_upper_bl_ret_0         : 0.000689568
+	s_lower_bl_ret_0         : 0.000669349
+	s_lower_bl_H_1           : 0.000592384
+	s_upper_bl_H_31          : 0.000590047
+Duration of Epoch: 15 was 893.5801033973694 seconds
+-- 14451.274586439133 seconds since start, for Epoch 15 --
+Epoch: 16 | Train Loss: 0.484023 | Test Loss: 0.481419 | analysis_confidence: 0.133161 | CL: 0.0147211 | ln_CD: 0.0264624 | CM: 0.0021569 | Top_Xtr: 0.00771508 | Bot_Xtr: 0.00905983
+Loss contributors: 
+	s_analysis_confidence    : 0.199011
+	s_ln_CD                  : 0.0959287
+	s_CL                     : 0.0939168
+	s_CM                     : 0.0365294
+	s_Bot_Xtr                : 0.00570136
+	s_Top_Xtr                : 0.00399339
+	s_upper_bl_ret_0         : 0.000717869
+	s_lower_bl_ret_0         : 0.000669381
+	s_upper_bl_H_31          : 0.00060103
+	s_upper_bl_H_30          : 0.000586606
+Duration of Epoch: 16 was 910.5573561191559 seconds
+-- 15361.889701128006 seconds since start, for Epoch 16 --
+Epoch: 17 | Train Loss: 0.483386 | Test Loss: 0.487902 | analysis_confidence: 0.133954 | CL: 0.0150215 | ln_CD: 0.0281922 | CM: 0.00218621 | Top_Xtr: 0.00786464 | Bot_Xtr: 0.0091328
+Loss contributors: 
+	s_analysis_confidence    : 0.199225
+	s_ln_CD                  : 0.101138
+	s_CL                     : 0.0952216
+	s_CM                     : 0.0367891
+	s_Bot_Xtr                : 0.00565169
+	s_Top_Xtr                : 0.00394585
+	s_upper_bl_ret_0         : 0.000701733
+	s_lower_bl_ret_0         : 0.000670846
+	s_upper_bl_H_31          : 0.000629319
+	s_upper_bl_H_30          : 0.00059653
+Duration of Epoch: 17 was 900.4527013301849 seconds
+-- 16262.407570838928 seconds since start, for Epoch 17 --
+Epoch: 18 | Train Loss: 0.482953 | Test Loss: 0.480031 | analysis_confidence: 0.133222 | CL: 0.0144798 | ln_CD: 0.0264373 | CM: 0.0021187 | Top_Xtr: 0.00876782 | Bot_Xtr: 0.0104168
+Loss contributors: 
+	s_analysis_confidence    : 0.199601
+	s_ln_CD                  : 0.0953265
+	s_CL                     : 0.0927118
+	s_CM                     : 0.0357941
+	s_Bot_Xtr                : 0.0061523
+	s_Top_Xtr                : 0.00435037
+	s_upper_bl_ret_0         : 0.000688699
+	s_lower_bl_ret_0         : 0.000657349
+	s_upper_bl_H_31          : 0.000593363
+	s_lower_bl_H_1           : 0.00057579
+Duration of Epoch: 18 was 896.4759421348572 seconds
+-- 17158.938591957092 seconds since start, for Epoch 18 --
+Epoch: 19 | Train Loss: 0.482149 | Test Loss: 0.480596 | analysis_confidence: 0.129614 | CL: 0.0147524 | ln_CD: 0.0266459 | CM: 0.00213359 | Top_Xtr: 0.00753563 | Bot_Xtr: 0.00899354
+Loss contributors: 
+	s_analysis_confidence    : 0.198613
+	s_ln_CD                  : 0.0973398
+	s_CL                     : 0.0938813
+	s_CM                     : 0.0358765
+	s_Bot_Xtr                : 0.00550203
+	s_Top_Xtr                : 0.00380438
+	s_upper_bl_ret_0         : 0.000689817
+	s_lower_bl_ret_0         : 0.00066179
+	s_upper_bl_H_31          : 0.000579548
+	s_lower_bl_H_1           : 0.000573221
+Duration of Epoch: 19 was 898.3481743335724 seconds
+-- 18057.342531204224 seconds since start, for Epoch 19 --
+Epoch: 20 | Train Loss: 0.481482 | Test Loss: 0.482737 | analysis_confidence: 0.131344 | CL: 0.0146556 | ln_CD: 0.0261624 | CM: 0.00225518 | Top_Xtr: 0.00753896 | Bot_Xtr: 0.00879745
+Loss contributors: 
+	s_analysis_confidence    : 0.200201
+	s_ln_CD                  : 0.0953233
+	s_CL                     : 0.0939983
+	s_CM                     : 0.0379828
+	s_Bot_Xtr                : 0.00550787
+	s_Top_Xtr                : 0.00385425
+	s_upper_bl_ret_0         : 0.000679963
+	s_lower_bl_ret_0         : 0.000645253
+	s_upper_bl_H_31          : 0.000600128
+	s_lower_bl_H_1           : 0.000587919
+Duration of Epoch: 20 was 911.2656526565552 seconds
+-- 18968.66775035858 seconds since start, for Epoch 20 --
+Epoch: 21 | Train Loss: 0.4811 | Test Loss: 0.477947 | analysis_confidence: 0.132244 | CL: 0.0149437 | ln_CD: 0.0259958 | CM: 0.00207527 | Top_Xtr: 0.00782391 | Bot_Xtr: 0.00906073
+Loss contributors: 
+	s_analysis_confidence    : 0.199927
+	s_ln_CD                  : 0.0951799
+	s_CL                     : 0.0935291
+	s_CM                     : 0.0350263
+	s_Bot_Xtr                : 0.00548881
+	s_Top_Xtr                : 0.00384739
+	s_upper_bl_ret_0         : 0.000680476
+	s_lower_bl_ret_0         : 0.000657097
+	s_upper_bl_H_31          : 0.000592262
+	s_upper_bl_H_30          : 0.000572804
+Duration of Epoch: 21 was 915.3020544052124 seconds
+-- 19884.041014909744 seconds since start, for Epoch 21 --
+Epoch: 22 | Train Loss: 0.480246 | Test Loss: 0.481404 | analysis_confidence: 0.130973 | CL: 0.0147373 | ln_CD: 0.0271819 | CM: 0.00215079 | Top_Xtr: 0.00865138 | Bot_Xtr: 0.00958838
+Loss contributors: 
+	s_analysis_confidence    : 0.199278
+	s_ln_CD                  : 0.0964048
+	s_CL                     : 0.0934934
+	s_CM                     : 0.036142
+	s_Bot_Xtr                : 0.0059837
+	s_Top_Xtr                : 0.00449472
+	s_upper_bl_ret_0         : 0.000668018
+	s_lower_bl_ret_0         : 0.000646517
+	s_upper_bl_H_31          : 0.000615938
+	s_upper_bl_H_30          : 0.000600165
+Duration of Epoch: 22 was 900.3889932632446 seconds
+-- 20784.496005773544 seconds since start, for Epoch 22 --
+Epoch: 23 | Train Loss: 0.479769 | Test Loss: 0.475426 | analysis_confidence: 0.130248 | CL: 0.0144347 | ln_CD: 0.0252627 | CM: 0.00211244 | Top_Xtr: 0.00725099 | Bot_Xtr: 0.00854684
+Loss contributors: 
+	s_analysis_confidence    : 0.198014
+	s_ln_CD                  : 0.0945297
+	s_CL                     : 0.0927652
+	s_CM                     : 0.0355661
+	s_Bot_Xtr                : 0.00538868
+	s_Top_Xtr                : 0.00371742
+	s_upper_bl_ret_0         : 0.000663027
+	s_lower_bl_ret_0         : 0.000644924
+	s_upper_bl_H_31          : 0.000585786
+	s_lower_bl_H_1           : 0.000564446
+Duration of Epoch: 23 was 887.052572965622 seconds
+-- 21671.594786167145 seconds since start, for Epoch 23 --
+Epoch: 24 | Train Loss: 0.479347 | Test Loss: 0.481116 | analysis_confidence: 0.132047 | CL: 0.0146011 | ln_CD: 0.0267652 | CM: 0.00211769 | Top_Xtr: 0.00784506 | Bot_Xtr: 0.00904706
+Loss contributors: 
+	s_analysis_confidence    : 0.198328
+	s_ln_CD                  : 0.0972576
+	s_CL                     : 0.0941059
+	s_CM                     : 0.0359195
+	s_Bot_Xtr                : 0.00564915
+	s_Top_Xtr                : 0.00406767
+	s_upper_bl_ret_0         : 0.000663061
+	s_lower_bl_ret_0         : 0.000642105
+	s_upper_bl_H_31          : 0.00059491
+	s_lower_bl_H_31          : 0.000575708
+Duration of Epoch: 24 was 887.5469448566437 seconds
+-- 22559.194859981537 seconds since start, for Epoch 24 --
+Epoch: 25 | Train Loss: 0.47873 | Test Loss: 0.471911 | analysis_confidence: 0.129217 | CL: 0.0142329 | ln_CD: 0.0254696 | CM: 0.00208829 | Top_Xtr: 0.00713515 | Bot_Xtr: 0.0085922
+Loss contributors: 
+	s_analysis_confidence    : 0.198539
+	s_ln_CD                  : 0.0938397
+	s_CL                     : 0.091337
+	s_CM                     : 0.0351169
+	s_Bot_Xtr                : 0.005325
+	s_Top_Xtr                : 0.00369913
+	s_upper_bl_ret_0         : 0.000693318
+	s_lower_bl_ret_0         : 0.000658128
+	s_upper_bl_H_31          : 0.00056881
+	s_lower_bl_H_1           : 0.000557474
+Duration of Epoch: 25 was 879.099684715271 seconds
+-- 23438.349881887436 seconds since start, for Epoch 25 --
+Epoch: 26 | Train Loss: 0.478343 | Test Loss: 0.474957 | analysis_confidence: 0.129675 | CL: 0.0142541 | ln_CD: 0.0259486 | CM: 0.00207794 | Top_Xtr: 0.00771481 | Bot_Xtr: 0.00865767
+Loss contributors: 
+	s_analysis_confidence    : 0.199267
+	s_ln_CD                  : 0.0953538
+	s_CL                     : 0.0913949
+	s_CM                     : 0.0349581
+	s_Bot_Xtr                : 0.00537912
+	s_Top_Xtr                : 0.00389371
+	s_upper_bl_ret_0         : 0.000665915
+	s_lower_bl_ret_0         : 0.000640019
+	s_upper_bl_H_31          : 0.000587752
+	s_lower_bl_H_1           : 0.000576404
+Duration of Epoch: 26 was 907.8082175254822 seconds
+-- 24346.2181494236 seconds since start, for Epoch 26 --
+Epoch: 27 | Train Loss: 0.477763 | Test Loss: 0.47702 | analysis_confidence: 0.131838 | CL: 0.0144889 | ln_CD: 0.0263335 | CM: 0.00220918 | Top_Xtr: 0.00843755 | Bot_Xtr: 0.0093061
+Loss contributors: 
+	s_analysis_confidence    : 0.197773
+	s_ln_CD                  : 0.0945456
+	s_CL                     : 0.0925679
+	s_CM                     : 0.0370248
+	s_Bot_Xtr                : 0.00560978
+	s_Top_Xtr                : 0.00403743
+	s_upper_bl_ret_0         : 0.000661634
+	s_lower_bl_ret_0         : 0.000639428
+	s_upper_bl_H_31          : 0.000581849
+	s_lower_bl_H_31          : 0.000572238
+Duration of Epoch: 27 was 919.0163569450378 seconds
+-- 25265.29700732231 seconds since start, for Epoch 27 --
+Epoch: 28 | Train Loss: 0.477223 | Test Loss: 0.491253 | analysis_confidence: 0.128955 | CL: 0.0149413 | ln_CD: 0.0279572 | CM: 0.00231982 | Top_Xtr: 0.00810452 | Bot_Xtr: 0.00906814
+Loss contributors: 
+	s_analysis_confidence    : 0.199804
+	s_ln_CD                  : 0.100746
+	s_CL                     : 0.0959403
+	s_CM                     : 0.0385843
+	s_Bot_Xtr                : 0.00566923
+	s_Top_Xtr                : 0.00413876
+	s_upper_bl_ret_0         : 0.000675842
+	s_lower_bl_ret_0         : 0.000660084
+	s_upper_bl_H_31          : 0.000603048
+	s_upper_bl_H_30          : 0.000578777
+Duration of Epoch: 28 was 888.8533663749695 seconds
+-- 26154.20347213745 seconds since start, for Epoch 28 --
+Epoch: 29 | Train Loss: 0.476874 | Test Loss: 0.480034 | analysis_confidence: 0.128575 | CL: 0.0152146 | ln_CD: 0.0264846 | CM: 0.00219901 | Top_Xtr: 0.0078935 | Bot_Xtr: 0.0089631
+Loss contributors: 
+	s_analysis_confidence    : 0.198077
+	s_ln_CD                  : 0.0971397
+	s_CL                     : 0.0944207
+	s_CM                     : 0.0366562
+	s_Bot_Xtr                : 0.00523383
+	s_Top_Xtr                : 0.00379823
+	s_upper_bl_ret_0         : 0.000654983
+	s_lower_bl_ret_0         : 0.000636778
+	s_upper_bl_H_31          : 0.000578773
+	s_lower_bl_H_1           : 0.000577246
+Duration of Epoch: 29 was 887.2360982894897 seconds
+-- 27041.488041877747 seconds since start, for Epoch 29 --
+Epoch: 30 | Train Loss: 0.476328 | Test Loss: 0.482147 | analysis_confidence: 0.129837 | CL: 0.0146345 | ln_CD: 0.0267213 | CM: 0.00220485 | Top_Xtr: 0.00770831 | Bot_Xtr: 0.00891982
+Loss contributors: 
+	s_analysis_confidence    : 0.198981
+	s_ln_CD                  : 0.098145
+	s_CL                     : 0.0935739
+	s_CM                     : 0.0370113
+	s_Bot_Xtr                : 0.00549459
+	s_Top_Xtr                : 0.00374748
+	s_upper_bl_ret_0         : 0.00067945
+	s_lower_bl_ret_0         : 0.000648103
+	s_upper_bl_H_31          : 0.000581607
+	s_lower_bl_H_1           : 0.000564584
+Duration of Epoch: 30 was 913.0936574935913 seconds
+-- 27954.63873553276 seconds since start, for Epoch 30 --
+Epoch: 31 | Train Loss: 0.475914 | Test Loss: 0.4853 | analysis_confidence: 0.132134 | CL: 0.0145617 | ln_CD: 0.0280618 | CM: 0.00223892 | Top_Xtr: 0.00781775 | Bot_Xtr: 0.00899138
+Loss contributors: 
+	s_analysis_confidence    : 0.198933
+	s_ln_CD                  : 0.0996398
+	s_CL                     : 0.0943103
+	s_CM                     : 0.0373849
+	s_Bot_Xtr                : 0.00545896
+	s_Top_Xtr                : 0.00385944
+	s_upper_bl_ret_0         : 0.000657666
+	s_lower_bl_ret_0         : 0.000637834
+	s_upper_bl_H_31          : 0.00057737
+	s_lower_bl_H_1           : 0.000566832
+Duration of Epoch: 31 was 924.5099370479584 seconds
+-- 28879.195900678635 seconds since start, for Epoch 31 --
+Epoch: 32 | Train Loss: 0.475735 | Test Loss: 0.479249 | analysis_confidence: 0.128347 | CL: 0.014383 | ln_CD: 0.0279122 | CM: 0.00210359 | Top_Xtr: 0.00714251 | Bot_Xtr: 0.00829461
+Loss contributors: 
+	s_analysis_confidence    : 0.198459
+	s_ln_CD                  : 0.0985387
+	s_CL                     : 0.0934043
+	s_CM                     : 0.0354346
+	s_Bot_Xtr                : 0.00515205
+	s_Top_Xtr                : 0.00356452
+	s_upper_bl_ret_0         : 0.000654818
+	s_lower_bl_ret_0         : 0.000642856
+	s_upper_bl_H_31          : 0.000573156
+	s_lower_bl_H_1           : 0.000567877
+Duration of Epoch: 32 was 912.2041521072388 seconds
+-- 29791.445456027985 seconds since start, for Epoch 32 --
+Epoch: 33 | Train Loss: 0.475171 | Test Loss: 0.472411 | analysis_confidence: 0.13028 | CL: 0.014698 | ln_CD: 0.0259275 | CM: 0.00216998 | Top_Xtr: 0.00720429 | Bot_Xtr: 0.00856501
+Loss contributors: 
+	s_analysis_confidence    : 0.19751
+	s_ln_CD                  : 0.0934909
+	s_CL                     : 0.0922911
+	s_CM                     : 0.0359964
+	s_Bot_Xtr                : 0.00541569
+	s_Top_Xtr                : 0.00362165
+	s_upper_bl_ret_0         : 0.00064737
+	s_lower_bl_ret_0         : 0.000620818
+	s_upper_bl_H_31          : 0.000576944
+	s_lower_bl_H_31          : 0.000555892
+Duration of Epoch: 33 was 912.1625785827637 seconds
+-- 30703.666310548782 seconds since start, for Epoch 33 --
+Epoch: 34 | Train Loss: 0.474604 | Test Loss: 0.484126 | analysis_confidence: 0.127658 | CL: 0.0150576 | ln_CD: 0.0289603 | CM: 0.00208671 | Top_Xtr: 0.00809968 | Bot_Xtr: 0.00888151
+Loss contributors: 
+	s_analysis_confidence    : 0.198772
+	s_ln_CD                  : 0.100019
+	s_CL                     : 0.0948813
+	s_CM                     : 0.0352384
+	s_Bot_Xtr                : 0.00555902
+	s_Top_Xtr                : 0.00415829
+	s_upper_bl_ret_0         : 0.000657533
+	s_lower_bl_ret_0         : 0.000638222
+	s_upper_bl_H_31          : 0.000593049
+	s_lower_bl_H_1           : 0.000567632
+Duration of Epoch: 34 was 878.4576396942139 seconds
+-- 31582.16951274872 seconds since start, for Epoch 34 --
+Epoch: 35 | Train Loss: 0.474553 | Test Loss: 0.475329 | analysis_confidence: 0.131753 | CL: 0.014527 | ln_CD: 0.0272574 | CM: 0.00216379 | Top_Xtr: 0.00762119 | Bot_Xtr: 0.00891089
+Loss contributors: 
+	s_analysis_confidence    : 0.198212
+	s_ln_CD                  : 0.09527
+	s_CL                     : 0.0924839
+	s_CM                     : 0.0363116
+	s_Bot_Xtr                : 0.00531159
+	s_Top_Xtr                : 0.00386693
+	s_upper_bl_ret_0         : 0.000666447
+	s_lower_bl_ret_0         : 0.000655146
+	s_upper_bl_H_31          : 0.000573122
+	s_lower_bl_H_0           : 0.000560043
+Duration of Epoch: 35 was 908.0603034496307 seconds
+-- 32490.28549838066 seconds since start, for Epoch 35 --
+Epoch: 36 | Train Loss: 0.473989 | Test Loss: 0.47389 | analysis_confidence: 0.13093 | CL: 0.014312 | ln_CD: 0.0257184 | CM: 0.0020916 | Top_Xtr: 0.007422 | Bot_Xtr: 0.00858367
+Loss contributors: 
+	s_analysis_confidence    : 0.198307
+	s_ln_CD                  : 0.0949797
+	s_CL                     : 0.0917277
+	s_CM                     : 0.0352173
+	s_Bot_Xtr                : 0.00529651
+	s_Top_Xtr                : 0.00376968
+	s_upper_bl_ret_0         : 0.000654346
+	s_lower_bl_ret_0         : 0.000629428
+	s_upper_bl_H_31          : 0.000581922
+	s_upper_bl_H_30          : 0.000558022
+Duration of Epoch: 36 was 924.8345806598663 seconds
+-- 33415.17417216301 seconds since start, for Epoch 36 --
+Epoch: 37 | Train Loss: 0.473513 | Test Loss: 0.478845 | analysis_confidence: 0.128687 | CL: 0.0147707 | ln_CD: 0.0258612 | CM: 0.00218429 | Top_Xtr: 0.00922285 | Bot_Xtr: 0.0104334
+Loss contributors: 
+	s_analysis_confidence    : 0.199145
+	s_ln_CD                  : 0.0950034
+	s_CL                     : 0.0937765
+	s_CM                     : 0.0368022
+	s_Bot_Xtr                : 0.00579898
+	s_Top_Xtr                : 0.00411282
+	s_upper_bl_ret_0         : 0.000667286
+	s_lower_bl_ret_0         : 0.000646645
+	s_upper_bl_H_31          : 0.00058842
+	s_upper_bl_H_30          : 0.000552589
+Duration of Epoch: 37 was 900.7239644527435 seconds
+-- 34315.94319987297 seconds since start, for Epoch 37 --
+Epoch: 38 | Train Loss: 0.473314 | Test Loss: 0.473559 | analysis_confidence: 0.129366 | CL: 0.0144584 | ln_CD: 0.0266529 | CM: 0.00205567 | Top_Xtr: 0.00736309 | Bot_Xtr: 0.00832461
+Loss contributors: 
+	s_analysis_confidence    : 0.198091
+	s_ln_CD                  : 0.0957027
+	s_CL                     : 0.0924935
+	s_CM                     : 0.0346764
+	s_Bot_Xtr                : 0.00512067
+	s_Top_Xtr                : 0.00363383
+	s_upper_bl_ret_0         : 0.000648003
+	s_lower_bl_ret_0         : 0.000624603
+	s_upper_bl_H_31          : 0.000563228
+	s_lower_bl_H_1           : 0.000555168
+Duration of Epoch: 38 was 898.8083653450012 seconds
+-- 35214.79050016403 seconds since start, for Epoch 38 --
+Epoch: 39 | Train Loss: 0.47292 | Test Loss: 0.471002 | analysis_confidence: 0.130892 | CL: 0.0143384 | ln_CD: 0.0257759 | CM: 0.00211209 | Top_Xtr: 0.00726823 | Bot_Xtr: 0.00845283
+Loss contributors: 
+	s_analysis_confidence    : 0.198091
+	s_ln_CD                  : 0.093024
+	s_CL                     : 0.0917251
+	s_CM                     : 0.0353566
+	s_Bot_Xtr                : 0.00506084
+	s_Top_Xtr                : 0.0035914
+	s_upper_bl_ret_0         : 0.000671415
+	s_lower_bl_ret_0         : 0.000648092
+	s_upper_bl_H_31          : 0.000576569
+	s_lower_bl_H_31          : 0.000560642
+Duration of Epoch: 39 was 898.6101942062378 seconds
+-- 36113.44897699356 seconds since start, for Epoch 39 --
+Epoch: 40 | Train Loss: 0.472667 | Test Loss: 0.470375 | analysis_confidence: 0.131943 | CL: 0.014119 | ln_CD: 0.0267919 | CM: 0.0020477 | Top_Xtr: 0.00699309 | Bot_Xtr: 0.00833761
+Loss contributors: 
+	s_analysis_confidence    : 0.198884
+	s_ln_CD                  : 0.0944266
+	s_CL                     : 0.0907454
+	s_CM                     : 0.034417
+	s_Bot_Xtr                : 0.00504048
+	s_Top_Xtr                : 0.0034736
+	s_upper_bl_ret_0         : 0.000637725
+	s_lower_bl_ret_0         : 0.000623413
+	s_upper_bl_H_31          : 0.000558188
+	s_lower_bl_H_1           : 0.000545628
+Duration of Epoch: 40 was 900.5768401622772 seconds
+-- 37014.076776742935 seconds since start, for Epoch 40 --
+Epoch: 41 | Train Loss: 0.472394 | Test Loss: 0.471616 | analysis_confidence: 0.130031 | CL: 0.0142047 | ln_CD: 0.0255203 | CM: 0.00214139 | Top_Xtr: 0.00842414 | Bot_Xtr: 0.00913293
+Loss contributors: 
+	s_analysis_confidence    : 0.197838
+	s_ln_CD                  : 0.0942006
+	s_CL                     : 0.0906553
+	s_CM                     : 0.0357486
+	s_Bot_Xtr                : 0.00535271
+	s_Top_Xtr                : 0.00392347
+	s_upper_bl_ret_0         : 0.000652281
+	s_lower_bl_ret_0         : 0.000629497
+	s_lower_bl_H_1           : 0.00056527
+	s_upper_bl_H_31          : 0.000561974
+Duration of Epoch: 41 was 928.4404094219208 seconds
+-- 37942.57615566254 seconds since start, for Epoch 41 --
+Epoch: 42 | Train Loss: 0.472026 | Test Loss: 0.476947 | analysis_confidence: 0.129848 | CL: 0.0147714 | ln_CD: 0.0258843 | CM: 0.00212894 | Top_Xtr: 0.00751945 | Bot_Xtr: 0.00861796
+Loss contributors: 
+	s_analysis_confidence    : 0.198552
+	s_ln_CD                  : 0.0945737
+	s_CL                     : 0.0940781
+	s_CM                     : 0.0355832
+	s_Bot_Xtr                : 0.00551669
+	s_Top_Xtr                : 0.00391389
+	s_upper_bl_ret_0         : 0.000656864
+	s_lower_bl_ret_0         : 0.000645362
+	s_upper_bl_H_31          : 0.000596879
+	s_upper_bl_H_30          : 0.000574155
+Duration of Epoch: 42 was 894.3079733848572 seconds
+-- 38836.93117451668 seconds since start, for Epoch 42 --
+Epoch: 43 | Train Loss: 0.471697 | Test Loss: 0.476713 | analysis_confidence: 0.13309 | CL: 0.0146015 | ln_CD: 0.0273114 | CM: 0.00212434 | Top_Xtr: 0.00724745 | Bot_Xtr: 0.00847673
+Loss contributors: 
+	s_analysis_confidence    : 0.197876
+	s_ln_CD                  : 0.0976536
+	s_CL                     : 0.0931283
+	s_CM                     : 0.0354823
+	s_Bot_Xtr                : 0.00509885
+	s_Top_Xtr                : 0.0035458
+	s_upper_bl_ret_0         : 0.000653859
+	s_lower_bl_ret_0         : 0.000638918
+	s_upper_bl_H_31          : 0.000569512
+	s_lower_bl_H_1           : 0.000558021
+Duration of Epoch: 43 was 908.7130057811737 seconds
+-- 39745.690417289734 seconds since start, for Epoch 43 --
+Epoch: 44 | Train Loss: 0.471361 | Test Loss: 0.474129 | analysis_confidence: 0.130477 | CL: 0.0141975 | ln_CD: 0.0262804 | CM: 0.00205608 | Top_Xtr: 0.00760344 | Bot_Xtr: 0.00859016
+Loss contributors: 
+	s_analysis_confidence    : 0.199784
+	s_ln_CD                  : 0.0956665
+	s_CL                     : 0.0912005
+	s_CM                     : 0.0346743
+	s_Bot_Xtr                : 0.00528678
+	s_Top_Xtr                : 0.00387076
+	s_upper_bl_ret_0         : 0.000662667
+	s_lower_bl_ret_0         : 0.000637285
+	s_upper_bl_H_31          : 0.000558914
+	s_lower_bl_H_0           : 0.000540154
+Duration of Epoch: 44 was 919.9470829963684 seconds
+-- 40665.6868622303 seconds since start, for Epoch 44 --
+Epoch: 45 | Train Loss: 0.470962 | Test Loss: 0.474518 | analysis_confidence: 0.130913 | CL: 0.0141315 | ln_CD: 0.0271229 | CM: 0.00206192 | Top_Xtr: 0.00726673 | Bot_Xtr: 0.00848316
+Loss contributors: 
+	s_analysis_confidence    : 0.197056
+	s_ln_CD                  : 0.0977297
+	s_CL                     : 0.0917533
+	s_CM                     : 0.0346789
+	s_Bot_Xtr                : 0.0053044
+	s_Top_Xtr                : 0.00371532
+	s_upper_bl_ret_0         : 0.000643351
+	s_lower_bl_ret_0         : 0.000628522
+	s_upper_bl_H_31          : 0.000574048
+	s_upper_bl_H_30          : 0.000558498
+Duration of Epoch: 45 was 897.2560977935791 seconds
+-- 41562.98908686638 seconds since start, for Epoch 45 --
+Epoch: 46 | Train Loss: 0.470866 | Test Loss: 0.465604 | analysis_confidence: 0.129051 | CL: 0.0140001 | ln_CD: 0.0249964 | CM: 0.00207194 | Top_Xtr: 0.00700506 | Bot_Xtr: 0.00804454
+Loss contributors: 
+	s_analysis_confidence    : 0.19741
+	s_ln_CD                  : 0.0923077
+	s_CL                     : 0.0902446
+	s_CM                     : 0.034647
+	s_Bot_Xtr                : 0.00490184
+	s_Top_Xtr                : 0.00338878
+	s_upper_bl_ret_0         : 0.000649432
+	s_lower_bl_ret_0         : 0.000621885
+	s_upper_bl_H_31          : 0.000550556
+	s_lower_bl_H_0           : 0.000541428
+Duration of Epoch: 46 was 900.5028040409088 seconds
+-- 42463.53702831268 seconds since start, for Epoch 46 --
+Epoch: 47 | Train Loss: 0.470435 | Test Loss: 0.476402 | analysis_confidence: 0.126498 | CL: 0.014669 | ln_CD: 0.0275522 | CM: 0.00216194 | Top_Xtr: 0.00777469 | Bot_Xtr: 0.00865744
+Loss contributors: 
+	s_analysis_confidence    : 0.198045
+	s_ln_CD                  : 0.0958256
+	s_CL                     : 0.0931767
+	s_CM                     : 0.0360897
+	s_Bot_Xtr                : 0.0052114
+	s_Top_Xtr                : 0.00396354
+	s_upper_bl_ret_0         : 0.000645507
+	s_lower_bl_ret_0         : 0.000627109
+	s_upper_bl_H_31          : 0.000573382
+	s_upper_bl_H_30          : 0.000558243
+Duration of Epoch: 47 was 912.5179717540741 seconds
+-- 43376.11282444 seconds since start, for Epoch 47 --
+Epoch: 48 | Train Loss: 0.470289 | Test Loss: 0.464015 | analysis_confidence: 0.130291 | CL: 0.013923 | ln_CD: 0.0245684 | CM: 0.00201081 | Top_Xtr: 0.00711752 | Bot_Xtr: 0.00829419
+Loss contributors: 
+	s_analysis_confidence    : 0.197395
+	s_ln_CD                  : 0.0913396
+	s_CL                     : 0.0896338
+	s_CM                     : 0.0340429
+	s_Bot_Xtr                : 0.00513414
+	s_Top_Xtr                : 0.00353741
+	s_upper_bl_ret_0         : 0.000635074
+	s_lower_bl_ret_0         : 0.000621101
+	s_upper_bl_H_31          : 0.000553594
+	s_lower_bl_H_1           : 0.000548682
+Duration of Epoch: 48 was 899.9435331821442 seconds
+-- 44276.11503696442 seconds since start, for Epoch 48 --
+Epoch: 49 | Train Loss: 0.469683 | Test Loss: 0.468813 | analysis_confidence: 0.130785 | CL: 0.0140129 | ln_CD: 0.025511 | CM: 0.00202236 | Top_Xtr: 0.00745169 | Bot_Xtr: 0.00855693
+Loss contributors: 
+	s_analysis_confidence    : 0.1984
+	s_ln_CD                  : 0.0933669
+	s_CL                     : 0.0904272
+	s_CM                     : 0.0341796
+	s_Bot_Xtr                : 0.00534201
+	s_Top_Xtr                : 0.00388215
+	s_upper_bl_ret_0         : 0.000638941
+	s_lower_bl_ret_0         : 0.000627935
+	s_upper_bl_H_31          : 0.000559643
+	s_lower_bl_H_1           : 0.000539456
+Duration of Epoch: 49 was 927.1010682582855 seconds
+-- 45203.263575315475 seconds since start, for Epoch 49 --
+Epoch: 50 | Train Loss: 0.469719 | Test Loss: 0.464241 | analysis_confidence: 0.130745 | CL: 0.0143185 | ln_CD: 0.0248619 | CM: 0.0020278 | Top_Xtr: 0.00729778 | Bot_Xtr: 0.00843668
+Loss contributors: 
+	s_analysis_confidence    : 0.196717
+	s_ln_CD                  : 0.0915095
+	s_CL                     : 0.090813
+	s_CM                     : 0.0339686
+	s_Bot_Xtr                : 0.00509168
+	s_Top_Xtr                : 0.00353044
+	s_upper_bl_ret_0         : 0.000637678
+	s_lower_bl_ret_0         : 0.000613189
+	s_upper_bl_H_31          : 0.000547906
+	s_lower_bl_H_1           : 0.000536091
+Duration of Epoch: 50 was 905.1630699634552 seconds
+-- 46108.48249745369 seconds since start, for Epoch 50 --
+Epoch: 51 | Train Loss: 0.469091 | Test Loss: 0.47168 | analysis_confidence: 0.12676 | CL: 0.0144879 | ln_CD: 0.0262818 | CM: 0.00208891 | Top_Xtr: 0.00733721 | Bot_Xtr: 0.00863567
+Loss contributors: 
+	s_analysis_confidence    : 0.197887
+	s_ln_CD                  : 0.0936276
+	s_CL                     : 0.0927455
+	s_CM                     : 0.0350837
+	s_Bot_Xtr                : 0.00522719
+	s_Top_Xtr                : 0.00353895
+	s_upper_bl_ret_0         : 0.000639761
+	s_lower_bl_ret_0         : 0.000619608
+	s_upper_bl_H_31          : 0.000549961
+	s_lower_bl_H_1           : 0.000539121
+Duration of Epoch: 51 was 876.2996139526367 seconds
+-- 46984.836139917374 seconds since start, for Epoch 51 --
+Epoch: 52 | Train Loss: 0.469228 | Test Loss: 0.472183 | analysis_confidence: 0.13049 | CL: 0.0141113 | ln_CD: 0.0261887 | CM: 0.00207953 | Top_Xtr: 0.00822965 | Bot_Xtr: 0.00922381
+Loss contributors: 
+	s_analysis_confidence    : 0.197961
+	s_ln_CD                  : 0.0944019
+	s_CL                     : 0.0910954
+	s_CM                     : 0.03514
+	s_Bot_Xtr                : 0.00560494
+	s_Top_Xtr                : 0.00429845
+	s_upper_bl_ret_0         : 0.000643745
+	s_lower_bl_ret_0         : 0.000625005
+	s_upper_bl_H_31          : 0.000562275
+	s_upper_bl_H_30          : 0.000546374
+Duration of Epoch: 52 was 885.4472615718842 seconds
+-- 47870.33391499519 seconds since start, for Epoch 52 --
+Epoch: 53 | Train Loss: 0.468938 | Test Loss: 0.47197 | analysis_confidence: 0.128282 | CL: 0.0144216 | ln_CD: 0.0260744 | CM: 0.00204839 | Top_Xtr: 0.00719601 | Bot_Xtr: 0.00848475
+Loss contributors: 
+	s_analysis_confidence    : 0.199346
+	s_ln_CD                  : 0.0939951
+	s_CL                     : 0.0914152
+	s_CM                     : 0.0345941
+	s_Bot_Xtr                : 0.00519511
+	s_Top_Xtr                : 0.00368595
+	s_upper_bl_ret_0         : 0.000634112
+	s_lower_bl_ret_0         : 0.00061361
+	s_upper_bl_H_31          : 0.000587529
+	s_lower_bl_H_0           : 0.00056036
+Duration of Epoch: 53 was 896.4672055244446 seconds
+-- 48766.860853910446 seconds since start, for Epoch 53 --
+Epoch: 54 | Train Loss: 0.468713 | Test Loss: 0.471779 | analysis_confidence: 0.128797 | CL: 0.0141775 | ln_CD: 0.0255228 | CM: 0.00201544 | Top_Xtr: 0.00725796 | Bot_Xtr: 0.0082078
+Loss contributors: 
+	s_analysis_confidence    : 0.197273
+	s_ln_CD                  : 0.0983535
+	s_CL                     : 0.0900854
+	s_CM                     : 0.0340716
+	s_Bot_Xtr                : 0.00505202
+	s_Top_Xtr                : 0.0036034
+	s_upper_bl_ret_0         : 0.000689838
+	s_lower_bl_ret_0         : 0.000642913
+	s_upper_bl_H_31          : 0.000560707
+	s_lower_bl_H_1           : 0.00054224
+Duration of Epoch: 54 was 915.5125925540924 seconds
+-- 49682.41650032997 seconds since start, for Epoch 54 --
+Epoch: 55 | Train Loss: 0.468246 | Test Loss: 0.47667 | analysis_confidence: 0.129829 | CL: 0.0143425 | ln_CD: 0.0284877 | CM: 0.00205785 | Top_Xtr: 0.00768686 | Bot_Xtr: 0.00874718
+Loss contributors: 
+	s_analysis_confidence    : 0.19744
+	s_ln_CD                  : 0.0991882
+	s_CL                     : 0.092432
+	s_CM                     : 0.0347135
+	s_Bot_Xtr                : 0.00517192
+	s_Top_Xtr                : 0.00371346
+	s_upper_bl_ret_0         : 0.000656919
+	s_lower_bl_ret_0         : 0.000622267
+	s_upper_bl_H_31          : 0.000567743
+	s_upper_bl_H_30          : 0.000550368
+Duration of Epoch: 55 was 887.7295897006989 seconds
+-- 50570.192068338394 seconds since start, for Epoch 55 --
+Epoch: 56 | Train Loss: 0.467974 | Test Loss: 0.465482 | analysis_confidence: 0.130836 | CL: 0.0140372 | ln_CD: 0.0246806 | CM: 0.00212408 | Top_Xtr: 0.00726176 | Bot_Xtr: 0.00834278
+Loss contributors: 
+	s_analysis_confidence    : 0.196669
+	s_ln_CD                  : 0.0926171
+	s_CL                     : 0.0899572
+	s_CM                     : 0.0353175
+	s_Bot_Xtr                : 0.00508044
+	s_Top_Xtr                : 0.00348381
+	s_upper_bl_ret_0         : 0.000643027
+	s_lower_bl_ret_0         : 0.000630927
+	s_upper_bl_H_31          : 0.000549717
+	s_lower_bl_H_1           : 0.000541083
+Duration of Epoch: 56 was 922.2457191944122 seconds
+-- 51492.498989105225 seconds since start, for Epoch 56 --
+Epoch: 57 | Train Loss: 0.467799 | Test Loss: 0.473243 | analysis_confidence: 0.128966 | CL: 0.0143234 | ln_CD: 0.0254791 | CM: 0.00209743 | Top_Xtr: 0.00775019 | Bot_Xtr: 0.00902148
+Loss contributors: 
+	s_analysis_confidence    : 0.197563
+	s_ln_CD                  : 0.0945807
+	s_CL                     : 0.0931158
+	s_CM                     : 0.0353852
+	s_Bot_Xtr                : 0.00535045
+	s_Top_Xtr                : 0.00373217
+	s_upper_bl_ret_0         : 0.000637416
+	s_lower_bl_ret_0         : 0.000628494
+	s_upper_bl_H_31          : 0.000556014
+	s_lower_bl_H_1           : 0.00054137
+Duration of Epoch: 57 was 917.3520753383636 seconds
+-- 52409.89502596855 seconds since start, for Epoch 57 --
+Epoch: 58 | Train Loss: 0.467471 | Test Loss: 0.466146 | analysis_confidence: 0.130858 | CL: 0.0141617 | ln_CD: 0.0246994 | CM: 0.00205865 | Top_Xtr: 0.00747841 | Bot_Xtr: 0.00859876
+Loss contributors: 
+	s_analysis_confidence    : 0.197169
+	s_ln_CD                  : 0.0921806
+	s_CL                     : 0.0905217
+	s_CM                     : 0.0345288
+	s_Bot_Xtr                : 0.00524814
+	s_Top_Xtr                : 0.00362531
+	s_upper_bl_ret_0         : 0.000635178
+	s_lower_bl_ret_0         : 0.000618374
+	s_upper_bl_H_31          : 0.00056096
+	s_lower_bl_H_1           : 0.000551113
+Duration of Epoch: 58 was 910.8531577587128 seconds
+-- 53320.813287734985 seconds since start, for Epoch 58 --
+Epoch: 59 | Train Loss: 0.467206 | Test Loss: 0.465196 | analysis_confidence: 0.131336 | CL: 0.013908 | ln_CD: 0.0251455 | CM: 0.0020659 | Top_Xtr: 0.00700506 | Bot_Xtr: 0.0083671
+Loss contributors: 
+	s_analysis_confidence    : 0.196947
+	s_ln_CD                  : 0.0929811
+	s_CL                     : 0.0896161
+	s_CM                     : 0.0345265
+	s_Bot_Xtr                : 0.00504803
+	s_Top_Xtr                : 0.00347198
+	s_upper_bl_ret_0         : 0.000636668
+	s_lower_bl_ret_0         : 0.000620205
+	s_upper_bl_H_31          : 0.000553365
+	s_lower_bl_H_1           : 0.000546589
+Duration of Epoch: 59 was 895.9801535606384 seconds
+-- 54216.84826421738 seconds since start, for Epoch 59 --
+Epoch: 60 | Train Loss: 0.467022 | Test Loss: 0.471664 | analysis_confidence: 0.131455 | CL: 0.0141758 | ln_CD: 0.0268665 | CM: 0.00207116 | Top_Xtr: 0.00782365 | Bot_Xtr: 0.00909478
+Loss contributors: 
+	s_analysis_confidence    : 0.197121
+	s_ln_CD                  : 0.0957789
+	s_CL                     : 0.091152
+	s_CM                     : 0.0347671
+	s_Bot_Xtr                : 0.00544772
+	s_Top_Xtr                : 0.00372524
+	s_upper_bl_ret_0         : 0.000650292
+	s_lower_bl_ret_0         : 0.000619772
+	s_upper_bl_H_31          : 0.000560187
+	s_upper_bl_H_30          : 0.000539956
+Duration of Epoch: 60 was 876.6719918251038 seconds
+-- 55093.5709104538 seconds since start, for Epoch 60 --
+Epoch: 61 | Train Loss: 0.466885 | Test Loss: 0.465756 | analysis_confidence: 0.13036 | CL: 0.0140993 | ln_CD: 0.0252275 | CM: 0.00207805 | Top_Xtr: 0.00718041 | Bot_Xtr: 0.00835599
+Loss contributors: 
+	s_analysis_confidence    : 0.196606
+	s_ln_CD                  : 0.0928118
+	s_CL                     : 0.0903282
+	s_CM                     : 0.0350941
+	s_Bot_Xtr                : 0.00498496
+	s_Top_Xtr                : 0.00353795
+	s_upper_bl_ret_0         : 0.000639066
+	s_lower_bl_ret_0         : 0.00061489
+	s_upper_bl_H_31          : 0.000547186
+	s_lower_bl_H_1           : 0.000534796
+Duration of Epoch: 61 was 911.6923687458038 seconds
+-- 56005.3135766983 seconds since start, for Epoch 61 --
+Epoch: 62 | Train Loss: 0.466438 | Test Loss: 0.467322 | analysis_confidence: 0.127175 | CL: 0.014415 | ln_CD: 0.0254828 | CM: 0.00201896 | Top_Xtr: 0.00734912 | Bot_Xtr: 0.00834331
+Loss contributors: 
+	s_analysis_confidence    : 0.197141
+	s_ln_CD                  : 0.0934344
+	s_CL                     : 0.0910272
+	s_CM                     : 0.0340033
+	s_Bot_Xtr                : 0.00507516
+	s_Top_Xtr                : 0.00353795
+	s_upper_bl_ret_0         : 0.000634736
+	s_lower_bl_ret_0         : 0.000616188
+	s_upper_bl_H_31          : 0.000546329
+	s_lower_bl_H_1           : 0.000538171
+Duration of Epoch: 62 was 894.2356429100037 seconds
+-- 56899.59774303436 seconds since start, for Epoch 62 --
+Epoch: 63 | Train Loss: 0.466308 | Test Loss: 0.464153 | analysis_confidence: 0.13256 | CL: 0.014003 | ln_CD: 0.0252482 | CM: 0.00204601 | Top_Xtr: 0.00724963 | Bot_Xtr: 0.00844251
+Loss contributors: 
+	s_analysis_confidence    : 0.197286
+	s_ln_CD                  : 0.0918041
+	s_CL                     : 0.0895758
+	s_CM                     : 0.0342278
+	s_Bot_Xtr                : 0.00536514
+	s_Top_Xtr                : 0.00385968
+	s_upper_bl_ret_0         : 0.000636065
+	s_lower_bl_ret_0         : 0.000609632
+	s_upper_bl_H_31          : 0.000543756
+	s_lower_bl_H_1           : 0.000536803
+Duration of Epoch: 63 was 919.8252689838409 seconds
+-- 57819.47952628136 seconds since start, for Epoch 63 --
+Epoch: 64 | Train Loss: 0.466028 | Test Loss: 0.465978 | analysis_confidence: 0.128074 | CL: 0.0138485 | ln_CD: 0.0248926 | CM: 0.00202571 | Top_Xtr: 0.00817768 | Bot_Xtr: 0.00887287
+Loss contributors: 
+	s_analysis_confidence    : 0.197443
+	s_ln_CD                  : 0.0920886
+	s_CL                     : 0.0900412
+	s_CM                     : 0.0343014
+	s_Bot_Xtr                : 0.00527625
+	s_Top_Xtr                : 0.00397943
+	s_upper_bl_ret_0         : 0.000636081
+	s_lower_bl_ret_0         : 0.000624604
+	s_upper_bl_H_31          : 0.000548788
+	s_lower_bl_H_1           : 0.000538657
+Duration of Epoch: 64 was 900.6373252868652 seconds
+-- 58720.18082475662 seconds since start, for Epoch 64 --
+Epoch: 65 | Train Loss: 0.466126 | Test Loss: 0.466943 | analysis_confidence: 0.130729 | CL: 0.0142301 | ln_CD: 0.0248202 | CM: 0.00206476 | Top_Xtr: 0.00751555 | Bot_Xtr: 0.00852145
+Loss contributors: 
+	s_analysis_confidence    : 0.196244
+	s_ln_CD                  : 0.0921058
+	s_CL                     : 0.0917781
+	s_CM                     : 0.0347156
+	s_Bot_Xtr                : 0.00532234
+	s_Top_Xtr                : 0.00399962
+	s_upper_bl_ret_0         : 0.000632995
+	s_lower_bl_ret_0         : 0.000608086
+	s_upper_bl_H_31          : 0.000584647
+	s_upper_bl_H_30          : 0.000560262
+Duration of Epoch: 65 was 897.2667241096497 seconds
+-- 59617.49751162529 seconds since start, for Epoch 65 --
+Epoch: 66 | Train Loss: 0.46572 | Test Loss: 0.469425 | analysis_confidence: 0.132591 | CL: 0.0142011 | ln_CD: 0.0255285 | CM: 0.00206686 | Top_Xtr: 0.0071038 | Bot_Xtr: 0.00829031
+Loss contributors: 
+	s_analysis_confidence    : 0.196969
+	s_ln_CD                  : 0.0946877
+	s_CL                     : 0.0914978
+	s_CM                     : 0.0348389
+	s_Bot_Xtr                : 0.00494965
+	s_Top_Xtr                : 0.00338272
+	s_upper_bl_ret_0         : 0.000630501
+	s_lower_bl_ret_0         : 0.000617828
+	s_upper_bl_H_31          : 0.00056446
+	s_upper_bl_H_30          : 0.000545711
+Duration of Epoch: 66 was 889.7105853557587 seconds
+-- 60507.25443696976 seconds since start, for Epoch 66 --
+Epoch: 67 | Train Loss: 0.465355 | Test Loss: 0.4685 | analysis_confidence: 0.129956 | CL: 0.0144072 | ln_CD: 0.0258165 | CM: 0.00207921 | Top_Xtr: 0.00747694 | Bot_Xtr: 0.00846735
+Loss contributors: 
+	s_analysis_confidence    : 0.196604
+	s_ln_CD                  : 0.093607
+	s_CL                     : 0.0914951
+	s_CM                     : 0.0348301
+	s_Bot_Xtr                : 0.00512195
+	s_Top_Xtr                : 0.00353568
+	s_upper_bl_ret_0         : 0.000629223
+	s_lower_bl_ret_0         : 0.000611567
+	s_upper_bl_H_31          : 0.000559335
+	s_upper_bl_H_30          : 0.000549077
+Duration of Epoch: 67 was 908.0743274688721 seconds
+-- 61415.38394880295 seconds since start, for Epoch 67 --
+Epoch: 68 | Train Loss: 0.465151 | Test Loss: 0.466274 | analysis_confidence: 0.129451 | CL: 0.0141434 | ln_CD: 0.0262944 | CM: 0.00205275 | Top_Xtr: 0.00687101 | Bot_Xtr: 0.0081381
+Loss contributors: 
+	s_analysis_confidence    : 0.196758
+	s_ln_CD                  : 0.0937465
+	s_CL                     : 0.0909982
+	s_CM                     : 0.034443
+	s_Bot_Xtr                : 0.00491934
+	s_Top_Xtr                : 0.0032824
+	s_upper_bl_ret_0         : 0.000649867
+	s_lower_bl_ret_0         : 0.000620071
+	s_upper_bl_H_31          : 0.000558963
+	s_lower_bl_H_1           : 0.000538411
+Duration of Epoch: 68 was 913.3671226501465 seconds
+-- 62328.802631378174 seconds since start, for Epoch 68 --
+Epoch: 69 | Train Loss: 0.465202 | Test Loss: 0.464067 | analysis_confidence: 0.129447 | CL: 0.0139886 | ln_CD: 0.0249591 | CM: 0.00201987 | Top_Xtr: 0.00731165 | Bot_Xtr: 0.00846953
+Loss contributors: 
+	s_analysis_confidence    : 0.196977
+	s_ln_CD                  : 0.0915338
+	s_CL                     : 0.0899159
+	s_CM                     : 0.0341605
+	s_Bot_Xtr                : 0.00522313
+	s_Top_Xtr                : 0.00362078
+	s_upper_bl_ret_0         : 0.000625366
+	s_lower_bl_ret_0         : 0.000605048
+	s_upper_bl_H_31          : 0.000557998
+	s_lower_bl_H_1           : 0.000538089
+Duration of Epoch: 69 was 896.4062309265137 seconds
+-- 63225.25885987282 seconds since start, for Epoch 69 --
+Epoch: 70 | Train Loss: 0.46492 | Test Loss: 0.47122 | analysis_confidence: 0.131301 | CL: 0.0143858 | ln_CD: 0.0266919 | CM: 0.00202775 | Top_Xtr: 0.00764622 | Bot_Xtr: 0.00871504
+Loss contributors: 
+	s_analysis_confidence    : 0.197721
+	s_ln_CD                  : 0.0952676
+	s_CL                     : 0.091717
+	s_CM                     : 0.0341801
+	s_Bot_Xtr                : 0.00531492
+	s_Top_Xtr                : 0.00368406
+	s_upper_bl_ret_0         : 0.000640739
+	s_lower_bl_ret_0         : 0.000628496
+	s_upper_bl_H_31          : 0.000561527
+	s_lower_bl_H_1           : 0.000540244
+Duration of Epoch: 70 was 886.7734155654907 seconds
+-- 64112.0751683712 seconds since start, for Epoch 70 --
+Epoch: 71 | Train Loss: 0.464264 | Test Loss: 0.462975 | analysis_confidence: 0.12824 | CL: 0.0139707 | ln_CD: 0.0245805 | CM: 0.00205382 | Top_Xtr: 0.00749921 | Bot_Xtr: 0.00870113
+Loss contributors: 
+	s_analysis_confidence    : 0.196641
+	s_ln_CD                  : 0.0907183
+	s_CL                     : 0.0895901
+	s_CM                     : 0.0344484
+	s_Bot_Xtr                : 0.00511334
+	s_Top_Xtr                : 0.00354503
+	s_upper_bl_ret_0         : 0.000628857
+	s_lower_bl_ret_0         : 0.000611501
+	s_upper_bl_H_31          : 0.000566287
+	s_upper_bl_H_30          : 0.000552858
+Duration of Epoch: 71 was 920.053563117981 seconds
+-- 65032.18298578262 seconds since start, for Epoch 71 --
+Epoch: 72 | Train Loss: 0.464239 | Test Loss: 0.462633 | analysis_confidence: 0.131051 | CL: 0.0140723 | ln_CD: 0.0248657 | CM: 0.00205574 | Top_Xtr: 0.00701297 | Bot_Xtr: 0.00799734
+Loss contributors: 
+	s_analysis_confidence    : 0.19663
+	s_ln_CD                  : 0.0917935
+	s_CL                     : 0.0898921
+	s_CM                     : 0.0345084
+	s_Bot_Xtr                : 0.00479585
+	s_Top_Xtr                : 0.0033353
+	s_upper_bl_ret_0         : 0.000636348
+	s_lower_bl_ret_0         : 0.000613449
+	s_upper_bl_H_31          : 0.000533902
+	s_lower_bl_H_1           : 0.000525833
+Duration of Epoch: 72 was 905.9133565425873 seconds
+-- 65938.14836192131 seconds since start, for Epoch 72 --
+Epoch: 73 | Train Loss: 0.464205 | Test Loss: 0.462414 | analysis_confidence: 0.129775 | CL: 0.0138447 | ln_CD: 0.0246976 | CM: 0.00202458 | Top_Xtr: 0.00675961 | Bot_Xtr: 0.00797187
+Loss contributors: 
+	s_analysis_confidence    : 0.195877
+	s_ln_CD                  : 0.0923818
+	s_CL                     : 0.0895435
+	s_CM                     : 0.0339411
+	s_Bot_Xtr                : 0.00486938
+	s_Top_Xtr                : 0.00334895
+	s_upper_bl_ret_0         : 0.000642069
+	s_lower_bl_ret_0         : 0.000622999
+	s_upper_bl_H_31          : 0.000544247
+	s_upper_bl_H_30          : 0.000535057
+Duration of Epoch: 73 was 903.4657990932465 seconds
+-- 66841.66074585915 seconds since start, for Epoch 73 --
+^CTraceback (most recent call last):
+  File "/home/faiza/Documents/NeuralFoil/training/train.py", line 328, in <module>
+    loss.backward()
+  File "/home/faiza/Documents/NeuralFoil/venv/lib/python3.10/site-packages/torch/_tensor.py", line 521, in backward
+    torch.autograd.backward(
+  File "/home/faiza/Documents/NeuralFoil/venv/lib/python3.10/site-packages/torch/autograd/__init__.py", line 289, in backward
+    _engine_run_backward(
+  File "/home/faiza/Documents/NeuralFoil/venv/lib/python3.10/site-packages/torch/autograd/graph.py", line 769, in _engine_run_backward
+    return Variable._execution_engine.run_backward(  # Calls into the C++ engine to run the backward pass
+KeyboardInterrupt
+
+[?2004h(venv) ]0;faiza@birdlab-arl: ~/Documents/NeuralFoil[01;32mfaiza@birdlab-arl[00m:[01;34m~/Documents/NeuralFoil[00m$ exit
+[?2004lexit
+
+Script done on 2026-04-16 12:16:08-07:00 [COMMAND_EXIT_CODE="130"]
