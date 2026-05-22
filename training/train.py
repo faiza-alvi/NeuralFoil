@@ -20,7 +20,7 @@ torch.set_float32_matmul_precision("highest")
 N_inputs = len(df_train_inputs_scaled.columns)
 N_outputs = len(df_train_outputs_scaled.columns)
 
-cache_file = Path(__file__).parent / "nn-avian-gen2-256.pth"
+cache_file = Path(__file__).parent / "nn-avian-gen2-512.pth"
 n_hidden_layers = 5
 width = 512
 print("Cache file: ", cache_file)
@@ -31,7 +31,8 @@ pattern = re.compile(
 )
 
 log_files = [
-   r"avian_gen2_256.log",
+    #starting from scratch, no log file
+#    r"avian_gen2_256.log",
 ]
 
 for file in log_files:
@@ -204,7 +205,7 @@ if __name__ == "__main__":
     # Define the data loader
     print("Preparing data...")
 
-    batch_size = 256
+    batch_size = 512
 
     # ---- TEST INPUTS ----
     test_np = df_test_inputs_scaled.to_numpy()
@@ -446,6 +447,7 @@ if __name__ == "__main__":
             
             train_sub = train_loss_history[-convergence_window:]
             train_conv_error = max(train_sub) - min(train_sub)
+            print(f"Convergence error at epoch {epoch} is {train_conv_error:.6g}")
             if train_conv_error < convergence_threshold:
                 print(f"Converged and stopped at epoch {epoch} with convergence error {train_conv_error}")
                 break
