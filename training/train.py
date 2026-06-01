@@ -33,6 +33,7 @@ pattern = re.compile(
 log_files = [
     #starting from scratch, no log file
    r"avian_gen2_512.log",
+   r"avian_gen2_512-2.log",
 ]
 
 for file in log_files:
