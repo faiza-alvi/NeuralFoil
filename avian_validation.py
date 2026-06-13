@@ -33,7 +33,7 @@ CUT_OFF = 0.7
 #Path to Bird test airfoils folder "C:\Users\booki\Documents\BIRD Lab\Airfoil Project\BirdAirfoils"
 # Path to Live airfoils: "C:\Users\booki\Documents\BIRD Lab\Airfoil Project\ResampledLiveBirdAirfoils\FinalLiveAirfoils"
 dir_path = r"C:\Users\booki\Documents\BIRD Lab\Airfoil Project\BirdAirfoils"
-output_path = r"C:\Users\booki\Documents\BIRD Lab\Airfoil Project\BirdNeuralFoilXTR0.1\Test60"
+output_path = r"C:\Users\booki\Documents\BIRD Lab\Airfoil Project\TestBirdAirfoils_XTR0.1_Avian_gen2_512"
 # TestBirdAirfoils_XTR0.1_Avian_gen2_256 folder name type
 
 ##########################################################################################
@@ -66,7 +66,7 @@ for file in csv_filenames:
         Re=Re.flatten(),
         xtr_upper=0.1,  # Location of a forced top-side BL trip, as a fraction of chord
         xtr_lower=0.1,  # Location of a forced bottom-side BL trip, as a fraction of chord
-        model_size= "xxxlarge",  # Optionally, specify your model size.
+        model_size= "avian-gen2-512",  # Optionally, specify your model size.
     )
 
     #OBTAIN FIGURE, FROM NEURAL FOIL
