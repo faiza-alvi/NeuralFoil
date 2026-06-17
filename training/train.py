@@ -20,7 +20,7 @@ torch.set_float32_matmul_precision("highest")
 N_inputs = len(df_train_inputs_scaled.columns)
 N_outputs = len(df_train_outputs_scaled.columns)
 
-cache_file = Path(__file__).parent / "nn-avian-gen2-512.pth"
+cache_file = Path(__file__).parent / "nn-avian-gen2-1024.pth"
 n_hidden_layers = 5
 width = 512
 print("Cache file: ", cache_file)
@@ -32,8 +32,8 @@ pattern = re.compile(
 
 log_files = [
     #starting from scratch, no log file
-   r"avian_gen2_512.log",
-   r"avian_gen2_512-2.log",
+#    r"avian_gen2_512.log",
+#    r"avian_gen2_512-2.log",
 ]
 
 for file in log_files:
@@ -179,7 +179,7 @@ if __name__ == "__main__":
 
 
     # Define the optimizer
-    learning_rate = 1.414e-4
+    learning_rate = 2e-4
     optimizer = torch.optim.RAdam(net.parameters(), lr=learning_rate, weight_decay=3e-5)
     scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(
         optimizer,
@@ -206,7 +206,7 @@ if __name__ == "__main__":
     # Define the data loader
     print("Preparing data...")
 
-    batch_size = 512
+    batch_size = 1024
 
     # ---- TEST INPUTS ----
     test_np = df_test_inputs_scaled.to_numpy()
