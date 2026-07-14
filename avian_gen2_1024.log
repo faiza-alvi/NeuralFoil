@@ -19202,4 +19202,78 @@ Loss contributors:
 	s_analysis_confidence    : 0.188678
 	s_CL                     : 0.0773309
 	s_ln_CD                  : 0.0715984
-	s_CM   
+	s_CM                     : 0.0273425
+	s_Bot_Xtr                : 0.00325448
+	s_Top_Xtr                : 0.0021548
+	s_upper_bl_ret_0         : 0.000534578
+	s_lower_bl_ret_0         : 0.000517257
+	s_upper_bl_H_31          : 0.000445254
+	s_upper_bl_H_30          : 0.000414597
+Duration of Epoch: 1241 was 234.07182955741882 seconds
+-- 298862.6913328171 seconds since start, for Epoch 1241 --
+Convergence error at epoch 1241 is 3.41535e-05
+Epoch: 1242 | Train Loss: 0.367847 | Test Loss: 0.403149 | analysis_confidence: 0.124027 | CL: 0.0114758 | ln_CD: 0.0186332 | CM: 0.00160523 | Top_Xtr: 0.00461286 | Bot_Xtr: 0.00549392
+Loss contributors: 
+	s_analysis_confidence    : 0.188678
+	s_CL                     : 0.0773351
+	s_ln_CD                  : 0.0716091
+	s_CM                     : 0.0273446
+	s_Bot_Xtr                : 0.00325453
+	s_Top_Xtr                : 0.00215484
+	s_upper_bl_ret_0         : 0.000534591
+	s_lower_bl_ret_0         : 0.00051724
+	s_upper_bl_H_31          : 0.000445215
+	s_upper_bl_H_30          : 0.000414609
+Duration of Epoch: 1242 was 241.94975566864014 seconds
+-- 299104.6809735298 seconds since start, for Epoch 1242 --
+Convergence error at epoch 1242 is 3.42727e-05
+Epoch: 1243 | Train Loss: 0.367848 | Test Loss: 0.403144 | analysis_confidence: 0.124065 | CL: 0.0114796 | ln_CD: 0.0186307 | CM: 0.00160549 | Top_Xtr: 0.00461428 | Bot_Xtr: 0.00549509
+Loss contributors: 
+	s_analysis_confidence    : 0.188678
+	s_CL                     : 0.0773352
+	s_ln_CD                  : 0.0716047
+	s_CM                     : 0.027343
+	s_Bot_Xtr                : 0.00325484
+	s_Top_Xtr                : 0.00215515
+	s_upper_bl_ret_0         : 0.000534571
+	s_lower_bl_ret_0         : 0.000517251
+	s_upper_bl_H_31          : 0.000445252
+	s_upper_bl_H_30          : 0.000414624
+Duration of Epoch: 1243 was 235.07175421714783 seconds
+-- 299339.7923195362 seconds since start, for Epoch 1243 --
+Convergence error at epoch 1243 is 3.30508e-05
+Epoch: 1244 | Train Loss: 0.367847 | Test Loss: 0.403158 | analysis_confidence: 0.124081 | CL: 0.0114799 | ln_CD: 0.0186285 | CM: 0.00160587 | Top_Xtr: 0.00461324 | Bot_Xtr: 0.00549414
+Loss contributors: 
+	s_analysis_confidence    : 0.188681
+	s_CL                     : 0.0773374
+	s_ln_CD                  : 0.0716126
+	s_CM                     : 0.0273437
+	s_Bot_Xtr                : 0.00325475
+	s_Top_Xtr                : 0.00215513
+	s_upper_bl_ret_0         : 0.000534585
+	s_lower_bl_ret_0         : 0.000517238
+	s_upper_bl_H_31          : 0.000445213
+	s_upper_bl_H_30          : 0.000414605
+Duration of Epoch: 1244 was 243.79845714569092 seconds
+-- 299583.6371266842 seconds since start, for Epoch 1244 --
+Convergence error at epoch 1244 is 3.20971e-05
+Epoch: 1245 | Train Loss: 0.367847 | Test Loss: 0.403136 | analysis_confidence: 0.124064 | CL: 0.011477 | ln_CD: 0.0186232 | CM: 0.00160574 | Top_Xtr: 0.00461297 | Bot_Xtr: 0.00549332
+Loss contributors: 
+	s_analysis_confidence    : 0.188678
+	s_CL                     : 0.0773314
+	s_ln_CD                  : 0.0716023
+	s_CM                     : 0.0273428
+	s_Bot_Xtr                : 0.00325454
+	s_Top_Xtr                : 0.00215491
+	s_upper_bl_ret_0         : 0.00053459
+	s_lower_bl_ret_0         : 0.000517244
+	s_upper_bl_H_31          : 0.00044523
+	s_upper_bl_H_30          : 0.000414553
+Duration of Epoch: 1245 was 243.06601309776306 seconds
+-- 299826.7425878048 seconds since start, for Epoch 1245 --
+Convergence error at epoch 1245 is 7.86781e-06
+Converged and stopped at epoch 1245 with convergence error 7.867813110351562e-06
+[?2004h(venv) ]0;faiza@birdlab-arl: ~/Documents/NeuralFoil[01;32mfaiza@birdlab-arl[00m:[01;34m~/Documents/NeuralFoil[00m$ [K(venv) ]0;faiza@birdlab-arl: ~/Documents/NeuralFoil[01;32mfaiza@birdlab-arl[00m:[01;34m~/Documents/NeuralFoil[00m$ exit
+[?2004lexit
+
+Script done on 2026-07-14 12:42:24-07:00 [COMMAND_EXIT_CODE="0"]
