@@ -285,6 +285,7 @@ def get_aero_from_kulfan_parameters(
             - "avian-v3"
             - "avian-gen2-256"
             - "avian-gen2-512"
+            - "avian-gen2-1024"
 
     Returns: A dictionary with the following keys:
 
@@ -330,7 +331,7 @@ def get_aero_from_kulfan_parameters(
         TE_thickness=kulfan_parameters["TE_thickness"],
     )
 
-    if model_size in ["avian-v3", "avian-gen2-256", "avian-gen2-512"]:
+    if model_size in ["avian-v3", "avian-gen2-256", "avian-gen2-512", "avian-gen2-1024"]:
         ### Prepare the inputs for the neural network
         # Only adds derivative if the avian model is selected
         input_rows: List[Union[float, np.ndarray]] = [
@@ -439,7 +440,7 @@ def get_aero_from_kulfan_parameters(
         y[:, 0] = y[:, 0] - _avian_squared_mahalanobis_distance(x) / (
             2 * _avian_scaled_input_distribution["N_inputs"]
         )
-    elif model_size == "avian-gen2-256" or model_size =="avian-gen2-512":
+    elif model_size == "avian-gen2-256" or model_size =="avian-gen2-512" or model_size=="avian-gen2-1024":
         y[:, 0] = y[:, 0] - _aviangen2_squared_mahalanobis_distance(x) / (
             2 * _aviangen2_scaled_input_distribution["N_inputs"]
         )
@@ -456,7 +457,7 @@ def get_aero_from_kulfan_parameters(
 
     # Accounts for the differences in input vector size. If Avian version is chosen then the avian version is evaluated first
     # Otherwise the old version is used. 
-    if model_size in ["avian-v3", "avian-gen2-256", "avian-gen2-512"]: 
+    if model_size in ["avian-v3", "avian-gen2-256", "avian-gen2-512", "avian-gen2-1024"]: 
         # input vector is the same for all avian models 
         x_flipped = (
             x + 0.0
@@ -512,7 +513,7 @@ def get_aero_from_kulfan_parameters(
             2 * _avian_scaled_input_distribution["N_inputs"]
         )
         # print(f"{_avian_squared_mahalanobis_distance(x_flipped)}")
-    elif model_size == "avian-gen2-256" or model_size =="avian-gen2-512":
+    elif model_size == "avian-gen2-256" or model_size =="avian-gen2-512" or model_size =="avian-gen2-1024":
         y_flipped[:, 0] = y_flipped[:, 0] - _aviangen2_squared_mahalanobis_distance(x_flipped) / (
             2 * _aviangen2_scaled_input_distribution["N_inputs"]
         )
