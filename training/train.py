@@ -179,7 +179,7 @@ if __name__ == "__main__":
 
 
     # Define the optimizer
-    learning_rate = 2e-4
+    learning_rate = 7.071e-5
     optimizer = torch.optim.RAdam(net.parameters(), lr=learning_rate, weight_decay=3e-5)
     scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(
         optimizer,
