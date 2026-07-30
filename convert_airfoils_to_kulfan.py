@@ -17,7 +17,8 @@ current_date = datetime.datetime.now()
 str_date = current_date.strftime("%y_%m_%d")
 
 #Path to all the airofils 
-dir_path = r"C:\Users\booki\Documents\BIRD Lab\Airfoil Project\Airfoils2Run"
+#dir_path = r"C:\Users\booki\Documents\BIRD Lab\Airfoil Project\Airfoils2Run"
+dir_path = r"C:\Users\booki\Documents\BIRD Lab\Airfoil Project\ResampledLiveBirdAirfoils\FinalLiveAirfoils"
 output_path = r"C:\Users\booki\Documents\BIRD Lab\Airfoil Project"
 
 
@@ -28,7 +29,7 @@ csv_filenames = list(filter(lambda f: f.endswith('.csv'), filenames)) # limits t
 if not os.path.exists(output_path):
     os.mkdir(output_path)
 
-output_filename = str_date + "_bird_airfoils_kulfan_parameters.csv" #one CSV for all airfoils 
+output_filename = str_date + "_live_bird_airfoils_kulfan_parameters.csv" #one CSV for all airfoils 
 output_fullname = os.path.join(output_path, output_filename)
 
 parameters_df = []
@@ -37,9 +38,9 @@ parameters_df = []
 for file in csv_filenames:
     # used different index numbers for the
     # non live airfoils bc they had dates too
-    species_name = file.split("_")[3] + "_" + file.split("_")[4]
-    bird_id = file.split("_")[5]
-    pos = file.split("_")[6]
+    species_name = file.split("_")[0] + "_" + file.split("_")[1]
+    bird_id = file.split("_")[2]
+    pos = file.split("_")[3]
     pos = pos[:4] # Makes sure the position doesn't also include .csv, only keeps the numbers
     #output_filename = str_date + "_" + species_name + "_" + bird_id + "_" + pos + "_af_gen2_1024.csv" #create the output file name
 
