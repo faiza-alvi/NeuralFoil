@@ -17123,4 +17123,72 @@ Loss contributors:
 	s_upper_bl_ret_0         : 0.000499517
 	s_lower_bl_ret_0         : 0.00047459
 	s_upper_bl_H_31          : 0.000447335
-	s_upper_bl_H_30          : 
+	s_upper_bl_H_30          : 0.000423943
+Duration of Epoch: 1102 was 1605.8904147148132 seconds
+-- 1746762.8347959518 seconds since start, for Epoch 1102 --
+Convergence error at epoch 1102 is 2.93255e-05
+Epoch: 1103 | Train Loss: 0.375671 | Test Loss: 0.406773 | analysis_confidence: 0.124475 | CL: 0.0115493 | ln_CD: 0.0188373 | CM: 0.00162125 | Top_Xtr: 0.00466895 | Bot_Xtr: 0.00554742
+Loss contributors: 
+	s_analysis_confidence    : 0.190656
+	s_CL                     : 0.0777301
+	s_ln_CD                  : 0.0724267
+	s_CM                     : 0.0276366
+	s_Bot_Xtr                : 0.0033272
+	s_Top_Xtr                : 0.00218827
+	s_upper_bl_ret_0         : 0.000499499
+	s_lower_bl_ret_0         : 0.000474586
+	s_upper_bl_H_31          : 0.000447301
+	s_upper_bl_H_30          : 0.000423877
+Duration of Epoch: 1103 was 1631.2858684062958 seconds
+-- 1748394.16635108 seconds since start, for Epoch 1103 --
+Convergence error at epoch 1103 is 2.88188e-05
+Epoch: 1104 | Train Loss: 0.37567 | Test Loss: 0.406771 | analysis_confidence: 0.124556 | CL: 0.0115479 | ln_CD: 0.0188376 | CM: 0.0016214 | Top_Xtr: 0.00466848 | Bot_Xtr: 0.00554794
+Loss contributors: 
+	s_analysis_confidence    : 0.190658
+	s_CL                     : 0.0777285
+	s_ln_CD                  : 0.0724267
+	s_CM                     : 0.027634
+	s_Bot_Xtr                : 0.00332757
+	s_Top_Xtr                : 0.00218806
+	s_upper_bl_ret_0         : 0.000499505
+	s_lower_bl_ret_0         : 0.000474591
+	s_upper_bl_H_31          : 0.00044725
+	s_upper_bl_H_30          : 0.000423828
+Duration of Epoch: 1104 was 1621.5105595588684 seconds
+-- 1750015.7170197964 seconds since start, for Epoch 1104 --
+Convergence error at epoch 1104 is 2.80738e-05
+Epoch: 1105 | Train Loss: 0.375671 | Test Loss: 0.406753 | analysis_confidence: 0.124497 | CL: 0.0115526 | ln_CD: 0.0188375 | CM: 0.00162177 | Top_Xtr: 0.00466846 | Bot_Xtr: 0.00554686
+Loss contributors: 
+	s_analysis_confidence    : 0.190657
+	s_CL                     : 0.0777263
+	s_ln_CD                  : 0.0724117
+	s_CM                     : 0.0276346
+	s_Bot_Xtr                : 0.0033274
+	s_Top_Xtr                : 0.00218804
+	s_upper_bl_ret_0         : 0.000499501
+	s_lower_bl_ret_0         : 0.000474584
+	s_upper_bl_H_31          : 0.000447311
+	s_upper_bl_H_30          : 0.000423892
+Duration of Epoch: 1105 was 1605.972995519638 seconds
+-- 1751621.7411458492 seconds since start, for Epoch 1105 --
+Convergence error at epoch 1105 is 2.80738e-05
+Epoch: 1106 | Train Loss: 0.375671 | Test Loss: 0.406767 | analysis_confidence: 0.124567 | CL: 0.0115518 | ln_CD: 0.01884 | CM: 0.00162165 | Top_Xtr: 0.00466998 | Bot_Xtr: 0.00554779
+Loss contributors: 
+	s_analysis_confidence    : 0.19066
+	s_CL                     : 0.0777284
+	s_ln_CD                  : 0.0724202
+	s_CM                     : 0.0276348
+	s_Bot_Xtr                : 0.0033276
+	s_Top_Xtr                : 0.00218829
+	s_upper_bl_ret_0         : 0.000499509
+	s_lower_bl_ret_0         : 0.000474576
+	s_upper_bl_H_31          : 0.000447253
+	s_upper_bl_H_30          : 0.000423847
+Duration of Epoch: 1106 was 1587.101681470871 seconds
+-- 1753208.8997557163 seconds since start, for Epoch 1106 --
+Convergence error at epoch 1106 is 2.5928e-06
+Converged and stopped at epoch 1106 with convergence error 2.592802047729492e-06
+[?2004h(venv) ]0;faiza@birdlab-arl: ~/Documents/NeuralFoil[01;32mfaiza@birdlab-arl[00m:[01;34m~/Documents/NeuralFoil[00m$ [K(venv) ]0;faiza@birdlab-arl: ~/Documents/NeuralFoil[01;32mfaiza@birdlab-arl[00m:[01;34m~/Documents/NeuralFoil[00m$ exit
+[?2004lexit
+
+Script done on 2026-08-13 10:32:23-07:00 [COMMAND_EXIT_CODE="0"]
