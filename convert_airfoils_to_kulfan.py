@@ -18,39 +18,69 @@ str_date = current_date.strftime("%y_%m_%d")
 
 #Path to all the airofils 
 #dir_path = r"C:\Users\booki\Documents\BIRD Lab\Airfoil Project\Airfoils2Run"
-dir_path = r"C:\Users\booki\Documents\BIRD Lab\Airfoil Project\ResampledLiveBirdAirfoils\FinalLiveAirfoils"
-output_path = r"C:\Users\booki\Documents\BIRD Lab\Airfoil Project"
+# dir_path = r"C:\Users\booki\Documents\BIRD Lab\Airfoil Project\ResampledLiveBirdAirfoils\FinalLiveAirfoils"
+dir_path = r"C:\Users\booki\Documents\BIRD Lab\Airfoil Project\TrainingAirfoils\Test"
+output_path = r"C:\Users\booki\Documents\BIRD Lab\Airfoil Project\BirdData"
 
 
 filenames = os.listdir(dir_path) #obtain all the airfoils
 total_airfoils = len(filenames) - 1
-csv_filenames = list(filter(lambda f: f.endswith('.csv'), filenames)) # limits to csv files
+csv_filenames = list(filter(lambda f: f.endswith('.dat'), filenames)) # limits to csv files
 
 if not os.path.exists(output_path):
     os.mkdir(output_path)
 
-output_filename = str_date + "_live_bird_airfoils_kulfan_parameters.csv" #one CSV for all airfoils 
+output_filename = str_date + "_selig_airfoils_kulfan_parameters.csv" #one CSV for all airfoils 
 output_fullname = os.path.join(output_path, output_filename)
 
 parameters_df = []
-
+counter = 1
 #loop through each file name
 for file in csv_filenames:
     # used different index numbers for the
     # non live airfoils bc they had dates too
-    species_name = file.split("_")[0] + "_" + file.split("_")[1]
-    bird_id = file.split("_")[2]
-    pos = file.split("_")[3]
-    pos = pos[:4] # Makes sure the position doesn't also include .csv, only keeps the numbers
+    species_name = file.split(".")[0] #file.split("_")[0] + "_" + file.split("_")[1]
+    bird_id = "Engineered" + str(counter) #file.split("_")[2]
+    pos = "No Position" #file.split("_")[3]
+    # pos = pos[:4] # Makes sure the position doesn't also include .csv, only keeps the numbers
     #output_filename = str_date + "_" + species_name + "_" + bird_id + "_" + pos + "_af_gen2_1024.csv" #create the output file name
 
     file_path = r"%s/%s" % (dir_path, file)
 
-    with open(file_path, mode='r') as f:
-        csv_reader = csv.reader(f)
-        data = [row for row in csv_reader]
+    # with open(file_path, mode='r') as f: # Use for .csv files 
+    #     csv_reader = csv.reader(f)
+    #     data = [row for row in csv_reader]
 
-    df_array = np.array(data).astype(float)
+    # ---------- loop for .dat files
+    with open(file_path, mode="r") as f:
+        lines = f.readlines()
+
+    data = []
+    started = False
+
+    for line in lines:
+        parts = line.split()
+
+        # Ignore anything before the coordinate data
+        if not started:
+            if len(parts) == 2:
+                try:
+                    x = float(parts[0])
+                    y = float(parts[1])
+                    started = True
+                    data.append([x, y])
+                except ValueError:
+                    continue
+
+        # Once coordinates start, everything should be x,y
+        else:
+            if line.strip():
+                x, y = line.split()
+                data.append([float(x), float(y)])
+
+
+    # end new 
+    df_array = np.array(data).astype(float) #Used for .csv
     kulfan_param = get_kulfan_parameters(df_array, n_weights_per_side=8)
 
     #Create an object row with airfoil name data and parameters
@@ -69,6 +99,7 @@ for file in csv_filenames:
     row["TE_thickness"] = kulfan_param["TE_thickness"]
 
     parameters_df.append(row)
+    counter = counter + 1 
 
 #Convert to dataframe and then write to a .csv 
 parameters_df = pd.DataFrame(parameters_df)
