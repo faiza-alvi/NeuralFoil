@@ -33,7 +33,8 @@ CUT_OFF = 0.7
 #Path to Bird test airfoils folder "C:\Users\booki\Documents\BIRD Lab\Airfoil Project\BirdAirfoils"
 # Path to Live airfoils: "C:\Users\booki\Documents\BIRD Lab\Airfoil Project\ResampledLiveBirdAirfoils\FinalLiveAirfoils"
 dir_path = r"C:\Users\booki\Documents\BIRD Lab\Airfoil Project\BirdAirfoils"
-output_path = r"C:\Users\booki\Documents\BIRD Lab\Airfoil Project\TestBirdAirfoils_XTR0.1_Avian_gen2_128_flipped"
+output_path = r"C:\Users\booki\Documents\BIRD Lab\Airfoil Project\TestBirdAirfoils_XTR0.1_Avian_gen2_1024"
+# Neural Foil results here: C:\Users\booki\Documents\BIRD Lab\Airfoil Project\BirdNeuralFoilXTR0.1\Test60
 # TestBirdAirfoils_XTR0.1_Avian_gen2_256 folder name type
 
 ##########################################################################################
@@ -51,7 +52,7 @@ for file in csv_filenames:
     bird_id = file.split("_")[2]
     pos = file.split("_")[3]
     pos = pos[:4] # Makes sure the position doesn't also include .csv, only keeps the numbers
-    output_filename = str_date + "_" + species_name + "_" + bird_id + "_" + pos + "_af_gen2_128.csv" #create the output file name
+    output_filename = str_date + "_" + species_name + "_" + bird_id + "_" + pos + "_af_gen2_1024.csv" #create the output file name
     file_path = r"%s/%s" % (dir_path, file)
 
     with open(file_path, mode='r') as f:
@@ -67,7 +68,7 @@ for file in csv_filenames:
         Re=Re.flatten(),
         xtr_upper=0.1,  # Location of a forced top-side BL trip, as a fraction of chord
         xtr_lower=0.1,  # Location of a forced bottom-side BL trip, as a fraction of chord
-        model_size= "avian-gen2-128",  # Optionally, specify your model size.
+        model_size= "avian-gen2-1024",  # Optionally, specify your model size.
     )
 
     #OBTAIN FIGURE, FROM NEURAL FOIL
@@ -105,5 +106,5 @@ for file in csv_filenames:
 
 # obtain the difference in time from the initial to obtain the time taken to run
 print("--- %s seconds ---" % (time.time() - start_time))
-print(total_good_results)
+print(output_path)
 
