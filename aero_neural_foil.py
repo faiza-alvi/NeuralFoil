@@ -72,6 +72,7 @@ for file in csv_filenames:
         data = [row for row in csv_reader]
 
     df_array = np.array(data).astype(float)
+    df_array = df_array[::-1] # Flips the bird airfoil .csv to match Selig format (upper surface -> lower surface)
     # ------- Run Neural Foil --------
     aero = nf.get_aero_from_coordinates(
         coordinates=df_array,
