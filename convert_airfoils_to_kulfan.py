@@ -19,7 +19,7 @@ str_date = current_date.strftime("%y_%m_%d")
 #Path to all the airofils 
 #dir_path = r"C:\Users\booki\Documents\BIRD Lab\Airfoil Project\Airfoils2Run"
 # dir_path = r"C:\Users\booki\Documents\BIRD Lab\Airfoil Project\ResampledLiveBirdAirfoils\FinalLiveAirfoils"
-dir_path = r"C:\Users\booki\Documents\BIRD Lab\Airfoil Project\TrainingAirfoils\Test"
+dir_path = r"C:\Users\booki\Documents\BIRD Lab\Airfoil Project\ResampledLiveBirdAirfoils\FinalLiveAirfoils"
 output_path = r"C:\Users\booki\Documents\BIRD Lab\Airfoil Project\BirdData"
 
 
@@ -30,7 +30,7 @@ csv_filenames = list(filter(lambda f: f.endswith('.dat'), filenames)) # limits t
 if not os.path.exists(output_path):
     os.mkdir(output_path)
 
-output_filename = str_date + "_selig_airfoils_kulfan_parameters.csv" #one CSV for all airfoils 
+output_filename = str_date + "_live_bird_airfoils_kulfan_parameters.csv" #one CSV for all airfoils 
 output_fullname = os.path.join(output_path, output_filename)
 
 parameters_df = []
@@ -81,6 +81,7 @@ for file in csv_filenames:
 
     # end new 
     df_array = np.array(data).astype(float) #Used for .csv
+    df_array = df_array[::-1] # Flips the bird airfoil .csv to match Selig format (upper surface -> lower surface)
     kulfan_param = get_kulfan_parameters(df_array, n_weights_per_side=8)
 
     #Create an object row with airfoil name data and parameters
