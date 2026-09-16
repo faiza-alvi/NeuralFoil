@@ -1,6 +1,7 @@
 import aerosandbox as asb
 import aerosandbox.numpy as np
 import pandas as pd
+import os
 import csv
 from aerosandbox.geometry.airfoil.airfoil_families import (
     get_kulfan_parameters,
@@ -259,10 +260,9 @@ plt.show()
 # Save CSV
 # ============================================================
 output_path = r"C:\Users\booki\Documents\BIRD Lab\Airfoil Project\BirdData"
-
-df.to_csv(
-    "Tyto_alba_NC17725_0.50_kulfan_param_lines.csv",
+output_fullname = os.path.join(output_path, "Tyto_alba_NC17725_0.50_kulfan_param_lines.csv") # outputs to a specific directory
+df.to_csv(output_fullname,
     index=False
 )
 
-print("Saved:", "Tyto_alba_NC17725_0.50_kulfan_param_lines.csv")
+print("Saved: ", output_fullname)
