@@ -179,4 +179,108 @@ ax_syn.xaxis.set_ticks_position('bottom')
 # fig.suptitle("Airfoil Comparison", fontsize=16)
 
 plt.show()
-fig.savefig("synthesized_airfoils.png", dpi=300)
+# fig.savefig("synthesized_airfoils.png", dpi=300)
+
+# -------------------------------------------------------------
+# Figure 3: Loss plots 
+# --------------------------------------------------------------
+import re
+import matplotlib.pyplot as plt
+
+# regex to capture epoch, train loss, test loss
+pattern = re.compile(
+    r"Epoch:\s*(\d+)\s*\|\s*Train Loss:\s*([\d.eE+-]+)\s*\|\s*Test Loss:\s*([\d.eE+-]+)"
+)
+
+
+train_losses_128 = []
+valid_losses_128 = []
+train_losses_256 = []
+valid_losses_256 = []
+train_losses_512 = []
+valid_losses_512 = []
+train_losses_1024 = []
+valid_losses_1024 = []
+
+
+
+# List of log files
+log_files = [r"avian_gen2_128.log"]
+for file in log_files:
+    with open(file, "r", encoding="utf-8", errors="ignore") as f:
+        for line in f:
+            match = pattern.search(line)
+            if match:
+                train_losses_128.append(float(match.group(2)))
+                valid_losses_128.append(float(match.group(3)))
+
+log_files = [r"avian_gen2_256.log", r"avian_gen2_256-2.log"]
+for file in log_files:
+    with open(file, "r", encoding="utf-8", errors="ignore") as f:
+        for line in f:
+            match = pattern.search(line)
+            if match:
+                train_losses_256.append(float(match.group(2)))
+                valid_losses_256.append(float(match.group(3)))
+
+log_files = [r"avian_gen2_512.log", r"avian_gen2_512-2.log", r"avian_gen2_512-3.log"]
+for file in log_files:
+    with open(file, "r", encoding="utf-8", errors="ignore") as f:
+        for line in f:
+            match = pattern.search(line)
+            if match:
+                train_losses_512.append(float(match.group(2)))
+                valid_losses_512.append(float(match.group(3)))
+
+log_files = [r"avian_gen2_1024.log"]
+for file in log_files:
+    with open(file, "r", encoding="utf-8", errors="ignore") as f:
+        for line in f:
+            match = pattern.search(line)
+            if match:
+                train_losses_1024.append(float(match.group(2)))
+                valid_losses_1024.append(float(match.group(3)))
+
+
+# Plot
+fig, axs = plt.subplots(2, 2, figsize=(10, 6))
+
+losses = [
+    (train_losses_128, valid_losses_128),
+    (train_losses_256, valid_losses_256),
+    (train_losses_512, valid_losses_512),
+    (train_losses_1024, valid_losses_1024)
+]
+
+for ax, (train, valid) in zip(axs.flat, losses):
+    ax.plot(train, lw=2, color="#0faeae", label="Train Loss")
+    ax.plot(valid, lw=2, color="#e9692c", label="Validation Loss")
+    ax.set_yscale("log")
+    ax.set_xlabel("Epoch", fontsize=18)
+    ax.set_ylabel("Loss", fontsize=18)
+    ax.tick_params(labelsize=16, length=5)
+    ax.spines[["top", "right"]].set_visible(False)
+
+# Labels outside plots
+for ax, label in zip(axs.flat, ["A", "B", "C", "D"]):
+    ax.text(-0.12, 1.02, label, transform=ax.transAxes,
+            fontsize=18, fontweight="bold", va="bottom", ha="right")
+
+# Shared legend
+handles, labels = axs[0, 0].get_legend_handles_labels()
+fig.legend(handles, labels, loc="center left",
+           bbox_to_anchor=(0.90, 0.5), frameon=False, fontsize=16)
+
+plt.tight_layout(rect=[0.03, 0, 0.87, 1])
+fig.savefig("C:/Users/booki/Documents/SciTech 2027/Figures/AvianFoil_loss_curves.svg", format="svg", transparent=True, bbox_inches="tight")
+plt.show()
+
+
+# plt.plot(train_losses_128, label="Train Loss", linewidth=2, color="#0faeae")
+# plt.plot(valid_losses_128, label="Validation Loss", linewidth=2, color="#e9692c")
+# plt.xlabel("Epoch")
+# plt.ylabel("Loss")
+# plt.title("AvianFoil Batch Size 128 Model Loss")
+# plt.yscale("log")   # if you want log scale like before
+# plt.legend()
+# plt.show()
