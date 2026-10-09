@@ -58,6 +58,7 @@ for i in range(N):
             ),
             leading_edge_weight=kulfan_parameters["leading_edge_weight"],
             TE_thickness=kulfan_parameters["TE_thickness"],
+            n_points_per_side=500
         )
     )
 
@@ -88,6 +89,7 @@ for i in range(N):
             upper_weights=kulfan_parameters["upper_weights"],
             leading_edge_weight=kulfan_parameters["leading_edge_weight"],
             TE_thickness=kulfan_parameters["TE_thickness"],
+            n_points_per_side=500
         )
     )
 
@@ -113,6 +115,7 @@ coords = np.asarray(
             kulfan_parameters["leading_edge_weight"] + 1
         ),
         TE_thickness=kulfan_parameters["TE_thickness"],
+        n_points_per_side=500
     )
 )
 
@@ -136,8 +139,8 @@ coords = np.asarray(
         upper_weights=kulfan_parameters["upper_weights"],
         leading_edge_weight=kulfan_parameters["leading_edge_weight"],
         TE_thickness=(
-            kulfan_parameters["TE_thickness"] + 0.2
-        ),
+            kulfan_parameters["TE_thickness"] ),
+        n_points_per_side=500
     )
 )
 
