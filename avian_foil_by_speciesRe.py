@@ -29,7 +29,7 @@ CUT_OFF = 0.7
 # #Currently LucasAirfoils subfolder
 dir_path = r"C:\Users\booki\Documents\BIRD Lab\Airfoil Project\Airfoils2Run"
 
-output_path = r"C:\Users\booki\Documents\BIRD Lab\Airfoil Project\BirdRelevantRe_XTR0.1_avian-gen2-1024"
+output_path = r"C:\Users\booki\Documents\BIRD Lab\Airfoil Project\BirdRelevantRe_XTR0.1_avian-gen2-256"
 
 # dir_path = r"C:\Users\booki\Documents\BIRD Lab\Airfoil Project\ResampledLiveBirdAirfoils\FinalLiveAirfoils"
 # output_path = r"C:\Users\booki\Documents\BIRD Lab\Airfoil Project\LiveBirdNeuralFoilXTR0.1_AvianV3"
@@ -44,7 +44,7 @@ csv_filenames = list(filter(lambda f: f.endswith('.csv'), filenames)) # limits t
 
 # Read in species and relevant Reynolds number 
 # Read in species and relevant Reynolds number
-re_species_path = r"C:\Users\booki\Documents\BIRD Lab\Airfoil Project\bird_species_reynolds_numbers.csv"
+re_species_path = r"C:\Users\booki\Documents\BIRD Lab\Airfoil Project\BirdData\bird_species_reynolds_numbers.csv"
 re_species_df = pd.read_csv(re_species_path)
 
 # Create dictionary: {species_name: Reynolds_number}
@@ -60,7 +60,7 @@ for file in csv_filenames:
     bird_id = file.split("_")[5]
     pos = file.split("_")[6]
     pos = pos[:4] # Makes sure the position doesn't also include .csv, only keeps the numbers
-    output_filename = str_date + "_" + species_name + "_" + bird_id + "_" + pos + "_af-gen2-1024.csv" #create the output file name
+    output_filename = str_date + "_" + species_name + "_" + bird_id + "_" + pos + "_af-gen2-256.csv" #create the output file name
     
     output_fullname = os.path.join(output_path, output_filename)
 
@@ -93,7 +93,7 @@ for file in csv_filenames:
         Re=Re.flatten(),
         xtr_upper=0.1,  # Location of a forced top-side BL trip, as a fraction of chord
         xtr_lower=0.1,  # Location of a forced bottom-side BL trip, as a fraction of chord
-        model_size="avian-gen2-1024",  # Optionally, specify your model size.
+        model_size="avian-gen2-256",  # Optionally, specify your model size.
     )
 
     #OBTAIN FIGURE, FROM NEURAL FOIL
