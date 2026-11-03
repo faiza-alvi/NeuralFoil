@@ -1,4 +1,6 @@
 import numpy as np
+import pandas as pd
+import os as os 
 import aerosandbox as asb
 import matplotlib.pyplot as plt
 from matplotlib.gridspec import GridSpec
@@ -180,6 +182,22 @@ ax_syn.xaxis.set_ticks_position('bottom')
 
 plt.show()
 # fig.savefig("synthesized_airfoils.png", dpi=300)
+
+#--------------------------------------------------------------------
+# Save coordinates for NACA 2412 and synthetic airfoil so the figure can be reconstructed in R 
+output_dir = r"C:\Users\booki\Documents\BIRD Lab\Airfoil Project\BirdData"
+
+# NACA 2412
+pd.DataFrame({
+    "x": naca_2412_coords[:, 0],
+    "z": naca_2412_coords[:, 1]
+}).to_csv(os.path.join(output_dir, "naca_2412.csv"), index=False)
+
+# Synthetic airfoil
+pd.DataFrame({
+    "x": af.coordinates[:, 0],
+    "z": af.coordinates[:, 1]
+}).to_csv(os.path.join(output_dir, "synthetic_airfoil.csv"), index=False)
 
 # -------------------------------------------------------------
 # Figure 3: Loss plots 
