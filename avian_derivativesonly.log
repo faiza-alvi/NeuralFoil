@@ -15977,4 +15977,28 @@ Loss contributors:
 	s_Top_Xtr                : 0.00195164
 	s_upper_bl_ret_0         : 0.000470394
 	s_lower_bl_ret_0         : 0.000462099
-	s
+	s_upper_bl_H_31          : 0.000429639
+	s_lower_bl_H_1           : 0.0004272
+Duration of Epoch: 1046 was 292.63920640945435 seconds
+-- 305734.60806298256 seconds since start, for Epoch 1046 --
+Convergence error at epoch 1046 is 1.92523e-05
+Epoch: 1047 | Train Loss: 0.285112 | Test Loss: 0.364047 | analysis_confidence: 0.106463 | CL: 0.0110296 | ln_CD: 0.0191357 | CM: 0.00158047 | Top_Xtr: 0.00487171 | Bot_Xtr: 0.00599567
+Loss contributors: 
+	s_analysis_confidence    : 0.168791
+	s_ln_CD                  : 0.0671638
+	s_CL                     : 0.0669868
+	s_CM                     : 0.0243871
+	s_Bot_Xtr                : 0.00323276
+	s_Top_Xtr                : 0.00195165
+	s_upper_bl_ret_0         : 0.000470389
+	s_lower_bl_ret_0         : 0.000462104
+	s_upper_bl_H_31          : 0.000429632
+	s_lower_bl_H_1           : 0.000427207
+Duration of Epoch: 1047 was 304.51630210876465 seconds
+-- 306039.1670958996 seconds since start, for Epoch 1047 --
+Convergence error at epoch 1047 is 8.19564e-06
+Converged and stopped at epoch 1047 with convergence error 8.195638656616211e-06
+[?2004h]0;faiza@birdlab-arl: ~/Documents/NeuralFoil[01;32mfaiza@birdlab-arl[00m:[01;34m~/Documents/NeuralFoil[00m$ [K]0;faiza@birdlab-arl: ~/Documents/NeuralFoil[01;32mfaiza@birdlab-arl[00m:[01;34m~/Documents/NeuralFoil[00m$ exit
+[?2004lexit
+
+Script done on 2026-11-13 11:15:36-08:00 [COMMAND_EXIT_CODE="0"]
