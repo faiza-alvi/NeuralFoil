@@ -1,6 +1,7 @@
 import aerosandbox as asb
 import aerosandbox.numpy as np
 import pandas as pd
+from scipy.special import comb
 import os
 import csv
 from aerosandbox.geometry.airfoil.airfoil_families import (
@@ -22,6 +23,8 @@ N = 8
 
 kulfan_parameters = get_kulfan_parameters(af.coordinates, n_weights_per_side=N,)
 lines = []
+
+print(kulfan_parameters)
 
 
 # ============================================================
@@ -58,7 +61,7 @@ for i in range(N):
             ),
             leading_edge_weight=kulfan_parameters["leading_edge_weight"],
             TE_thickness=kulfan_parameters["TE_thickness"],
-            n_points_per_side=500
+            n_points_per_side=200
         )
     )
 
@@ -89,7 +92,7 @@ for i in range(N):
             upper_weights=kulfan_parameters["upper_weights"],
             leading_edge_weight=kulfan_parameters["leading_edge_weight"],
             TE_thickness=kulfan_parameters["TE_thickness"],
-            n_points_per_side=500
+            n_points_per_side=200
         )
     )
 
@@ -115,7 +118,7 @@ coords = np.asarray(
             kulfan_parameters["leading_edge_weight"] + 1
         ),
         TE_thickness=kulfan_parameters["TE_thickness"],
-        n_points_per_side=500
+        n_points_per_side=200
     )
 )
 
@@ -140,7 +143,7 @@ coords = np.asarray(
         leading_edge_weight=kulfan_parameters["leading_edge_weight"],
         TE_thickness=(
             kulfan_parameters["TE_thickness"] ),
-        n_points_per_side=500
+        n_points_per_side=200
     )
 )
 
@@ -269,3 +272,7 @@ df.to_csv(output_fullname,
 )
 
 print("Saved: ", output_fullname)
+
+#------------------------------------------------------------
+# Updated Code to save each polynomial separately
+# ---------------------------------------------------------------
