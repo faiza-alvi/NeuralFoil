@@ -666,12 +666,12 @@ print(f"Used RAM: {mem.used / 1e9:.2f} GB")
 print(f"RAM usage: {mem.percent}%")
 
 # Save everything to a .npz file
-# np.savez(
-#     "gen2_scaled_input_distribution_K1-6.npz",
-#     mean_inputs_scaled=mean_inputs_scaled,
-#     cov_inputs_scaled=cov_inputs_scaled,
-#     inv_cov_inputs_scaled=inv_cov_inputs_scaled
-# )
+np.savez(
+    "nf_scaled_input_distribution.npz",
+    mean_inputs_scaled=mean_inputs_scaled,
+    cov_inputs_scaled=cov_inputs_scaled,
+    inv_cov_inputs_scaled=inv_cov_inputs_scaled
+)
 
 #Saving for testing: 
 # df_inputs_scaled.write_csv("test_load_data_new64_inputs.csv")
