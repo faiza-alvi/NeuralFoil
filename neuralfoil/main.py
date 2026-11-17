@@ -151,6 +151,14 @@ _avian_scaled_input_distribution["N_inputs"]: int = len(
     _avian_scaled_input_distribution["mean_inputs_scaled"]
 )
 
+# Scaled input distribution for NeuralFoil training data with derivative information
+_nf_scaled_input_distribution = dict(
+    np.load(nn_weights_dir / "nf_scaled_input_distribution.npz")
+)
+_nf_scaled_input_distribution["N_inputs"]: int = len(
+    _avian_scaled_input_distribution["mean_inputs_scaled"]
+)
+
 # Additional new scaled input distribution information for Gen2 training data
 _aviangen2_scaled_input_distribution = dict(
     np.load(nn_weights_dir / "gen2_scaled_input_distribution_K1-6.npz")
@@ -202,6 +210,23 @@ def _avian_squared_mahalanobis_distance(x: np.ndarray) -> np.ndarray:
         The squared Mahalanobis distance. Shape: (N_cases,)
     """
     d = _avian_scaled_input_distribution
+    mean = np.reshape(d["mean_inputs_scaled"], (1, -1))
+    x_minus_mean = (x.T - mean.T).T
+    return np.sum(x_minus_mean @ d["inv_cov_inputs_scaled"] * x_minus_mean, axis=1)
+
+# For NeuralFoil training data with derivatives in input vector
+def _nf_squared_mahalanobis_distance(x: np.ndarray) -> np.ndarray:
+    """
+    Computes the squared Mahalanobis distance of a set of points from the training data.
+
+    Args:
+        x: Query point in the input latent space. Shape: (N_cases, N_inputs)
+            For non-vectorized queries, N_cases=1.
+
+    Returns:
+        The squared Mahalanobis distance. Shape: (N_cases,)
+    """
+    d = _nf_scaled_input_distribution
     mean = np.reshape(d["mean_inputs_scaled"], (1, -1))
     x_minus_mean = (x.T - mean.T).T
     return np.sum(x_minus_mean @ d["inv_cov_inputs_scaled"] * x_minus_mean, axis=1)
@@ -287,6 +312,7 @@ def get_aero_from_kulfan_parameters(
             - "avian-gen2-256"
             - "avian-gen2-512"
             - "avian-gen2-1024"
+            - "avian-derivativesonly"
 
     Returns: A dictionary with the following keys:
 
@@ -332,7 +358,8 @@ def get_aero_from_kulfan_parameters(
         TE_thickness=kulfan_parameters["TE_thickness"],
     )
 
-    if model_size in ["avian-v3", "avian-gen2-128", "avian-gen2-256", "avian-gen2-512", "avian-gen2-1024"]:
+    if model_size in ["avian-v3", "avian-gen2-128", "avian-gen2-256", 
+                      "avian-gen2-512", "avian-gen2-1024", "avian-derivativesonly"]:
         ### Prepare the inputs for the neural network
         # Only adds derivative if the avian model is selected
         input_rows: List[Union[float, np.ndarray]] = [
@@ -441,6 +468,10 @@ def get_aero_from_kulfan_parameters(
         y[:, 0] = y[:, 0] - _avian_squared_mahalanobis_distance(x) / (
             2 * _avian_scaled_input_distribution["N_inputs"]
         )
+    elif model_size == "avian-derivativesonly": 
+        y[:, 0] = y[:, 0] - _nf_squared_mahalanobis_distance(x) / (
+                    2 * _scaled_input_distribution["N_inputs"]
+        )
     elif model_size == "avian-gen2-128" or model_size == "avian-gen2-256" or model_size =="avian-gen2-512" or model_size=="avian-gen2-1024":
         y[:, 0] = y[:, 0] - _aviangen2_squared_mahalanobis_distance(x) / (
             2 * _aviangen2_scaled_input_distribution["N_inputs"]
@@ -458,7 +489,8 @@ def get_aero_from_kulfan_parameters(
 
     # Accounts for the differences in input vector size. If Avian version is chosen then the avian version is evaluated first
     # Otherwise the old version is used. 
-    if model_size in ["avian-v3", "avian-gen2-128", "avian-gen2-256", "avian-gen2-512", "avian-gen2-1024"]: 
+    if model_size in ["avian-v3", "avian-gen2-128", "avian-gen2-256", 
+                      "avian-gen2-512", "avian-gen2-1024", "avian-derivativesonly"]: 
         # input vector is the same for all avian models 
         x_flipped = (
             x + 0.0
@@ -514,6 +546,10 @@ def get_aero_from_kulfan_parameters(
             2 * _avian_scaled_input_distribution["N_inputs"]
         )
         # print(f"{_avian_squared_mahalanobis_distance(x_flipped)}")
+    elif model_size == "avian-derivativesonly": 
+            y[:, 0] = y[:, 0] - _nf_squared_mahalanobis_distance(x) / (
+                        2 * _scaled_input_distribution["N_inputs"]
+            )
     elif model_size == "avian-gen2-128" or model_size == "avian-gen2-256" or model_size =="avian-gen2-512" or model_size =="avian-gen2-1024":
         y_flipped[:, 0] = y_flipped[:, 0] - _aviangen2_squared_mahalanobis_distance(x_flipped) / (
             2 * _aviangen2_scaled_input_distribution["N_inputs"]
